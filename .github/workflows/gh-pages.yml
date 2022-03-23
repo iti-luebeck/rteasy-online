@@ -9,6 +9,7 @@ env:
 
 jobs:
   gh_pages:
+    concurrency: ci-${{ github.ref }}
     name: Github Pages
     runs-on: ubuntu-latest
 

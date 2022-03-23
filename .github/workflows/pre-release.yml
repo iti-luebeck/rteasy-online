@@ -1,4 +1,5 @@
 name: pre-release
+concurrency: pre-release
 
 on:
   push:
