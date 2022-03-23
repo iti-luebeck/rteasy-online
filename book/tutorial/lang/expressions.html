@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Expressions - RTeasy-Online</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="../../tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/expressions.html" class="active"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="../../compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">RTeasy-Online</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="expressions"><a class="header" href="#expressions">Expressions</a></h1>
+<p>Expressions appear in assignments, asserts, and as conditions.
+Besides literals, registers and buses there is the possibility to form concatenations and terms.</p>
+<p>When evaluating expressions, expressions of different sizes are automatically adjusted by zero extending by default.
+However, if you want for example a register to be interpreted as signed, you can use the sign extend operator (see further below) to extend with the sign bit instead.
+What the exact rules are when evaluating expressions can be seen in <a href="../advanced/eval-expressions.html">Evaluation of Expressions</a>.</p>
+<h2 id="literals"><a class="header" href="#literals">Literals</a></h2>
+<h3 id="decimal"><a class="header" href="#decimal">Decimal</a></h3>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;- 12;
+X &lt;- 00000012; # leading zeros are stripped
+</code></pre>
+<h3 id="binary"><a class="header" href="#binary">Binary</a></h3>
+<p>Binary literals are prefixed with <code>0b</code>/<code>0B</code> (or with <code>%</code> for compatibility with older versions).</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;-     0b110011;
+X &lt;-     0B110011;
+X &lt;-      %110011;
+X &lt;- 0b0000110011; # leading zeros are stripped
+</code></pre>
+<h3 id="hexadecimal"><a class="header" href="#hexadecimal">Hexadecimal</a></h3>
+<p>Hexadecimal literals are prefixed with <code>0x</code>/<code>0X</code> (or with <code>$</code> for compatibility with older versions).</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;-     0xfa;
+X &lt;-     0XfA;
+X &lt;-      $fa;
+X &lt;- 0x0000fa; # leading zeros are stripped
+</code></pre>
+<h3 id="bit-strings"><a class="header" href="#bit-strings">Bit Strings</a></h3>
+<p>Bit strings are a sequence of zeros and ones delimited by double quotes. They work pretty much the same as normal binary numbers. The only difference is that they have a fixed size unlike other literals. All other literals ignore leading zeros and are always equivalent to the shortest binary representation of themselves.</p>
+<p>The main use case for bit strings is for use in concatenations (see further below) where all parts must have a well defined size.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;- &quot;01010&quot;;
+</code></pre>
+<h2 id="registersbuses"><a class="header" href="#registersbuses">Registers/Buses</a></h2>
+<p>Registers and buses can be used simply by name. Individual bits can be accessed by specifying a bit range.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span>declare register REG(7:0)
+declare bus BUS(7:0)
+
+X &lt;- REG;
+X &lt;- BUS;
+
+X &lt;- REG(4:2); # Access a subrange
+X &lt;- BUS(4);   # Access a single bit
+</code></pre>
+<h2 id="register-arrays"><a class="header" href="#register-arrays">Register Arrays</a></h2>
+<p>Using register arrays works similiar to using registers. In addition to the name, an index must be specified, which is itself an expression.
+Accessing individual bits is not possible with register arrays.</p>
+<p>In addition, care must be taken that register arrays may be read no more than twice once per execution path and cycle.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span>declare register IDX(1:0)
+declare register array ARR(7:0)[4]
+
+X &lt;- ARR[0];       # Read at index 0
+X &lt;- ARR[IDX + 1]; # Use an expression as the index
+</code></pre>
+<p>If it is necessary to access individual bits, this can be done with the help of a temporary bus:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span>declare bus TEMP(7:0)
+declare register array ARR(7:0)[4]
+
+TEMP &lt;- ARR[0], X &lt;- TEMP(4:2); # Access a subrange at index 0
+</code></pre>
+<h2 id="concatenations"><a class="header" href="#concatenations">Concatenations</a></h2>
+<p>Concatenations can be composed of registers, buses, register arrays and bit strings. The individual values are simply concatenated bit by bit.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(31:0)
+</span>declare register REG(7:0)
+declare bus BUS(7:0)
+declare register array ARR(7:0)[4]
+
+X &lt;- REG.&quot;001100&quot;.BUS(2);
+X &lt;- &quot;01&quot;.ARR[3].REG(3:1);
+</code></pre>
+<h2 id="terms"><a class="header" href="#terms">Terms</a></h2>
+<p>Unary terms are written as <code>OPERATOR EXPRESSION</code> and binary terms are written as <code>EXPRESSION OPERATOR EXPRESSION</code>.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(15:0)
+</span>declare register REG(7:0)
+declare bus BUS(7:0)
+
+X &lt;- neg REG;
+X &lt;- REG + 1;
+X &lt;- not BUS.&quot;1&quot; + 42;
+</code></pre>
+<p>The following table gives an overview of all operators. Operators with higher precedence are executed before operators with lower precedence. Precedence comes before associativity.</p>
+<table><thead><tr><th>Precedence</th><th>Operator</th><th>Associativity</th><th>Individual operators</th></tr></thead><tbody>
+<tr><td>10</td><td>Unary Sign</td><td>right-to-left</td><td><code>- ... </code></td></tr>
+<tr><td>10</td><td>Unary Negation</td><td>right-to-left</td><td><code>neg ... </code></td></tr>
+<tr><td>9</td><td>Sign Extend</td><td>right-to-left</td><td><code>sxt ... </code></td></tr>
+<tr><td>8</td><td>Addition</td><td>left-to-right</td><td><code>... + ...</code></td></tr>
+<tr><td>8</td><td>Subtraction</td><td>left-to-right</td><td><code>... - ...</code></td></tr>
+<tr><td>7</td><td>Less Than</td><td>left-to-right</td><td><code>... &lt; ...</code></td></tr>
+<tr><td>7</td><td>Less Than Or Equal</td><td>left-to-right</td><td><code>... &lt;= ...</code></td></tr>
+<tr><td>7</td><td>Greater Than</td><td>left-to-right</td><td><code>... &gt; ...</code></td></tr>
+<tr><td>7</td><td>Greater Than Or Equal</td><td>left-to-right</td><td><code>... &gt;= ...</code></td></tr>
+<tr><td>6</td><td>Equality</td><td>left-to-right</td><td><code>... = ...</code></td></tr>
+<tr><td>6</td><td>Inequality</td><td>left-to-right</td><td><code>... &lt;&gt; ...</code></td></tr>
+<tr><td>5</td><td>Bitwise NOT</td><td>right-to-left</td><td><code>not ...</code></td></tr>
+<tr><td>4</td><td>Bitwise NAND</td><td>left-to-right</td><td><code>... nand ...</code></td></tr>
+<tr><td>3</td><td>Bitwise AND</td><td>left-to-right</td><td><code>... and ...</code></td></tr>
+<tr><td>2</td><td>Bitwise NOR</td><td>left-to-right</td><td><code>... nor ...</code></td></tr>
+<tr><td>1</td><td>Bitwise OR</td><td>left-to-right</td><td><code>... or ...</code></td></tr>
+<tr><td>0</td><td>Bitwise XOR</td><td>left-to-right</td><td><code>... xor ...</code></td></tr>
+</tbody></table>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../tutorial/lang/micro-operations.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../tutorial/ide/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../tutorial/lang/micro-operations.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../tutorial/ide/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

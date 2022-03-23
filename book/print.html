@@ -1,0 +1,715 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>RTeasy-Online</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">RTeasy-Online</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>...</p>
+<p>RTeasy-Online is a development environment for the register transfer language RTeasy. With RTeasy it is possible to design and simulate register transfer programs.</p>
+<p>A register transfer language (RT language) is used to describe the hardware using
+register operations. The following basic pattern is used for the operations:</p>
+<pre><code>Z &lt;- f(X_1, X_2, ..., X_m)
+</code></pre>
+<p>where <code>Z</code>, <code>X_1</code>, <code>X_2</code>, ... , <code>X_m</code> represent identifiers for registers and the function <code>f</code> describes the operation. The result is then stored in <code>Z</code>.</p>
+<p>This book contains a tutorial for RTeasy-Online and RTeasy as well as a list and explanation of all possible errors that can occur during compilation.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-register-transfer-language-rteasy"><a class="header" href="#the-register-transfer-language-rteasy">The Register Transfer Language RTeasy</a></h1>
+<p>An RTeasy program consists of a set of declarations followed by the actual algorithm. All declarations must be placed in the header of the program. Besides registers, buses, register arrays and memories can be declared. These are all explained in more detail in the next section.</p>
+<p>An important concept in RTeasy is the difference between the clocked and the unclocked items. While registers, register arrays and memories are clocked, buses are unclocked. This means that values assigned to a register are only available in the next clock cycle. In contrast, values assigned to a bus are yet available in the same and only in this clock cycle.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="declarations"><a class="header" href="#declarations">Declarations</a></h1>
+<p>Before the actual algorithm, all items must first be defined. A declaration is composed of a <code>declare</code> followed by the type of the item, e.g. <code>register</code>, and finally the list of items you want to declare, separated by commas. All names may only contain uppercase letters, digits or underscores, whereby the first character may not be a digit.</p>
+<h2 id="registers"><a class="header" href="#registers">Registers</a></h2>
+<p>Declare two registers <code>R</code> and <code>C</code>. Register <code>R</code> is 8 bits wide and ranges from 7 (MSB) to 0 (LSB). The register <code>C</code> is 1 bit wide, with the bit at position 0.</p>
+<pre><code class="language-rteasy">declare register R(7:0), C
+</code></pre>
+<h2 id="buses"><a class="header" href="#buses">Buses</a></h2>
+<p>Declare two buses <code>B</code> and <code>SECOND_BUS</code>. Bus <code>B</code> is 8 bits wide and ranges from 7 (MSB) to 0 (LSB). The bus <code>SECOND_BUS</code> is 1 bit wide, with the bit at position 5.</p>
+<pre><code class="language-rteasy">declare bus B(7:0), SECOND_BUS(5)
+</code></pre>
+<h2 id="register-arrays"><a class="header" href="#register-arrays">Register Arrays</a></h2>
+<p>Declare a register array named <code>ARR</code>. As with registers and buses, a bit range can be specified. The length of the register array is specified in brackets. The length must be a power of two.</p>
+<pre><code class="language-rteasy">declare register array ARR(7:0)[4]
+</code></pre>
+<p>Register arrays may be read no more than twice and written no more than once per execution path and cycle.</p>
+<h2 id="memories"><a class="header" href="#memories">Memories</a></h2>
+<p>Declare a memory named <code>MEM</code>. Memories require two registers, whereby the first is the address register and the second is the data register. So in this case <code>AR</code> is the address register and <code>DR</code> is the data register. Thus the memory is of size 2^16 = 64 KByte and 1 byte wide.</p>
+<pre><code class="language-rteasy">declare register AR(15:0), DR(7:0)
+declare memory MEM(AR, DR)
+</code></pre>
+<h2 id="inputsoutputs"><a class="header" href="#inputsoutputs">Inputs/Outputs</a></h2>
+<p>Declare an input <code>IN</code> and an output <code>OUT</code>. As far as the execution is concerned, outputs behave exactly as registers do. Inputs behave exactly as buses do, except that they are read-only and are not reset between clock cycles.</p>
+<pre><code class="language-rteasy">declare input IN(7:0)
+declare output OUT(7:0)
+</code></pre>
+<p>Inputs and outputs define the interface of a program. The inputs and outputs become input and output ports respectively in the VHDL export.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="algorithm"><a class="header" href="#algorithm">Algorithm</a></h1>
+<p>The declarations are followed by the actual algorithm. The algorithm consists of a list of states that are executed sequentially. A state represents a clock cycle in which several <em>micro operations</em> are executed in parallel. Each state is terminated by a semicolon.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(3:0), B(3:0), REG(3:0)
+</span><span class="boring">
+</span># A simple state with two micro operations executed in parallel.
+A &lt;- A + 1, B &lt;- B - 1;
+
+# Another state with only one micro operation.
+REG &lt;- A and B;
+</code></pre>
+<h2 id="label"><a class="header" href="#label">Label</a></h2>
+<p>In addition to the micro operations, a state can receive a label to which it can be jumped to:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(3:0)
+</span><span class="boring">
+</span># A state with the label MY_LABEL.
+MY_LABEL: A &lt;- A + 1;
+
+# ...
+
+# Resume execution at MY_LABEL
+goto MY_LABEL;
+</code></pre>
+<h2 id="conditional-branch"><a class="header" href="#conditional-branch">Conditional Branch</a></h2>
+<p>Since registers are clocked, it is not possible to jump in one cycle depending on the result of a register assignment. Instead two cycles are needed. For this purpose, a state can have a conditional branch separated by the pipe symbol. After the pipe, all assignments have already taken place. The conditional branch may only contain if, switch and goto operations. With this, it is possible in some cases to save a clock cycle by writing:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register COUNTER(7:0)
+</span><span class="boring">
+</span>LOOP:  nop; # do something
+CHECK: COUNTER &lt;- COUNTER + 1 | if COUNTER &lt; 20 then goto LOOP fi;
+</code></pre>
+<p>instead of:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register COUNTER(7:0)
+</span><span class="boring">
+</span>LOOP:  nop; # do something
+INC:   COUNTER &lt;- COUNTER + 1;
+CHECK: if COUNTER &lt; 20 then goto LOOP fi;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="micro-operations"><a class="header" href="#micro-operations">Micro Operations</a></h1>
+<p>The micro operations are the building blocks of the algorithm. Besides the unconditional operations (assignment, no operation and read/write) there are jumps (goto) and conditional operations (if and switch).</p>
+<h2 id="assignment"><a class="header" href="#assignment">Assignment</a></h2>
+<p>...</p>
+<h2 id="no-operation"><a class="header" href="#no-operation">No Operation</a></h2>
+<p>The <code>nop</code> operation will not trigger any operation and can be used to have an empty state.</p>
+<pre><code class="language-rteasy">nop;
+</code></pre>
+<h2 id="readwrite"><a class="header" href="#readwrite">Read/Write</a></h2>
+<p>The read and write operations are available for operating on memories. Both operations take the name of the memory as an argument, e.g. <code>read MEM</code>. When reading, the value currently stored in the memory at the position of the address register is written to the data register. In the case of writing, the process is exactly the opposite: The value from the data register is written into the memory.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register AR(3:0), DR(3:0)
+</span><span class="boring">declare memory MEM(AR, DR)
+</span><span class="boring">
+</span># Read value at position 4
+AR &lt;- 4;
+read MEM;
+
+# Write (value + 1) back to the memory
+DR &lt;- DR + 1;
+write MEM;
+</code></pre>
+<h2 id="assert"><a class="header" href="#assert">Assert</a></h2>
+<p>The assert operation checks if an expression (with a size of one bit) is one or zero. If the expression evaluates to zero, the assert fails and the simulator will stop immediately and highlight the failed assert.</p>
+<p>The assert operation is intended as a tool for development and is therefore only executed in the simulator. It will not execute if the program gets compiled to VHDL.</p>
+<pre><code class="language-rteasy"><span class="boring">declare bus BUS(3:0)
+</span><span class="boring">
+</span>assert 5 &gt; 2; # passes
+assert BUS = 2, BUS &lt;- 2; # passes
+</code></pre>
+<pre><code class="language-rteasy should_fail">assert 2 = 3; # fails
+</code></pre>
+<h2 id="goto"><a class="header" href="#goto">Goto</a></h2>
+<p>The goto operation takes a label and can be used to resume the execution at a different state than the following one.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A, B
+</span><span class="boring">
+</span>START: A &lt;- 0, B &lt;- 1, goto SKIP;
+
+A &lt;- B; # &lt;-- This is never executed
+
+SKIP: nop; # do something
+END: goto START;
+</code></pre>
+<h2 id="if"><a class="header" href="#if">If</a></h2>
+<p>The if operation checks a single condition, which can be either one or zero, and executes the if or else branch accordingly. Syntactically, the else branch is optional. If it is missing a simple <code>nop</code> is used instead. Both branches can contain any number of micro operations, just like a state. Thus, it is also possible to nest if operations.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(3:0), B(3:0), C(3:0), D(3:0), COUNT(3:0)
+</span><span class="boring">
+</span># If/else
+if COUNT = 0 then
+    A &lt;- 0, B &lt;- 0
+else
+    A &lt;- 1
+fi;
+
+# Nested if
+if A = 0 and B = 0 then
+    C &lt;- 0, if D &gt; 1 then D &lt;- 0 fi
+fi;
+</code></pre>
+<h2 id="switch"><a class="header" href="#switch">Switch</a></h2>
+<p>The switch operation checks an expression against various values. The expression must have a fixed size. This requirement is necessary to have a well defined size in which to evaluate. Fixed size expression are: comparisons, concatenations, registers, buses, register arrays and bit strings.</p>
+<p>The values used in the case clauses can be literals or constant expressions. Constant expression are: literals, concatenations only containing constants and terms only containing constants.</p>
+<p>In addition to the case clauses, there must always be exactly one default clause.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(3:0), B(3:0), C(3:0), D(3:0)
+</span><span class="boring">
+</span>switch A.D(2) {            # match against a fixed size expression
+    case 0: B &lt;- 2, C &lt;- 2 # case clause 0
+    case 1: nop            # case clause 1
+    case 1 + 1: C &lt;- 3     # case clause 2 (1 + 1)
+    default: goto END      # default clause
+};
+<span class="boring">
+</span><span class="boring">END:
+</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="expressions"><a class="header" href="#expressions">Expressions</a></h1>
+<p>Expressions appear in assignments, asserts, and as conditions.
+Besides literals, registers and buses there is the possibility to form concatenations and terms.</p>
+<p>When evaluating expressions, expressions of different sizes are automatically adjusted by zero extending by default.
+However, if you want for example a register to be interpreted as signed, you can use the sign extend operator (see further below) to extend with the sign bit instead.
+What the exact rules are when evaluating expressions can be seen in <a href="tutorial/lang/../advanced/eval-expressions.html">Evaluation of Expressions</a>.</p>
+<h2 id="literals"><a class="header" href="#literals">Literals</a></h2>
+<h3 id="decimal"><a class="header" href="#decimal">Decimal</a></h3>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;- 12;
+X &lt;- 00000012; # leading zeros are stripped
+</code></pre>
+<h3 id="binary"><a class="header" href="#binary">Binary</a></h3>
+<p>Binary literals are prefixed with <code>0b</code>/<code>0B</code> (or with <code>%</code> for compatibility with older versions).</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;-     0b110011;
+X &lt;-     0B110011;
+X &lt;-      %110011;
+X &lt;- 0b0000110011; # leading zeros are stripped
+</code></pre>
+<h3 id="hexadecimal"><a class="header" href="#hexadecimal">Hexadecimal</a></h3>
+<p>Hexadecimal literals are prefixed with <code>0x</code>/<code>0X</code> (or with <code>$</code> for compatibility with older versions).</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;-     0xfa;
+X &lt;-     0XfA;
+X &lt;-      $fa;
+X &lt;- 0x0000fa; # leading zeros are stripped
+</code></pre>
+<h3 id="bit-strings"><a class="header" href="#bit-strings">Bit Strings</a></h3>
+<p>Bit strings are a sequence of zeros and ones delimited by double quotes. They work pretty much the same as normal binary numbers. The only difference is that they have a fixed size unlike other literals. All other literals ignore leading zeros and are always equivalent to the shortest binary representation of themselves.</p>
+<p>The main use case for bit strings is for use in concatenations (see further below) where all parts must have a well defined size.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span>X &lt;- &quot;01010&quot;;
+</code></pre>
+<h2 id="registersbuses"><a class="header" href="#registersbuses">Registers/Buses</a></h2>
+<p>Registers and buses can be used simply by name. Individual bits can be accessed by specifying a bit range.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span>declare register REG(7:0)
+declare bus BUS(7:0)
+
+X &lt;- REG;
+X &lt;- BUS;
+
+X &lt;- REG(4:2); # Access a subrange
+X &lt;- BUS(4);   # Access a single bit
+</code></pre>
+<h2 id="register-arrays-1"><a class="header" href="#register-arrays-1">Register Arrays</a></h2>
+<p>Using register arrays works similiar to using registers. In addition to the name, an index must be specified, which is itself an expression.
+Accessing individual bits is not possible with register arrays.</p>
+<p>In addition, care must be taken that register arrays may be read no more than twice once per execution path and cycle.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span>declare register IDX(1:0)
+declare register array ARR(7:0)[4]
+
+X &lt;- ARR[0];       # Read at index 0
+X &lt;- ARR[IDX + 1]; # Use an expression as the index
+</code></pre>
+<p>If it is necessary to access individual bits, this can be done with the help of a temporary bus:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span>declare bus TEMP(7:0)
+declare register array ARR(7:0)[4]
+
+TEMP &lt;- ARR[0], X &lt;- TEMP(4:2); # Access a subrange at index 0
+</code></pre>
+<h2 id="concatenations"><a class="header" href="#concatenations">Concatenations</a></h2>
+<p>Concatenations can be composed of registers, buses, register arrays and bit strings. The individual values are simply concatenated bit by bit.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(31:0)
+</span>declare register REG(7:0)
+declare bus BUS(7:0)
+declare register array ARR(7:0)[4]
+
+X &lt;- REG.&quot;001100&quot;.BUS(2);
+X &lt;- &quot;01&quot;.ARR[3].REG(3:1);
+</code></pre>
+<h2 id="terms"><a class="header" href="#terms">Terms</a></h2>
+<p>Unary terms are written as <code>OPERATOR EXPRESSION</code> and binary terms are written as <code>EXPRESSION OPERATOR EXPRESSION</code>.</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(15:0)
+</span>declare register REG(7:0)
+declare bus BUS(7:0)
+
+X &lt;- neg REG;
+X &lt;- REG + 1;
+X &lt;- not BUS.&quot;1&quot; + 42;
+</code></pre>
+<p>The following table gives an overview of all operators. Operators with higher precedence are executed before operators with lower precedence. Precedence comes before associativity.</p>
+<table><thead><tr><th>Precedence</th><th>Operator</th><th>Associativity</th><th>Individual operators</th></tr></thead><tbody>
+<tr><td>10</td><td>Unary Sign</td><td>right-to-left</td><td><code>- ... </code></td></tr>
+<tr><td>10</td><td>Unary Negation</td><td>right-to-left</td><td><code>neg ... </code></td></tr>
+<tr><td>9</td><td>Sign Extend</td><td>right-to-left</td><td><code>sxt ... </code></td></tr>
+<tr><td>8</td><td>Addition</td><td>left-to-right</td><td><code>... + ...</code></td></tr>
+<tr><td>8</td><td>Subtraction</td><td>left-to-right</td><td><code>... - ...</code></td></tr>
+<tr><td>7</td><td>Less Than</td><td>left-to-right</td><td><code>... &lt; ...</code></td></tr>
+<tr><td>7</td><td>Less Than Or Equal</td><td>left-to-right</td><td><code>... &lt;= ...</code></td></tr>
+<tr><td>7</td><td>Greater Than</td><td>left-to-right</td><td><code>... &gt; ...</code></td></tr>
+<tr><td>7</td><td>Greater Than Or Equal</td><td>left-to-right</td><td><code>... &gt;= ...</code></td></tr>
+<tr><td>6</td><td>Equality</td><td>left-to-right</td><td><code>... = ...</code></td></tr>
+<tr><td>6</td><td>Inequality</td><td>left-to-right</td><td><code>... &lt;&gt; ...</code></td></tr>
+<tr><td>5</td><td>Bitwise NOT</td><td>right-to-left</td><td><code>not ...</code></td></tr>
+<tr><td>4</td><td>Bitwise NAND</td><td>left-to-right</td><td><code>... nand ...</code></td></tr>
+<tr><td>3</td><td>Bitwise AND</td><td>left-to-right</td><td><code>... and ...</code></td></tr>
+<tr><td>2</td><td>Bitwise NOR</td><td>left-to-right</td><td><code>... nor ...</code></td></tr>
+<tr><td>1</td><td>Bitwise OR</td><td>left-to-right</td><td><code>... or ...</code></td></tr>
+<tr><td>0</td><td>Bitwise XOR</td><td>left-to-right</td><td><code>... xor ...</code></td></tr>
+</tbody></table>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ide-user-guide"><a class="header" href="#ide-user-guide">IDE User Guide</a></h1>
+<p>The RTeasy-Online IDE has two different modes. On the one hand there is the editing mode, in which the program is developed. On the other hand there is the simulation mode, where you can execute the program and display the register, bus, register array and memory contents. In this mode, you cannot modify the program. In both modes all views can be moved around freely.</p>
+<p>At the start you are always in the editing mode.</p>
+<p>TODO: Options Dialog</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="editing-mode"><a class="header" href="#editing-mode">Editing Mode</a></h1>
+<p>At the top you can see the toolbar. With File and Edit classic IDE functions like loading/saving the file or undo/redo can be done. Under Run you can find the same functionality that is available in the second row in the center of the screen. The first button switches between the two modes. The remaining four are used to control the simulation and are disabled in edit mode.</p>
+<p>Besides syntax highlighting, the code editor supports autocompletion and code snippets for frequently used constructs like switch-case operations. At the same time, all errors, if any, are displayed live on the right side.</p>
+<p>Each error is associated with an error code that can be clicked and leads to the <a href="tutorial/ide/../../compiler-error-index/errors.html">compiler error index</a> that explains the errors in more detail.</p>
+<hr />
+<p><img src="tutorial/ide/../../images/ide-editing-mode.png" alt="The RTeasy-Online IDE in the editing mode." /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="simulation-mode"><a class="header" href="#simulation-mode">Simulation Mode</a></h1>
+<p>This mode is for the simulating and testing the program. In addition to the code, the signals and the current state can be viewed here.
+The state view displays the register, bus, register array and memory contents. During simulation, both the code and the state view provide visual hints.</p>
+<p>The buttons at the top center are now all operable. From left to right they let you switches between the two modes, start/stop the simulation, reset the simulation, make a step (execute the next state) and make a micro step (execute the next micro step).</p>
+<hr />
+<p><img src="tutorial/ide/../../images/ide-simulation-mode.png" alt="The RTeasy-Online IDE in the simulation mode." /></p>
+<h2 id="code-view"><a class="header" href="#code-view">Code View</a></h2>
+<p>During simulation, the code view provide visual hints.
+When executing a micro step, the current micro step is highlighted in yellow. Conditions are highlighted either green or red, respectively, whether they evaluate to true or false. For conditions, this highlighting becomes transparent as soon as the next micro operation is executed.
+When executing a step, the complete current step is highlighted in yellow.</p>
+<h2 id="state-view"><a class="header" href="#state-view">State View</a></h2>
+<p>The state view displays the register, bus, register array and memory contents. In addition, the cycle count is displayed in the upper right corner.</p>
+<p>Via several dropdowns it is possible to select the base in which the values are presented. The dropdown in the upper left corner serves as the global default setting. This setting can then be inherited elsewhere (Inherit) or overwritten locally (BIN/DEC/HEX).</p>
+<p>During simulation, the state view provide visual hints.
+When executing with micro steps, writes to registers are represented by an arrow, with the value that is assigned after the clock cycle on the right-hand side.
+After executing a complete step, values that have changed are highlighted in yellow.</p>
+<p>TODO: Memory/Register Array View</p>
+<h2 id="signals-view"><a class="header" href="#signals-view">Signals View</a></h2>
+<p>The signals view shows the condition signals and control signals of a resulting execution unit and control unit respectively.</p>
+<h2 id="breakpoints"><a class="header" href="#breakpoints">Breakpoints</a></h2>
+<p>By clicking on the line numbers it is possible to set or remove breakpoints. If the simulation is now started via the play button, it will pause as soon as a breakpoint is reached.</p>
+<p>TODO: Image</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vhdl-export"><a class="header" href="#vhdl-export">VHDL Export</a></h1>
+<p>TODO: ...</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+<p>TODO: ...</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="advanced"><a class="header" href="#advanced">Advanced</a></h1>
+<p>The following sections contain advanced/in-depth material.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="evaluation-of-expressions"><a class="header" href="#evaluation-of-expressions">Evaluation of Expressions</a></h1>
+<p>TODO: ...</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="memory-file-format"><a class="header" href="#memory-file-format">Memory File Format</a></h1>
+<p>The memory file format is a simple line-based file format.</p>
+<h2 id="header"><a class="header" href="#header">Header</a></h2>
+<p>The first line is the header, which indicates in which base the numbers are stored and how large the memory is. The header must always be in the following shape:</p>
+<pre><code class="language-rteasy ignore">[B|b|H|h] &lt;ADDRESS_SIZE&gt; &lt;DATA_SIZE&gt;
+</code></pre>
+<p><code>B</code> or <code>b</code> means binary, <code>H</code> or <code>h</code> means hexadecimal. <code>ADDRESS_SIZE</code> specifies the bit width of the address space and <code>DATA_SIZE</code> specifies the bit width of the data. For example, a memory that is stored in a binary base, with 65536 (= 2^16) entries and a width of 1 byte, has the following header:</p>
+<pre><code class="language-rteasy ignore">B 16 8
+</code></pre>
+<h2 id="data"><a class="header" href="#data">Data</a></h2>
+<p>After the header, the data is stored line by line. The first line, unless otherwise specified, is at address 0. Subsequent lines are always located at the next address. For example, the following describes a memory with the numbers <code>0x1</code>, <code>0x7</code> and <code>0xF1</code> at address <code>0x0</code>, <code>0x1</code> and <code>0x2</code>:</p>
+<pre><code class="language-rteasy ignore">H 4 16
+
+1
+7
+F1
+</code></pre>
+<p>Additionally, it is possible to store data at a specific address. With <code>&lt;ADDRESS&gt;:</code> the address for the next line can be specified. For example, in the following, the values <code>0xFF</code> and <code>0xC</code> are stored at the addresses <code>0x9</code> and <code>0xA</code>:</p>
+<pre><code class="language-rteasy ignore">H 4 16
+
+9:
+FF
+C
+</code></pre>
+<p>Of course, this can be combined in any way:</p>
+<pre><code class="language-rteasy ignore">H 4 16
+
+3
+4
+
+C:
+2
+1
+
+3:
+25
+</code></pre>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>The memory format allows simple line comments starting with the hash (#) character. Comments are allowed in all lines including the header. Example:</p>
+<pre><code class="language-rteasy ignore">H 8 32 # Memory in hexadecimal base
+
+# Hello World
+
+4: # Store some data, starting at address 4
+FF # (addr = 4)
+0  # (addr = 5)
+1  # (addr = 6)
+2  # (addr = 7)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="errors"><a class="header" href="#errors">Errors</a></h1>
+<p>An overview of all possible errors that can occur during compilation.</p>
+<h2 id="e001"><a class="header" href="#e001">E001</a></h2>
+<p>This error indicates that a symbol is declared more than once.</p>
+<h3 id="examples-1"><a class="header" href="#examples-1">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E001)">declare register X(3:0)
+declare register X # error: duplicate symbol &quot;X&quot;
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E001)">declare register X(3:0)
+declare bus X # error: duplicate symbol &quot;X&quot;
+</code></pre>
+<h2 id="e002"><a class="header" href="#e002">E002</a></h2>
+<p>This error indicates that the length of a register array is not a power of two. The length must always be a power of two.</p>
+<h3 id="examples-2"><a class="header" href="#examples-2">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E002)"># error: length of register array &quot;ARR&quot; must be a power of two
+declare register array ARR(7:0)[3]
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E002)"># error: length of register array &quot;ARR&quot; must be a power of two
+declare register array ARR(7:0)[0]
+</code></pre>
+<h2 id="e003"><a class="header" href="#e003">E003</a></h2>
+<p>This error occurs when a register array is used without an index expression.</p>
+<h3 id="examples-3"><a class="header" href="#examples-3">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E003)"><span class="boring">declare register X(7:0)
+</span><span class="boring">declare register array ARR(7:0)[4]
+</span><span class="boring">
+</span>X &lt;- ARR[0] + 1; # ok
+X &lt;- ARR + 1;    # error: register array &quot;ARR&quot; is missing index [...]
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E003)"><span class="boring">declare register array ARR(7:0)[4]
+</span><span class="boring">
+</span>ARR[3] &lt;- 1 + 1; # ok
+ARR &lt;- 1 + 1;    # error: register array &quot;ARR&quot; is missing index [...]
+</code></pre>
+<h2 id="e004"><a class="header" href="#e004">E004</a></h2>
+<p>This error indicates that a label is declared more than once. Labels are used as goto marks and must therefore be unique.</p>
+<h3 id="examples-4"><a class="header" href="#examples-4">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E004)"><span class="boring">declare register X(3:0), Y(3:0)
+</span><span class="boring">
+</span>MY_LABEL: X &lt;- Y;
+MY_LABEL: X &lt;- X + 1; # error: duplicate label &quot;MY_LABEL&quot;
+</code></pre>
+<h2 id="e005"><a class="header" href="#e005">E005</a></h2>
+<p>This error occurs when a symbol can not be found.</p>
+<h3 id="examples-5"><a class="header" href="#examples-5">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E005)">declare register AR(3:0)
+declare memory MEM(AR, DR) # error: no register named &quot;DR&quot; found
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E005)">X &lt;- 42 + 2; # error: no register or bus named &quot;X&quot; found
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E005)">declare register X(3:0)
+X &lt;- ARR[0]; # error: no register array named &quot;ARR&quot; found
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E005)">read MEM; # error: no memory named &quot;MEM&quot; found
+</code></pre>
+<h2 id="e006"><a class="header" href="#e006">E006</a></h2>
+<p>This error occurs when a label can not be found.</p>
+<h3 id="examples-6"><a class="header" href="#examples-6">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E006)">LABEL_A: goto LABEL_B; # error: no label named &quot;LABEL_B&quot; found
+</code></pre>
+<h2 id="e007"><a class="header" href="#e007">E007</a></h2>
+<p>This error occurs when an expression without a fixed size is used in a switch operation. This requirement is necessary to have a well defined size in which to evaluate. Fixed size expression are: comparisons, concatenations, registers, buses, register arrays and bit strings.</p>
+<h3 id="examples-7"><a class="header" href="#examples-7">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E007)"><span class="boring">declare register X(3:0), Y(3:0)
+</span><span class="boring">
+</span>switch X + Y { # error: expected fixed size expression
+    case 1: nop
+    default: nop
+};
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E007)">switch 12 { # error: expected fixed size expression
+    case 1: nop
+    default: nop
+};
+</code></pre>
+<pre><code class="language-rteasy"><span class="boring">declare register X(3:0), Y(3:0)
+</span><span class="boring">
+</span>switch X = Y { # ok
+    case 1: nop
+    default: nop
+};
+</code></pre>
+<pre><code class="language-rteasy">switch &quot;1100&quot; { # ok
+    case 1: nop
+    default: nop
+};
+</code></pre>
+<h2 id="e008"><a class="header" href="#e008">E008</a></h2>
+<p>This error occurs when a non-constant expression used in a case clause. Constant expression are: literals, concatenations only containing constants and terms only containing constants.</p>
+<h3 id="examples-8"><a class="header" href="#examples-8">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E008)"><span class="boring">declare register X(3:0), Y(3:0)
+</span><span class="boring">
+</span>switch &quot;0101&quot; {
+    case X + Y: nop # error: expected constant expression
+    default: nop
+};
+</code></pre>
+<pre><code class="language-rteasy">switch &quot;0101&quot; {
+    case 7: nop # ok
+    default: nop
+};
+</code></pre>
+<pre><code class="language-rteasy">switch &quot;0101&quot; {
+    case 3 + 4: nop # ok
+    default: nop
+};
+</code></pre>
+<h2 id="e009"><a class="header" href="#e009">E009</a></h2>
+<p>This error indicates a switch operation with zero or more than one default clause. Switch operations must always have exactly one default clause.</p>
+<h3 id="examples-9"><a class="header" href="#examples-9">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E009)"># error: expected exactly one default clause
+switch &quot;0101&quot; {
+    case 1: nop
+};
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E009)"># error: expected exactly one default clause
+switch &quot;0101&quot; {
+    case 1: nop
+    default: nop
+    default: nop
+};
+</code></pre>
+<h2 id="e010"><a class="header" href="#e010">E010</a></h2>
+<p>This error occurs when a literal other than the bit string is used in a concatenation. Concatenations may only contain elements of fixed size, thus only registers, buses, register arrays and bit strings.</p>
+<h3 id="examples-10"><a class="header" href="#examples-10">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E010)"><span class="boring">declare register X(7:0), Y(3:0)
+</span><span class="boring">
+</span>X &lt;- Y.&quot;101&quot;.Y(0); # ok
+X &lt;- Y.5.Y(0);     # error: concat must not contain numbers other than bit strings
+</code></pre>
+<h2 id="e011"><a class="header" href="#e011">E011</a></h2>
+<p>TODO: ...</p>
+<h2 id="e012"><a class="header" href="#e012">E012</a></h2>
+<p>TODO: ...</p>
+<h2 id="e013"><a class="header" href="#e013">E013</a></h2>
+<p>TODO: ...</p>
+<h2 id="e014"><a class="header" href="#e014">E014</a></h2>
+<p>TODO: ...</p>
+<h2 id="e015"><a class="header" href="#e015">E015</a></h2>
+<p>TODO: ...</p>
+<h2 id="e016"><a class="header" href="#e016">E016</a></h2>
+<p>TODO: ...</p>
+<h2 id="e017"><a class="header" href="#e017">E017</a></h2>
+<p>TODO: ...</p>
+<h2 id="e018"><a class="header" href="#e018">E018</a></h2>
+<p>TODO: ...</p>
+<h2 id="e019"><a class="header" href="#e019">E019</a></h2>
+<p>TODO: ...</p>
+<h2 id="e020"><a class="header" href="#e020">E020</a></h2>
+<p>TODO: ...</p>
+<h2 id="e021"><a class="header" href="#e021">E021</a></h2>
+<p>TODO: ...</p>
+<h2 id="e022"><a class="header" href="#e022">E022</a></h2>
+<p>TODO: ...</p>
+<h2 id="e023"><a class="header" href="#e023">E023</a></h2>
+<p>TODO: ...</p>
+<h2 id="e024"><a class="header" href="#e024">E024</a></h2>
+<p>TODO: ...</p>
+<h2 id="e025"><a class="header" href="#e025">E025</a></h2>
+<p>This error indicates that a register, bus, register array or memory is assigned more than once in a cycle. Only one assignment to an item may be executed per execution path and cycle.</p>
+<h3 id="examples-11"><a class="header" href="#examples-11">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E025)"><span class="boring">declare register X(3:0)
+</span><span class="boring">
+</span>X &lt;- 2, X &lt;- 1; # error: register &quot;X&quot; is assigned more than once
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E025)"><span class="boring">declare register AR(3:0), DR(3:0)
+</span><span class="boring">declare memory MEM(AR, DR)
+</span><span class="boring">
+</span>read MEM, read MEM; # error: register &quot;DR&quot; is assigned more than once
+write MEM, write MEM; # error: memory &quot;MEM&quot; is assigned more than once
+</code></pre>
+<pre><code class="language-rteasy"><span class="boring">declare register X(3:0), COND
+</span><span class="boring">
+</span># ok, because always only one of the two assignments is executed in one cycle.
+if COND then X &lt;- 2 else X &lt;- 1 fi;
+</code></pre>
+<h2 id="e026"><a class="header" href="#e026">E026</a></h2>
+<p>TODO: ...</p>
+<h2 id="e027"><a class="header" href="#e027">E027</a></h2>
+<p>TODO: ...</p>
+<h2 id="e028"><a class="header" href="#e028">E028</a></h2>
+<p>TODO: ...</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </body>
+</html>
