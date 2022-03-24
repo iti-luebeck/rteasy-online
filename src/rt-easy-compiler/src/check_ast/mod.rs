@@ -2,9 +2,9 @@ mod expression;
 mod operation;
 mod statements;
 
-use crate::{symbols::Symbols, Error};
+use crate::{symbols::Symbols, Backend, Error};
 
-pub fn check<'s>(ast: &rtast::Ast<'s>) -> Result<Symbols<'s>, Error> {
+pub fn check<'s, B: Backend>(ast: &rtast::Ast<'s>) -> Result<Symbols<'s>, Error<B>> {
     // Errors
     let mut errors = Vec::new();
     let mut error_sink = |e| errors.push(e);

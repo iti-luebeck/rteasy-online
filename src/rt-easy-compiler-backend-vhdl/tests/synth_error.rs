@@ -1,6 +1,6 @@
 mod util;
 
-use rt_easy_compiler_backend_vhdl::error::{BackendError, SynthError};
+use rt_easy_compiler_backend_vhdl::error::SynthError;
 
 #[derive(Debug)]
 struct Example {
@@ -57,8 +57,7 @@ fn unclocked_goto_dependency() {
                 compiler::Error::Errors(_) | compiler::Error::Internal(_) => {
                     panic!("expected backend error")
                 }
-                compiler::Error::Backend(compiler::BackendError(err)) => {
-                    let err = *err.downcast::<BackendError>().unwrap();
+                compiler::Error::Backend(err) => {
                     for e in err.errors {
                         assert!(matches!(e, SynthError::UnclockedGotoDependency));
                     }
@@ -131,8 +130,7 @@ fn conditional_goto_in_first_state() {
                 compiler::Error::Errors(_) | compiler::Error::Internal(_) => {
                     panic!("expected backend error")
                 }
-                compiler::Error::Backend(compiler::BackendError(err)) => {
-                    let err = *err.downcast::<BackendError>().unwrap();
+                compiler::Error::Backend(err) => {
                     for e in err.errors {
                         assert!(matches!(e, SynthError::ConditionalGotoInFirstState));
                     }

@@ -17,7 +17,7 @@ pub fn compile(source: &str) -> Vhdl {
 }
 
 #[allow(dead_code)] // Not used by every test file
-pub fn compile_err(source: &str) -> Error {
+pub fn compile_err(source: &str) -> Error<BackendVhdl> {
     let ast = match parser::parse(source) {
         Ok(ast) => ast,
         Err(e) => panic!("{}", parser::pretty_print_error(&e, source, None, false)),

@@ -1,15 +1,15 @@
-use crate::SymbolType;
+use crate::{Backend, SymbolType};
 use rtcore::common::{BitRange, Span};
 use std::fmt;
 
 #[derive(Debug)]
-pub enum Error {
+pub enum Error<B: Backend> {
     Errors(Vec<CompilerError>),
     Internal(InternalError),
-    Backend(BackendError),
+    Backend(B::Error),
 }
 
-impl Error {
+impl<B: Backend> Error<B> {
     pub fn pretty_print(&self, source: &str, file_name: Option<&str>, ansi_colors: bool) -> String {
         match self {
             Error::Errors(errors) => {
@@ -28,18 +28,18 @@ impl Error {
                 result
             }
             Error::Internal(internal) => format!("{}", internal),
-            Error::Backend(backend) => format!("{}", backend),
+            Error::Backend(backend) => format!("ICE (Backend): {}", backend),
         }
     }
 }
 
-impl From<Vec<CompilerError>> for Error {
+impl<B: Backend> From<Vec<CompilerError>> for Error<B> {
     fn from(errors: Vec<CompilerError>) -> Self {
         Self::Errors(errors)
     }
 }
 
-impl From<InternalError> for Error {
+impl<B: Backend> From<InternalError> for Error<B> {
     fn from(internal: InternalError) -> Self {
         Self::Internal(internal)
     }
@@ -249,14 +249,5 @@ impl fmt::Display for InternalError {
 impl From<CompilerError> for InternalError {
     fn from(err: CompilerError) -> Self {
         Self(format!("{:?}", err))
-    }
-}
-
-#[derive(Debug)]
-pub struct BackendError(pub Box<dyn std::error::Error + Send + Sync + 'static>);
-
-impl fmt::Display for BackendError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ICE (Backend): {}", self.0)
     }
 }

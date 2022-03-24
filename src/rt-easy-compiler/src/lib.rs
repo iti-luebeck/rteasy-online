@@ -8,8 +8,10 @@ mod symbols;
 mod util;
 
 pub mod mir;
-pub use self::error::{BackendError, CompilerError, CompilerErrorKind, Error, InternalError};
+pub use self::error::{CompilerError, CompilerErrorKind, Error, InternalError};
 pub use self::symbols::SymbolType;
+
+use std::convert::Infallible;
 
 pub trait Backend {
     type Args;
@@ -17,6 +19,17 @@ pub trait Backend {
     type Error: std::error::Error + Send + Sync + 'static;
 
     fn generate(&self, mir: mir::Mir<'_>, args: Self::Args) -> Result<Self::Output, Self::Error>;
+}
+
+// Dummy Backend
+impl Backend for Infallible {
+    type Args = Infallible;
+    type Output = Infallible;
+    type Error = Infallible;
+
+    fn generate(&self, _: mir::Mir<'_>, args: Self::Args) -> Result<Self::Output, Self::Error> {
+        match args {}
+    }
 }
 
 #[derive(Debug, Default)]
@@ -30,7 +43,7 @@ pub fn compile<B>(
     args: B::Args,
     ast: rtast::Ast<'_>,
     options: &Options,
-) -> Result<B::Output, Error>
+) -> Result<B::Output, Error<B>>
 where
     B: Backend,
 {
@@ -38,19 +51,19 @@ where
 
     match backend.generate(mir, args) {
         Ok(output) => Ok(output),
-        Err(e) => Err(Error::Backend(BackendError(e.into()))),
+        Err(e) => Err(Error::Backend(e)),
     }
 }
 
-pub fn check(ast: rtast::Ast<'_>, options: &Options) -> Result<(), Error> {
+pub fn check(ast: rtast::Ast<'_>, options: &Options) -> Result<(), Error<Infallible>> {
     check_(ast, options)?;
     Ok(())
 }
 
-fn check_<'s>(
+fn check_<'s, B: Backend>(
     ast: rtast::Ast<'s>,
     options: &Options,
-) -> Result<(symbols::Symbols<'s>, mir::Mir<'s>), Error> {
+) -> Result<(symbols::Symbols<'s>, mir::Mir<'s>), Error<B>> {
     // Check ast
     let symbols = check_ast::check(&ast)?;
 

@@ -6,11 +6,15 @@ mod ordering;
 mod register_array_read;
 mod sim;
 
-use crate::mir::*;
 use crate::symbols::Symbols;
+use crate::{mir::*, Backend};
 use crate::{Error, Options};
 
-pub fn check(symbols: &Symbols<'_>, mir: &mut Mir<'_>, options: &Options) -> Result<(), Error> {
+pub fn check<B: Backend>(
+    symbols: &Symbols<'_>,
+    mir: &mut Mir<'_>,
+    options: &Options,
+) -> Result<(), Error<B>> {
     // Errors
     let mut errors = Vec::new();
     let mut error_sink = |e| errors.push(e);

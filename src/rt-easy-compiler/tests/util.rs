@@ -1,3 +1,5 @@
+use std::convert::Infallible;
+
 use rt_easy_compiler::{Error, Options};
 
 #[allow(dead_code)] // Not used by every test file
@@ -14,14 +16,14 @@ pub fn check_with_options(source: &str, options: &Options) {
 }
 
 #[allow(dead_code)] // Not used by every test file
-pub fn check_err(source: &str) -> Error {
+pub fn check_err(source: &str) -> Error<Infallible> {
     match check_(source, &Default::default()) {
         Ok(()) => panic!("Expected error"),
         Err(e) => e,
     }
 }
 
-fn check_(source: &str, options: &Options) -> Result<(), Error> {
+fn check_(source: &str, options: &Options) -> Result<(), Error<Infallible>> {
     let ast = match parser::parse(source) {
         Ok(ast) => ast,
         Err(e) => panic!("{}", parser::pretty_print_error(&e, source, None, false)),
