@@ -1,3 +1,35 @@
+-- VHDL Export for {{ module_name }}
+--
+-- This file contains:
+--     - a helper package:   HELPER_{{ module_name }}
+--     - the control unit:   CU_{{ module_name }}
+--     - the execution unit: EU_{{ module_name }}
+--
+-- Control Unit States:
+{% for (idx, statement) in statements.iter().enumerate() %}
+    --     - {{ statement.label }}
+{% else%}
+    --     <EMPTY>
+{% endfor %}
+--
+-- Condition Signals / Criteria:
+{% for (idx, expression) in criteria.iter().enumerate() %}
+    --     - k{{ idx }}: {{ RenderAsRt(expression) }}
+{% else%}
+    --     <EMPTY>
+{% endfor %}
+--
+-- Control Signals / Operations:
+{% for (idx, operation) in operations.iter().enumerate() %}
+    --     - c{{ idx }}: {{ RenderAsRt(operation) }}
+{% else%}
+    --     <EMPTY>
+{% endfor %}
+
+-------------------------------------------------------------------------------
+-- Helper Package
+-------------------------------------------------------------------------------
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -143,6 +175,8 @@ PACKAGE BODY HELPER_{{ module_name }} IS
 END PACKAGE BODY HELPER_{{ module_name }};
 
 -------------------------------------------------------------------------------
+-- Control Unit
+-------------------------------------------------------------------------------
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -238,6 +272,8 @@ BEGIN
     END PROCESS;
 END Behavioral;
 
+-------------------------------------------------------------------------------
+-- Execution Unit
 -------------------------------------------------------------------------------
 
 LIBRARY ieee;
