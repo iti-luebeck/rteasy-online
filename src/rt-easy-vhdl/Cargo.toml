@@ -11,7 +11,7 @@ rtcore = { path = "../rt-easy-core", package = "rt-easy-core" }
 memory-file = { path = "../rt-easy-memory-file", package = "rt-easy-memory-file" }
 
 thiserror = "1.0.30"
-temply = "0.2.0"
+temply = "0.3.0"
 indexmap = "1.8.0"
 vec1 = "1.8.0"
 
