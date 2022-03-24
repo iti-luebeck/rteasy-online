@@ -187,7 +187,7 @@ expression_leaf -> Expression<'s>:
 // ...
 memory -> Memory<'s>: spanned(ident) memory_range { Memory { ident: $1, range: $2, span: $span.into() } };
 reg_bus -> RegBus<'s>: spanned(ident) opt(spanned(bit_range)) { RegBus { ident: $1, range: $2, span: $span.into() } };
-register_array -> RegisterArray<'s>: spanned(ident) "[" expression "]" { RegisterArray { ident: $1, index: Box::new($3), span: $span.into() } };
+register_array -> RegisterArray<'s>: spanned(ident) "[" expression "]" opt(spanned(bit_range)) { RegisterArray { ident: $1, index: Box::new($3), range: $5, span: $span.into() } };
 concat -> Concat<'s>:
     concat_part many1(preceded(".", concat_part)) {
         let mut parts = $2;

@@ -102,6 +102,7 @@ pub enum CompilerErrorKind {
     DoubleGoto,
     RegisterArrayTooManyReads { name: String, allowed: usize },
     FeedbackLoop,
+    AssignmentLhsRegisterArrayWithBitRange,
 }
 
 impl CompilerErrorKind {
@@ -137,6 +138,7 @@ impl CompilerErrorKind {
             DoubleGoto => 26,
             RegisterArrayTooManyReads { .. } => 27,
             FeedbackLoop => 28,
+            AssignmentLhsRegisterArrayWithBitRange => 29,
         }
     }
 }
@@ -228,6 +230,9 @@ impl fmt::Display for CompilerErrorKind {
                 write!(f, "register array \"{}\" is read more than {} times", name, allowed)
             }
             FeedbackLoop => write!(f, "statement has a feedback loop"),
+            AssignmentLhsRegisterArrayWithBitRange => {
+                write!(f, "bit range is not allowed in this position")
+            }
         }
     }
 }

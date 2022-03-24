@@ -215,6 +215,7 @@ pub struct Bus {
 pub struct RegisterArray {
     pub ident: Ident,
     pub index: Box<Expression>,
+    pub range: Option<BitRange>,
 }
 
 #[derive(Debug, PartialEq, Eq, Hash)]

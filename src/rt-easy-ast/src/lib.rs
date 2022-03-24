@@ -104,6 +104,7 @@ pub struct DeclareRegisterArrayItem<'s> {
 pub struct RegisterArray<'s> {
     pub ident: Spanned<Ident<'s>>,
     pub index: Box<Expression<'s>>,
+    pub range: Option<Spanned<BitRange>>,
     pub span: Span,
 }
 

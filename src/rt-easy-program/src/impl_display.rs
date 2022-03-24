@@ -226,7 +226,11 @@ impl Display for Bus {
 
 impl Display for RegisterArray {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}[{}]", self.ident.0, self.index)
+        write!(f, "{}[{}]", self.ident.0, self.index)?;
+        if let Some(range) = self.range {
+            write!(f, "{}", range)?;
+        }
+        Ok(())
     }
 }
 

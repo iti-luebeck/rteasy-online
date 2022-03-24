@@ -75,7 +75,7 @@ X <- BUS(4);   # Access a single bit
 ## Register Arrays
 
 Using register arrays works similiar to using registers. In addition to the name, an index must be specified, which is itself an expression.
-Accessing individual bits is not possible with register arrays.
+Individual bits can be accessed by specifying a bit range.
 
 In addition, care must be taken that register arrays may be read no more than twice once per execution path and cycle.
 
@@ -86,16 +86,9 @@ declare register array ARR(7:0)[4]
 
 X <- ARR[0];       # Read at index 0
 X <- ARR[IDX + 1]; # Use an expression as the index
-```
 
-If it is necessary to access individual bits, this can be done with the help of a temporary bus:
-
-```rteasy
-~declare register X(7:0)
-declare bus TEMP(7:0)
-declare register array ARR(7:0)[4]
-
-TEMP <- ARR[0], X <- TEMP(4:2); # Access a subrange at index 0
+X <- ARR[3](4:2);  # Access a subrange
+X <- ARR[3](4);    # Access a single bit
 ```
 
 ## Concatenations

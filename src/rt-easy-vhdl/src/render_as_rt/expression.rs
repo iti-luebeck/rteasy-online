@@ -90,7 +90,7 @@ impl Display for RenderAsRt<&Bus> {
 
 impl Display for RenderAsRt<&RegisterArray> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}[{}]", self.0.ident, RenderAsRt(&*self.0.index))
+        write!(f, "{}[{}]{}", self.0.ident, RenderAsRt(&*self.0.index), RenderAsRt(self.0.range))
     }
 }
 

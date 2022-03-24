@@ -68,6 +68,7 @@ impl Generate<mir::RegisterArray<'_>> for RegisterArray {
             ident: gen_ident(reg_array.ident.node),
             index: Box::new(Generate::generate(*reg_array.index)?),
             index_ctx_size: reg_array.index_ctx_size,
+            range: reg_array.range.map(|s| s.node),
         })
     }
 }

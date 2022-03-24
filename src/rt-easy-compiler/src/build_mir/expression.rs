@@ -167,15 +167,17 @@ impl<'s> BuildExpr<ast::RegisterArray<'s>> for RegisterArray<'s> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::RegisterArray { range, len }) => {
                 let index = Expression::build(*item.index, symbols)?;
+                let size = util::range_into(range, item.range)?;
 
                 Ok(Expr {
                     inner: RegisterArray {
                         ident: item.ident,
                         index: Box::new(index.inner),
                         index_ctx_size: util::log_2(len),
+                        range: item.range,
                         span: item.span,
                     },
-                    size: range.map(|range| range.size()).unwrap_or(1),
+                    size,
                 })
             }
             _ => Err(InternalError("missing register array".to_string())),

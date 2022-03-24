@@ -98,7 +98,7 @@ impl Evaluate for RegisterArray {
     fn evaluate(&self, state: &State, ctx_size: usize) -> Result {
         let idx = self.index.evaluate(state, self.index_ctx_size)?;
 
-        let mut value = state.register_array(&self.ident)?.read(idx)?;
+        let mut value = state.register_array(&self.ident)?.read(idx, self.range)?;
         value.extend_zero(ctx_size);
 
         Ok(value)
@@ -123,7 +123,7 @@ impl Evaluate for Concat<ConcatPartExpr> {
                 ConcatPartExpr::Bus(bus) => state.bus(&bus.ident)?.read(bus.range),
                 ConcatPartExpr::RegisterArray(reg_array) => {
                     let idx = reg_array.index.evaluate(state, reg_array.index_ctx_size)?;
-                    state.register_array(&reg_array.ident)?.read(idx)
+                    state.register_array(&reg_array.ident)?.read(idx, reg_array.range)
                 }
                 ConcatPartExpr::Number(number) => Ok(number.value.clone()),
             })

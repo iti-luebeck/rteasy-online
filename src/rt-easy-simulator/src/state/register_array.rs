@@ -1,6 +1,7 @@
+use super::util::slice_idx;
 use crate::Error;
 use anyhow::anyhow;
-use rtcore::value::Value;
+use rtcore::{common::BitRange, value::Value};
 use std::cell::RefCell;
 use std::collections::HashMap;
 
@@ -10,13 +11,14 @@ const REGISTER_ARRAY_PAGE_SIZE: usize = 32;
 pub struct RegisterArrayState {
     data: HashMap<Value, Value>,
     data_next: RefCell<Option<(Value, Value)>>,
+    range: BitRange,
     len: usize,
-    data_size: usize,
 }
 
 impl RegisterArrayState {
-    pub fn init(len: usize, data_size: usize) -> Self {
-        Self { data: HashMap::new(), data_next: RefCell::new(None), len, data_size }
+    pub fn init(range: Option<BitRange>, len: usize) -> Self {
+        let range = range.unwrap_or_default();
+        Self { data: HashMap::new(), data_next: RefCell::new(None), len, range }
     }
 
     pub fn value_next(&self) -> Option<(usize, Value)> {
@@ -24,14 +26,23 @@ impl RegisterArrayState {
         Some((usize::from_str_radix(&idx.as_bin(false), 2).unwrap(), value))
     }
 
-    pub fn read(&self, idx: Value) -> Result<Value, Error> {
+    pub fn read(&self, idx: Value, range: Option<BitRange>) -> Result<Value, Error> {
         // Check idx
         if idx.size() > self.index_size() {
             return Err(anyhow!("index too big"));
         }
 
-        let value = self.data.get(&idx).cloned().unwrap_or_else(|| Value::zero(self.data_size));
-        Ok(value)
+        // Get value by idx
+        let value = self.data.get(&idx).cloned().unwrap_or_else(|| Value::zero(self.data_size()));
+
+        // Select bits
+        match range {
+            Some(range) => {
+                let slice_idx = slice_idx(self.range, range)?;
+                Ok(value[slice_idx].to_owned())
+            }
+            None => Ok(value),
+        }
     }
 
     pub fn write(&self, idx: Value, value: Value) -> Result<(), Error> {
@@ -39,7 +50,7 @@ impl RegisterArrayState {
         if idx.size() > self.index_size() {
             return Err(anyhow!("index too big"));
         }
-        if value.size() > self.data_size {
+        if value.size() > self.data_size() {
             return Err(anyhow!("value too big"));
         }
 
@@ -86,7 +97,7 @@ impl RegisterArrayState {
                 .data
                 .get(&idx_as_value)
                 .cloned()
-                .unwrap_or_else(|| Value::zero(self.data_size));
+                .unwrap_or_else(|| Value::zero(self.data_size()));
             result.push((idx_as_usize, value));
 
             // Update idx
@@ -106,7 +117,7 @@ impl RegisterArrayState {
     }
 
     pub fn data_size(&self) -> usize {
-        self.data_size
+        self.range.size()
     }
 }
 

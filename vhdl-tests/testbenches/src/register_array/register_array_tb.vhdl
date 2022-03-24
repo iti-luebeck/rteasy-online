@@ -9,7 +9,7 @@ ARCHITECTURE tb OF register_array_tb IS
     SIGNAL clock_p : STD_LOGIC := '0';
     SIGNAL clock_n : STD_LOGIC;
     SIGNAL reset : STD_LOGIC := '0';
-    SIGNAL c : STD_LOGIC_VECTOR(8 DOWNTO 0);
+    SIGNAL c : STD_LOGIC_VECTOR(10 DOWNTO 0);
     SIGNAL k : STD_LOGIC_VECTOR(0 DOWNTO 0);
 
     SIGNAL output_OUT : unsigned(7 DOWNTO 0);
@@ -55,7 +55,7 @@ BEGIN
         do_reset;
 
         -- Test
-        advance_clock(4);
+        advance_clock(5);
 
         advance_clock;
         ASSERT output_OUT = 42;
@@ -65,6 +65,9 @@ BEGIN
 
         advance_clock;
         ASSERT output_OUT = 43;
+
+        advance_clock;
+        ASSERT output_OUT = "00110101";
 
         advance_clock;
         ASSERT output_OUT = 3;

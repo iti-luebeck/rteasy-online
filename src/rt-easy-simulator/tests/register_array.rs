@@ -14,6 +14,9 @@ IDX <- 1;
 ARR[IDX] <- ARR[IDX - 1] + 3; # 2
 
 ARR["111111"].A(7) <- 0b101; # 3
+
+ARR[0] <- "00000100";
+A <- "1111".ARR[0](3:1)."1";
 "#;
 
 #[test]
@@ -42,5 +45,13 @@ fn register_array() {
     assert_eq!(
         simulator.register_array_page(&Ident("ARR".to_string()), 2).unwrap()[31].1,
         Value::parse_bin("10").unwrap()
+    );
+
+    // 2
+    simulator.step(false).unwrap();
+    simulator.step(false).unwrap();
+    assert_eq!(
+        simulator.register_value(&Ident("A".to_string())).unwrap(),
+        Value::parse_bin("11110101").unwrap()
     );
 }

@@ -66,4 +66,5 @@ pub struct RegisterArray {
     pub ident: Ident,
     pub index: Box<Expression>,
     pub index_ctx_size: usize,
+    pub range: Option<BitRange>,
 }

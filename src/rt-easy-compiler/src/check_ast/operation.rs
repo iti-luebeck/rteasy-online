@@ -304,6 +304,34 @@ impl<'s> CheckOp<'s> for Assignment<'s> {
             }
         }
 
+        // Check assign to register array with bit range
+        match &self.lhs {
+            Lvalue::RegBus(_) => (),
+            Lvalue::RegisterArray(reg_array) => {
+                if reg_array.range.is_some() {
+                    error_sink(CompilerError::new(
+                        CompilerErrorKind::AssignmentLhsRegisterArrayWithBitRange,
+                        reg_array.span,
+                    ));
+                }
+            }
+            Lvalue::Concat(concat) => {
+                for part in &concat.parts {
+                    match part {
+                        ConcatPart::RegisterArray(reg_array) => {
+                            if reg_array.range.is_some() {
+                                error_sink(CompilerError::new(
+                                    CompilerErrorKind::AssignmentLhsRegisterArrayWithBitRange,
+                                    reg_array.span,
+                                ));
+                            }
+                        }
+                        ConcatPart::RegBus(_) | ConcatPart::Number(_) => (),
+                    }
+                }
+            }
+        }
+
         Ok(Res { contains_goto: false, contains_mutate: true })
     }
 }

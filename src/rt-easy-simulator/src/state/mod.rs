@@ -47,10 +47,9 @@ impl State {
                 }
                 Declaration::RegisterArray(declare_register_array) => {
                     for reg_array in &declare_register_array.register_arrays {
-                        let data_size = reg_array.range.unwrap_or_default().size();
                         register_arrays.insert(
                             reg_array.ident.clone(),
-                            RegisterArrayState::init(reg_array.len, data_size),
+                            RegisterArrayState::init(reg_array.range, reg_array.len),
                         );
                     }
                 }

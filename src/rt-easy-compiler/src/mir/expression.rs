@@ -84,5 +84,6 @@ pub struct RegisterArray<'s> {
     pub ident: Spanned<Ident<'s>>,
     pub index: Box<Expression<'s>>,
     pub index_ctx_size: usize,
+    pub range: Option<Spanned<BitRange>>,
     pub span: Span,
 }

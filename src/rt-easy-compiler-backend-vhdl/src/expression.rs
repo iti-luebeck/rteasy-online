@@ -84,13 +84,19 @@ pub fn generate_register_array<'s>(
     reg_array: &mir::RegisterArray<'s>,
     declarations: &Declarations,
 ) -> RegisterArray {
+    let ident = gen_ident(reg_array.ident.node);
+
+    let range_declaration =
+        declarations.register_arrays.iter().find(|(name, _, _)| ident == *name).unwrap().1;
+
     RegisterArray {
-        ident: gen_ident(reg_array.ident.node),
+        ident,
         index: Box::new(generate_expression(
             &reg_array.index,
             declarations,
             reg_array.index_ctx_size,
         )),
+        range: generate_bit_range(reg_array.range.map(|s| s.node), range_declaration),
     }
 }
 

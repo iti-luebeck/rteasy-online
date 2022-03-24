@@ -5,9 +5,11 @@ declare bus BUS(2:0)
 ARR[1] <- 42;
 ARR[2] <- 1;
 ARR[2] <- ARR[1] + ARR[2];
+ARR[3] <- "01101011";
 BUS <- -1, ARR[BUS] <- 3;
 
 OUT <- ARR[1];
 OUT <- ARR[0];
 OUT <- ARR[2];
+OUT <- ARR[3](6:1);
 OUT <- ARR[2 + 2 + 2 + 1];

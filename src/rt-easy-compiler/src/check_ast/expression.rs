@@ -182,7 +182,13 @@ impl<'s> CheckExpr<'s> for RegisterArray<'s> {
                     }
                 }
 
-                Some(range.map(|range| range.size()).unwrap_or(1))
+                match util::range_into(range, self.range) {
+                    Ok(size) => Some(size),
+                    Err(e) => {
+                        error_sink(e);
+                        None
+                    }
+                }
             }
             Some(symbol) => {
                 error_sink(CompilerError::new(
