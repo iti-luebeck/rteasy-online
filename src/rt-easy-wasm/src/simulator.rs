@@ -1,6 +1,6 @@
 use crate::{
     util::{JsError, *},
-    Signals, Span, StepResult,
+    Span, StepResult,
 };
 use rt_easy::rtcore::{
     common::{BusKind, RegisterKind},
@@ -26,10 +26,6 @@ impl Simulator {
 
     pub fn is_finished(&self) -> bool {
         self.0.is_finished()
-    }
-
-    pub fn signals(&self) -> Signals {
-        Signals(self.0.signals())
     }
 
     pub fn statement_span(&self, statement: usize) -> Option<Span> {

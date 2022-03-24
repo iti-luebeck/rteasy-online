@@ -3,7 +3,7 @@ mod impl_step;
 
 use self::impl_step::Cursor;
 use crate::{state::State, Changed};
-use rtprogram::{Ident, Label, Program, Signals, Span};
+use rtprogram::{Ident, Label, Program, Span};
 use std::collections::{BTreeSet, HashSet};
 
 pub struct Simulator {
@@ -52,10 +52,6 @@ impl Simulator {
 
     pub fn program(&self) -> &Program {
         &self.program
-    }
-
-    pub fn signals(&self) -> Signals {
-        self.program.signals()
     }
 
     pub fn statement_span(&self, statement: usize) -> Option<Span> {

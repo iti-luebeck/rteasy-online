@@ -8,6 +8,7 @@ publish = false
 
 [dependencies]
 rtcore = { path = "../rt-easy-core", package = "rt-easy-core" }
+rtvhdl = { path = "../rt-easy-vhdl", package = "rt-easy-vhdl" }
 rtast = { path = "../rt-easy-ast", package = "rt-easy-ast" }
 rtprogram = { path = "../rt-easy-program", package = "rt-easy-program" }
 parser = { path = "../rt-easy-parser", package = "rt-easy-parser" }

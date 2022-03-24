@@ -38,6 +38,20 @@ export class RtEasy {
       return { tag: "Error", error_html: errorToHtml(e as string) };
     }
   }
+
+  buildSignals(code: string): CompilerResult<Signals> {
+    try {
+      const signalsWasm = this.rtEasyWasm.build_signals(code);
+      const signals: Signals = {
+        conditionSignals: signalsWasm.condition_signals(),
+        controlSignals: signalsWasm.control_signals(),
+      };
+      signalsWasm.free();
+      return { tag: "Ok", value: signals };
+    } catch (e) {
+      return { tag: "Error", error_html: errorToHtml(e as string) };
+    }
+  }
 }
 
 export type CompilerResult<T> =
@@ -47,7 +61,6 @@ export type CompilerResult<T> =
 export class Simulator {
   private simulatorWasm: wasm.Simulator;
   private sourceCode: string;
-  private signals: Signals;
   private simState: SimState | null;
   private runTimer: NodeJS.Timeout | null;
 
@@ -60,7 +73,6 @@ export class Simulator {
   ) {
     this.simulatorWasm = simulatorWasm;
     this.sourceCode = sourceCode;
-    this.signals = getSignals(simulatorWasm);
     this.simState = null;
     this.runTimer = null;
 
@@ -83,7 +95,6 @@ export class Simulator {
     (this.simulatorWasm.is_finished() && this.simState === null) ||
     (this.simState?.isAtAssertError ?? false);
   getSimState = (): SimState | null => this.simState;
-  getSignals = (): Signals => this.signals;
 
   statementRange = (statement: number): Range | null => {
     const span = this.simulatorWasm.statement_span(statement);
@@ -354,16 +365,6 @@ function errorToHtml(error: string): string {
   );
 
   return error;
-}
-
-function getSignals(simulatorWasm: wasm.Simulator): Signals {
-  const signalsWasm = simulatorWasm.signals();
-  const signals: Signals = {
-    conditionSignals: signalsWasm.condition_signals(),
-    controlSignals: signalsWasm.control_signals(),
-  };
-  signalsWasm.free();
-  return signals;
 }
 
 function calcRange(sourceCode: string, span: wasm.Span): Range {

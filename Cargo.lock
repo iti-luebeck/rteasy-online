@@ -285,6 +285,7 @@ dependencies = [
  "rt-easy-parser",
  "rt-easy-program",
  "rt-easy-simulator",
+ "rt-easy-vhdl",
 ]
 
 [[package]]
