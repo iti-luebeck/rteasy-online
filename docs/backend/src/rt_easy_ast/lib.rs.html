@@ -319,6 +319,7 @@
 <span id="317">317</span>
 <span id="318">318</span>
 <span id="319">319</span>
+<span id="320">320</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">either::Either</span>;
@@ -425,6 +426,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RegisterArray</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Spanned</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">index</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expression</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">range</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Spanned</span><span class="op">&lt;</span><span class="ident">BitRange</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">span</span>: <span class="ident">Span</span>,
 }
 

@@ -344,6 +344,7 @@
 <span id="342">342</span>
 <span id="343">343</span>
 <span id="344">344</span>
+<span id="345">345</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 
 <span class="kw">mod</span> <span class="ident">impl_render</span>;
@@ -561,6 +562,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RegisterArray</span> {
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Ident</span>,
     <span class="kw">pub</span> <span class="ident">index</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expression</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">range</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BitRange</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>

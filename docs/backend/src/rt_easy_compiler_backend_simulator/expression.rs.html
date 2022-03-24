@@ -73,6 +73,7 @@
 <span id="71">71</span>
 <span id="72">72</span>
 <span id="73">73</span>
+<span id="74">74</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">gen_ident</span>, <span class="ident">Generate</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="ident">compiler::mir</span>;
 <span class="kw">use</span> <span class="ident">rtprogram</span>::<span class="kw-2">*</span>;
@@ -143,6 +144,7 @@
             <span class="ident">ident</span>: <span class="ident">gen_ident</span>(<span class="ident">reg_array</span>.<span class="ident">ident</span>.<span class="ident">node</span>),
             <span class="ident">index</span>: <span class="ident">Box::new</span>(<span class="ident">Generate::generate</span>(<span class="kw-2">*</span><span class="ident">reg_array</span>.<span class="ident">index</span>)<span class="question-mark">?</span>),
             <span class="ident">index_ctx_size</span>: <span class="ident">reg_array</span>.<span class="ident">index_ctx_size</span>,
+            <span class="ident">range</span>: <span class="ident">reg_array</span>.<span class="ident">range</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">node</span>),
         })
     }
 }

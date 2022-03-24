@@ -257,6 +257,11 @@
 <span id="255">255</span>
 <span id="256">256</span>
 <span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::SymbolType</span>;
 <span class="kw">use</span> <span class="ident">rtcore::common</span>::{<span class="ident">BitRange</span>, <span class="ident">Span</span>};
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
@@ -361,6 +366,7 @@
     <span class="ident">DoubleGoto</span>,
     <span class="ident">RegisterArrayTooManyReads</span> { <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">allowed</span>: <span class="ident">usize</span> },
     <span class="ident">FeedbackLoop</span>,
+    <span class="ident">AssignmentLhsRegisterArrayWithBitRange</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">CompilerErrorKind</span> {
@@ -396,6 +402,7 @@
             <span class="ident">DoubleGoto</span> =&gt; <span class="number">26</span>,
             <span class="ident">RegisterArrayTooManyReads</span> { .. } =&gt; <span class="number">27</span>,
             <span class="ident">FeedbackLoop</span> =&gt; <span class="number">28</span>,
+            <span class="ident">AssignmentLhsRegisterArrayWithBitRange</span> =&gt; <span class="number">29</span>,
         }
     }
 }
@@ -487,6 +494,9 @@
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;register array \&quot;{}\&quot; is read more than {} times&quot;</span>, <span class="ident">name</span>, <span class="ident">allowed</span>)
             }
             <span class="ident">FeedbackLoop</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;statement has a feedback loop&quot;</span>),
+            <span class="ident">AssignmentLhsRegisterArrayWithBitRange</span> =&gt; {
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;bit range is not allowed in this position&quot;</span>)
+            }
         }
     }
 }

@@ -88,6 +88,7 @@
 <span id="86">86</span>
 <span id="87">87</span>
 <span id="88">88</span>
+<span id="89">89</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
@@ -174,6 +175,7 @@
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Spanned</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">index</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expression</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">index_ctx_size</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">range</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Spanned</span><span class="op">&lt;</span><span class="ident">BitRange</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">span</span>: <span class="ident">Span</span>,
 }
 </code></pre></div>
