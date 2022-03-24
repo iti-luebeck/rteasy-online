@@ -110,16 +110,12 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
 </pre><pre class="rust"><code><span class="kw">mod</span> <span class="ident">impl_state_view</span>;
 <span class="kw">mod</span> <span class="ident">impl_step</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="self">self</span>::impl_step::Cursor</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">state::State</span>, <span class="ident">Changed</span>};
-<span class="kw">use</span> <span class="ident">rtprogram</span>::{<span class="ident">Ident</span>, <span class="ident">Label</span>, <span class="ident">Program</span>, <span class="ident">Signals</span>, <span class="ident">Span</span>};
+<span class="kw">use</span> <span class="ident">rtprogram</span>::{<span class="ident">Ident</span>, <span class="ident">Label</span>, <span class="ident">Program</span>, <span class="ident">Span</span>};
 <span class="kw">use</span> <span class="ident">std::collections</span>::{<span class="ident">BTreeSet</span>, <span class="ident">HashSet</span>};
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Simulator</span> {
@@ -168,10 +164,6 @@
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">program</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Program</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">program</span>
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">signals</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Signals</span> {
-        <span class="self">self</span>.<span class="ident">program</span>.<span class="ident">signals</span>()
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">statement_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">statement</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span> {

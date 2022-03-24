@@ -278,13 +278,9 @@
 <span id="276">276</span>
 <span id="277">277</span>
 <span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">util</span>::{<span class="ident">JsError</span>, <span class="kw-2">*</span>},
-    <span class="ident">Signals</span>, <span class="ident">Span</span>, <span class="ident">StepResult</span>,
+    <span class="ident">Span</span>, <span class="ident">StepResult</span>,
 };
 <span class="kw">use</span> <span class="ident">rt_easy::rtcore</span>::{
     <span class="ident">common</span>::{<span class="ident">BusKind</span>, <span class="ident">RegisterKind</span>},
@@ -310,10 +306,6 @@
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">is_finished</span>()
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">signals</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Signals</span> {
-        <span class="ident">Signals</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">signals</span>())
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">statement_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">statement</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span> {

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["SynthError",""]],"type":[["Result",""]]});
+initSidebarItems({"enum":[["SynthError",""]],"struct":[["BackendError",""]],"type":[["Result",""]]});

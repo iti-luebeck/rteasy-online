@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["build",""],["check",""],["setPanicHook",""]],"struct":[["Signals",""],["Simulator",""],["Span",""],["StepResult",""],["StepResultCondition",""]]});
+initSidebarItems({"fn":[["build",""],["build_signals",""],["check",""],["setPanicHook",""]],"struct":[["Signals",""],["Simulator",""],["Span",""],["StepResult",""],["StepResultCondition",""]]});
