@@ -1,4 +1,5 @@
 use anyhow::{anyhow, bail, ensure, Context, Error, Result};
+use compiler::PrettyPrintError;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{

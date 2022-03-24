@@ -1,3 +1,4 @@
+use compiler::PrettyPrintError;
 use rtcore::common::Span;
 use std::fmt;
 use thiserror::Error;
@@ -11,8 +12,8 @@ pub struct BackendError {
     pub signals: rtvhdl::Signals,
 }
 
-impl BackendError {
-    pub fn pretty_print(&self, source: &str, file_name: Option<&str>, ansi_colors: bool) -> String {
+impl PrettyPrintError for BackendError {
+    fn pretty_print(&self, source: &str, file_name: Option<&str>, ansi_colors: bool) -> String {
         // Sort errors
         let mut errors = self.errors.iter().collect::<Vec<_>>();
         errors.sort_by(|a, b| a.span.cmp(&b.span));

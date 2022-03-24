@@ -1,3 +1,4 @@
+use compiler::PrettyPrintError;
 use rt_easy_program::Program;
 
 pub fn compile(source: &str) -> Program {

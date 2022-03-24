@@ -1,6 +1,6 @@
 use std::convert::Infallible;
 
-use rt_easy_compiler::{Error, Options};
+use rt_easy_compiler::{Error, Options, PrettyPrintError};
 
 #[allow(dead_code)] // Not used by every test file
 pub fn check(source: &str) {

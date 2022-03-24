@@ -1,3 +1,4 @@
+use compiler::PrettyPrintError;
 use compiler_backend_vhdl::BackendVhdl;
 use rt_easy_vhdl::Vhdl;
 

@@ -1,4 +1,5 @@
 use anyhow::{bail, Context, Result};
+use compiler::PrettyPrintError;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::{Path, PathBuf};

@@ -1,4 +1,5 @@
 use anyhow::{anyhow, bail, ensure, Context, Error, Result};
+use compiler::PrettyPrintError;
 use compiler_backend_vhdl::BackendVhdl;
 use memory_file::MemoryFile;
 use std::{

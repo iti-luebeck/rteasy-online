@@ -1,3 +1,4 @@
+use compiler::PrettyPrintError;
 use rt_easy_unit_test::unit_test::UnitTest;
 use rtprogram::Program;
 

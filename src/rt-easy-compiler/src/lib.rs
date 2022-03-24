@@ -16,7 +16,7 @@ use std::convert::Infallible;
 pub trait Backend {
     type Args;
     type Output;
-    type Error: std::error::Error + Send + Sync + 'static;
+    type Error: PrettyPrintError;
 
     fn generate(&self, mir: mir::Mir<'_>, args: Self::Args) -> Result<Self::Output, Self::Error>;
 }
@@ -27,8 +27,19 @@ impl Backend for Infallible {
     type Output = Infallible;
     type Error = Infallible;
 
-    fn generate(&self, _: mir::Mir<'_>, args: Self::Args) -> Result<Self::Output, Self::Error> {
-        match args {}
+    fn generate(&self, _: mir::Mir<'_>, _: Self::Args) -> Result<Self::Output, Self::Error> {
+        match *self {}
+    }
+}
+
+pub trait PrettyPrintError {
+    fn pretty_print(&self, source: &str, file_name: Option<&str>, ansi_colors: bool) -> String;
+}
+
+// Dummy PrettyPrintError
+impl PrettyPrintError for Infallible {
+    fn pretty_print(&self, _: &str, _: Option<&str>, _: bool) -> String {
+        match *self {}
     }
 }
 

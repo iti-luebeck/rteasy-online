@@ -1,4 +1,4 @@
-use crate::{Backend, SymbolType};
+use crate::{Backend, PrettyPrintError, SymbolType};
 use rtcore::common::{BitRange, Span};
 use std::fmt;
 
@@ -9,8 +9,8 @@ pub enum Error<B: Backend> {
     Backend(B::Error),
 }
 
-impl<B: Backend> Error<B> {
-    pub fn pretty_print(&self, source: &str, file_name: Option<&str>, ansi_colors: bool) -> String {
+impl<B: Backend> PrettyPrintError for Error<B> {
+    fn pretty_print(&self, source: &str, file_name: Option<&str>, ansi_colors: bool) -> String {
         match self {
             Error::Errors(errors) => {
                 // Sort errors
@@ -27,8 +27,8 @@ impl<B: Backend> Error<B> {
                 }
                 result
             }
-            Error::Internal(internal) => format!("{}", internal),
-            Error::Backend(backend) => format!("ICE (Backend): {}", backend),
+            Error::Internal(err) => format!("{}", err),
+            Error::Backend(err) => err.pretty_print(source, file_name, ansi_colors),
         }
     }
 }

@@ -1,4 +1,5 @@
 use crate::{Signals, Simulator};
+use rt_easy::compiler::PrettyPrintError;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
