@@ -8,7 +8,7 @@ fn zero() {
     "#;
 
     let vhdl = util::compile(SOURCE);
-    assert_eq!(vhdl.signals().control_signals.len(), 0);
+    assert_eq!(vhdl.signals.control_signals().len(), 0);
 }
 
 #[test]
@@ -20,7 +20,7 @@ fn one() {
     "#;
 
     let vhdl = util::compile(SOURCE);
-    assert_eq!(vhdl.signals().control_signals.len(), 1);
+    assert_eq!(vhdl.signals.control_signals().len(), 1);
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn duplicate() {
     "#;
 
     let vhdl = util::compile(SOURCE);
-    assert_eq!(vhdl.signals().control_signals.len(), 2);
+    assert_eq!(vhdl.signals.control_signals().len(), 2);
 }
 
 #[test]
@@ -45,7 +45,7 @@ fn duplicate_full_range() {
     "#;
 
     let vhdl = util::compile(SOURCE);
-    assert_eq!(vhdl.signals().control_signals.len(), 1);
+    assert_eq!(vhdl.signals.control_signals().len(), 1);
 }
 
 #[test]
@@ -59,7 +59,7 @@ fn duplicate_number_different_kind() {
     "#;
 
     let vhdl = util::compile(SOURCE);
-    assert_eq!(vhdl.signals().control_signals.len(), 1);
+    assert_eq!(vhdl.signals.control_signals().len(), 1);
 }
 
 #[test]
@@ -71,5 +71,5 @@ fn different_ctx_size() {
     "#;
 
     let vhdl = util::compile(SOURCE);
-    assert_eq!(vhdl.signals().control_signals.len(), 2);
+    assert_eq!(vhdl.signals.control_signals().len(), 2);
 }

@@ -3,7 +3,6 @@
 mod impl_render;
 mod render_as_rt;
 mod render_as_vhdl;
-mod signals;
 
 pub mod error;
 
@@ -13,7 +12,6 @@ use crate::error::RenderError;
 // Re-export
 // -------------------------------------------------------------------------------------------------
 
-pub use self::signals::Signals;
 pub use indexmap::{IndexMap, IndexSet};
 pub use rtcore::common::{BinaryOperator, BusKind, NumberKind, RegisterKind, UnaryOperator};
 pub use vec1::{vec1, Vec1};
@@ -25,23 +23,35 @@ pub use vec1::{vec1, Vec1};
 #[derive(Debug)]
 pub struct Vhdl {
     pub statements: Vec<Statement>,
-    pub criteria: IndexSet<Expression>,  // Index = CriterionId
-    pub operations: IndexSet<Operation>, // Index = OperationId
-
+    pub signals: Signals,
     pub declarations: Declarations,
 }
 
 impl Vhdl {
-    pub fn signals(&self) -> Signals {
-        Signals::new(self)
-    }
-
     pub fn render(
         &self,
         module_name: &str,
         memories: std::collections::HashMap<Ident, memory_file::MemoryFile>,
     ) -> Result<String, RenderError> {
         crate::impl_render::render(self, module_name, memories)
+    }
+}
+
+#[derive(Debug)]
+pub struct Signals {
+    pub criteria: IndexSet<Expression>,  // Index = CriterionId
+    pub operations: IndexSet<Operation>, // Index = OperationId
+}
+
+impl Signals {
+    pub fn condition_signals(&self) -> Vec<String> {
+        use render_as_rt::RenderAsRt;
+        self.criteria.iter().map(|expression| RenderAsRt(expression).to_string()).collect()
+    }
+
+    pub fn control_signals(&self) -> Vec<String> {
+        use render_as_rt::RenderAsRt;
+        self.operations.iter().map(|operation| RenderAsRt(operation).to_string()).collect()
     }
 }
 

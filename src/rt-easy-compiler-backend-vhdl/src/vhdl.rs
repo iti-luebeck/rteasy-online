@@ -2,7 +2,7 @@ use super::{
     declarations::generate_declarations, next_state_logic_deps::next_state_logic_deps,
     statement::StatementBuilder,
 };
-use crate::error::SynthError;
+use crate::error::{BackendError, SynthError};
 use compiler::mir;
 use rtvhdl::*;
 use rtvhdl::{IndexMap, IndexSet};
@@ -20,7 +20,7 @@ pub struct VhdlBuilder {
 }
 
 impl VhdlBuilder {
-    pub fn build(mir: mir::Mir<'_>) -> Result<Vhdl, SynthError> {
+    pub fn build(mir: mir::Mir<'_>) -> Result<Vhdl, BackendError> {
         // Create builder
         let mut builder = Self {
             statements: Vec::new(),
@@ -32,6 +32,9 @@ impl VhdlBuilder {
             transform_goto_prefix: calc_label_goto_prefix(&mir),
         };
 
+        // Errors
+        let mut errors = Vec::new();
+
         // Generate statements
         for (idx, statement) in mir.statements.iter().enumerate() {
             // Labels
@@ -40,13 +43,12 @@ impl VhdlBuilder {
 
             // Next state logic
             let deps = next_state_logic_deps(statement);
-            let transform = match (deps.clocked, deps.unclocked) {
-                (_, true) => return Err(SynthError::UnclockedGotoDependency),
-                (true, false) => true,
-                (false, false) => false,
-            };
+            let transform = deps.clocked;
+            if deps.unclocked {
+                errors.push(SynthError::UnclockedGotoDependency);
+            }
             if transform && idx == 0 {
-                return Err(SynthError::ConditionalGotoInFirstState);
+                errors.push(SynthError::ConditionalGotoInFirstState);
             }
 
             // Build
@@ -73,13 +75,15 @@ impl VhdlBuilder {
             operations: IndexMap::new(),
         });
 
+        // Signals
+        let signals = Signals { criteria: builder.criteria, operations: builder.operations };
+
         // Finish
-        Ok(Vhdl {
-            statements: builder.statements,
-            criteria: builder.criteria,
-            operations: builder.operations,
-            declarations: builder.declarations,
-        })
+        if errors.is_empty() {
+            Ok(Vhdl { statements: builder.statements, signals, declarations: builder.declarations })
+        } else {
+            Err(BackendError { errors, signals })
+        }
     }
 
     pub fn push_statement(&mut self, statement: Statement) {

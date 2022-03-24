@@ -16,7 +16,7 @@ pub struct BackendVhdl;
 impl compiler::Backend for BackendVhdl {
     type Args = ();
     type Output = rtvhdl::Vhdl;
-    type Error = error::SynthError;
+    type Error = error::BackendError;
 
     fn generate(
         &self,

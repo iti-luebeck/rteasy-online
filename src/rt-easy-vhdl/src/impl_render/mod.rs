@@ -29,8 +29,8 @@ pub fn render(
     VhdlTemplate {
         module_name,
         statements: &vhdl.statements,
-        criteria: &vhdl.criteria,
-        operations: &vhdl.operations,
+        criteria: &vhdl.signals.criteria,
+        operations: &vhdl.signals.operations,
         declarations: &vhdl.declarations,
         memories,
     }
