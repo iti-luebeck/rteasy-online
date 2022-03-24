@@ -10,6 +10,7 @@ publish = false
 rtcore = { path = "../rt-easy-core", package = "rt-easy-core" }
 rtvhdl = { path = "../rt-easy-vhdl", package = "rt-easy-vhdl" }
 compiler = { path = "../rt-easy-compiler", package = "rt-easy-compiler" }
+pretty-error = { path = "../lib/pretty-error" }
 
 thiserror = "1.0.30"
 

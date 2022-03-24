@@ -2,7 +2,7 @@ use super::{
     declarations::generate_declarations, next_state_logic_deps::next_state_logic_deps,
     statement::StatementBuilder,
 };
-use crate::error::{BackendError, SynthError};
+use crate::error::{BackendError, SynthError, SynthErrorKind};
 use compiler::mir;
 use rtvhdl::*;
 use rtvhdl::{IndexMap, IndexSet};
@@ -45,10 +45,14 @@ impl VhdlBuilder {
             let deps = next_state_logic_deps(statement);
             let transform = deps.clocked;
             if deps.unclocked {
-                errors.push(SynthError::UnclockedGotoDependency);
+                errors
+                    .push(SynthError::new(SynthErrorKind::UnclockedGotoDependency, statement.span));
             }
             if transform && idx == 0 {
-                errors.push(SynthError::ConditionalGotoInFirstState);
+                errors.push(SynthError::new(
+                    SynthErrorKind::ConditionalGotoInFirstState,
+                    statement.span,
+                ));
             }
 
             // Build

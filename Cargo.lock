@@ -333,6 +333,7 @@ dependencies = [
 name = "rt-easy-compiler-backend-vhdl"
 version = "0.1.0"
 dependencies = [
+ "pretty-error",
  "rt-easy-compiler",
  "rt-easy-core",
  "rt-easy-parser",

@@ -1,6 +1,6 @@
 mod util;
 
-use rt_easy_compiler_backend_vhdl::error::SynthError;
+use rt_easy_compiler_backend_vhdl::error::SynthErrorKind;
 
 #[derive(Debug)]
 struct Example {
@@ -59,7 +59,7 @@ fn unclocked_goto_dependency() {
                 }
                 compiler::Error::Backend(err) => {
                     for e in err.errors {
-                        assert!(matches!(e, SynthError::UnclockedGotoDependency));
+                        assert!(matches!(e.kind, SynthErrorKind::UnclockedGotoDependency));
                     }
                 }
             }
@@ -132,7 +132,7 @@ fn conditional_goto_in_first_state() {
                 }
                 compiler::Error::Backend(err) => {
                     for e in err.errors {
-                        assert!(matches!(e, SynthError::ConditionalGotoInFirstState));
+                        assert!(matches!(e.kind, SynthErrorKind::ConditionalGotoInFirstState));
                     }
                 }
             }
