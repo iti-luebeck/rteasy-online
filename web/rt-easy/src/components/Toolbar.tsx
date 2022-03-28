@@ -243,6 +243,16 @@ const Toolbar: React.FC<Props> = () => {
     </Menu>
   );
 
+  const helpMenu = (
+    <Menu>
+      <MenuItem
+        icon="book"
+        text="Tutorial"
+        onClick={() => window.open("/rteasy-online/book", "_blank")}
+      />
+    </Menu>
+  );
+
   return (
     <div
       style={{
@@ -267,16 +277,18 @@ const Toolbar: React.FC<Props> = () => {
           position: "relative",
         }}
       >
-        <Popover content={fileMenu} position={Position.BOTTOM_RIGHT} minimal>
+        <Popover content={fileMenu} position={Position.BOTTOM_LEFT} minimal>
           <Button className={Classes.MINIMAL} text="File" />
         </Popover>
-        <Popover content={editMenu} position={Position.BOTTOM_RIGHT} minimal>
+        <Popover content={editMenu} position={Position.BOTTOM_LEFT} minimal>
           <Button className={Classes.MINIMAL} text="Edit" />
         </Popover>
-        <Popover content={runMenu} position={Position.BOTTOM_RIGHT} minimal>
+        <Popover content={runMenu} position={Position.BOTTOM_LEFT} minimal>
           <Button className={Classes.MINIMAL} text="Run" />
         </Popover>
-        <Button className={Classes.MINIMAL} text="Help" />
+        <Popover content={helpMenu} position={Position.BOTTOM_LEFT} minimal>
+          <Button className={Classes.MINIMAL} text="Help" />
+        </Popover>
         <div
           className="displayOnlySmall"
           style={{
