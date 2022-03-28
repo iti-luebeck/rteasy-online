@@ -31,6 +31,17 @@ pub enum Command {
         #[structopt(parse(from_os_str))]
         test_file: PathBuf,
     },
+    #[structopt(about = "Generate VHDL code")]
+    GenVhdl {
+        #[structopt(parse(from_os_str))]
+        rt_file: PathBuf,
+        #[structopt(parse(from_os_str))]
+        vhdl_file: PathBuf,
+        #[structopt(long)]
+        module_name: Option<String>,
+        #[structopt(long)]
+        memories: Option<Vec<String>>,
+    },
 }
 
 pub fn run(opt: Opt) -> Result<String> {
@@ -43,6 +54,10 @@ pub fn run(opt: Opt) -> Result<String> {
         Command::Test { file, test_file } => {
             commands::test(file, test_file, ansi_colors)?;
             "Tests passed"
+        }
+        Command::GenVhdl { rt_file, vhdl_file, module_name, memories } => {
+            commands::gen_vhdl(rt_file, vhdl_file, module_name, memories, ansi_colors)?;
+            "Generated VHDL code"
         }
     };
 

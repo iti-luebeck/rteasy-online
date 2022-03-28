@@ -1,0 +1,14 @@
+declare register AR(5:0), DR(7:0)
+declare memory MEM(AR,DR)
+
+AR <- 0, DR <- 42;
+write MEM;
+
+AR <- 2, DR <- 7;
+write MEM;
+
+AR <- 0, DR <- 21;
+write MEM;
+
+AR <- 2;
+read MEM;
