@@ -15,3 +15,10 @@ export function showErrorToast(props: ToastProps, key?: string): string {
     key
   );
 }
+
+export function showSuccessToast(props: ToastProps, key?: string): string {
+  return AppToaster.show(
+    { intent: Intent.SUCCESS, timeout: 1000, ...props },
+    key
+  );
+}
