@@ -394,6 +394,8 @@ name = "rt-easy-memory-file"
 version = "0.1.0"
 dependencies = [
  "rt-easy-core",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -429,8 +431,6 @@ dependencies = [
  "rt-easy-memory-file",
  "rt-easy-parser",
  "rt-easy-program",
- "serde",
- "serde_json",
 ]
 
 [[package]]

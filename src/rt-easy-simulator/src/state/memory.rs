@@ -178,13 +178,7 @@ impl MemoryState {
         reader.read_to_string(&mut source).map_err(|_| anyhow!("failed to read memory file"))?;
 
         // Parse file
-        let mem = match MemoryFile::parse(&source) {
-            Ok(mem) => mem,
-            Err(()) => {
-                // Try to parse as deprecated
-                parse_deprecated(&source).map_err(|()| anyhow!("invalid memory file"))?
-            }
-        };
+        let mem = MemoryFile::parse(&source).map_err(|()| anyhow!("invalid memory file"))?;
 
         // Check
         if mem.ar_size() != self.ar_size || mem.dr_size() != self.dr_size {
@@ -217,24 +211,3 @@ impl MemoryState {
 //         Ok(())
 //     }
 // }
-
-// Keep this for compatibility with older versions of memory saves
-fn parse_deprecated(source: &str) -> Result<MemoryFile, ()> {
-    #[derive(Debug, serde::Serialize, serde::Deserialize)]
-    struct MemorySave {
-        ar_size: usize,
-        dr_size: usize,
-        data: Vec<(String, String)>,
-    }
-
-    let save = serde_json::from_str::<MemorySave>(source).map_err(|_| ())?;
-
-    MemoryFile::new(
-        save.ar_size,
-        save.dr_size,
-        save.data
-            .into_iter()
-            .map(|(addr, value)| Ok((Value::parse_hex(&addr)?, Value::parse_hex(&value)?)))
-            .collect::<Result<_, _>>()?,
-    )
-}

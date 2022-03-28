@@ -1,5 +1,7 @@
 #![deny(rust_2018_idioms)]
 
+mod impl_parse;
+
 use std::collections::HashMap;
 use std::fmt;
 
@@ -67,67 +69,8 @@ impl MemoryFile {
 
 impl MemoryFile {
     pub fn parse(source: &str) -> Result<Self, ()> {
-        // Split to lines
-        let mut lines = source.lines().map(|line| {
-            // Remove comment
-            let line = match line.split_once('#') {
-                Some((line, _comment)) => line,
-                None => line,
-            };
-
-            // Trim
-            line.trim()
-        });
-
-        // Parse header
-        let header = lines.next().ok_or(())?;
-        let mut parts = header.split(' ');
-        let parse_fn = match parts.next() {
-            Some("B") | Some("b") => Value::parse_bin,
-            Some("H") | Some("h") => Value::parse_hex,
-            _ => return Err(()),
-        };
-        let ar_size = match parts.next() {
-            Some(ar_size) => ar_size.parse().map_err(|_| ())?,
-            None => return Err(()),
-        };
-        let dr_size = match parts.next() {
-            Some(dr_size) => dr_size.parse().map_err(|_| ())?,
-            None => return Err(()),
-        };
-
-        // Parse data
-        let mut current_address = Value::zero(ar_size);
-        let mut data = HashMap::new();
-        for line in lines {
-            // Skip empty lines
-            if line.is_empty() {
-                continue;
-            }
-
-            // Parse as address or data
-            if line.ends_with(':') {
-                let mut v = parse_fn(&line[0..line.len() - 1]).map_err(|_| ())?;
-                if v.size() > ar_size {
-                    return Err(());
-                }
-                v.extend_zero(ar_size);
-
-                current_address = v;
-            } else {
-                let mut v = parse_fn(line).map_err(|_| ())?;
-                if v.size() > dr_size {
-                    return Err(());
-                }
-                v.extend_zero(dr_size);
-
-                data.insert(current_address.clone(), v);
-                current_address = current_address + Value::one(ar_size);
-            }
-        }
-
-        // Memory file
-        Ok(Self { ar_size, dr_size, data })
+        self::impl_parse::parse(source)
+            .or_else(|e| self::impl_parse::parse_deprecated(source).map_err(|_| e))
     }
 }
 

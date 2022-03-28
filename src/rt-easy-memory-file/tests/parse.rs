@@ -118,3 +118,26 @@ fn comment() {
         );
     }
 }
+
+#[test]
+fn deprecated() {
+    let sources =
+        [r###"{ "ar_size": 4, "dr_size": 8, "data": [["0",  "17"], ["1",  "0"], ["2",  "3"]] }"###];
+
+    for source in sources {
+        let mem = MemoryFile::parse(&source).unwrap();
+        assert_eq!(
+            mem,
+            MemoryFile::new(
+                4,
+                8,
+                HashMap::from([
+                    (Value::parse_bin("0").unwrap(), Value::parse_bin("010111").unwrap()),
+                    (Value::parse_bin("1").unwrap(), Value::parse_bin("0").unwrap()),
+                    (Value::parse_bin("10").unwrap(), Value::parse_bin("11").unwrap()),
+                ])
+            )
+            .unwrap()
+        );
+    }
+}
