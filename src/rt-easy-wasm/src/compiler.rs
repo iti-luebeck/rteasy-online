@@ -1,4 +1,4 @@
-use crate::{Signals, Simulator};
+use crate::{Signals, Simulator, Vhdl};
 use rt_easy::compiler::PrettyPrintError;
 use wasm_bindgen::prelude::*;
 
@@ -39,6 +39,26 @@ pub fn build(code: String) -> Result<Simulator, JsValue> {
     };
 
     Ok(Simulator(rt_easy::simulator::Simulator::init(program)))
+}
+
+#[wasm_bindgen]
+pub fn build_vhdl(code: String) -> Result<Vhdl, JsValue> {
+    let ast = match rt_easy::parser::parse(&code) {
+        Ok(ast) => ast,
+        Err(e) => {
+            return Err(JsValue::from_str(&rt_easy::parser::pretty_print_error(
+                &e, &code, None, true,
+            )))
+        }
+    };
+
+    let backend = rt_easy::compiler_backend_vhdl::BackendVhdl;
+    let vhdl = match rt_easy::compiler::compile(&backend, (), ast, &Default::default()) {
+        Ok(vhdl) => vhdl,
+        Err(e) => return Err(JsValue::from_str(&e.pretty_print(&code, None, true))),
+    };
+
+    Ok(Vhdl(vhdl))
 }
 
 #[wasm_bindgen]

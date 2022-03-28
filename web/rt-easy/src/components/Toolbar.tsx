@@ -10,6 +10,7 @@ import {
   Text,
 } from "@blueprintjs/core";
 
+import { VhdlExportDialog } from "./";
 import { OptionsDialog } from "./";
 
 import { useFilePicker } from "../hooks/useFilePicker";
@@ -22,6 +23,7 @@ interface Props {}
 
 const Toolbar: React.FC<Props> = () => {
   const globalModel = useContext(GlobalContext);
+  const [showVhdlExportDialog, setShowVhdlExportDialog] = useState(false);
   const [showOptionsDialog, setShowOptionsDialog] = useState(false);
   const openFilePicker = useFilePicker({
     accept: [".rt", ".txt"],
@@ -45,10 +47,11 @@ const Toolbar: React.FC<Props> = () => {
       handleUserKeyPress(
         event,
         globalModel,
+        setShowVhdlExportDialog,
         setShowOptionsDialog,
         openFilePicker
       ),
-    [globalModel, setShowOptionsDialog, openFilePicker]
+    [globalModel, setShowVhdlExportDialog, setShowOptionsDialog, openFilePicker]
   );
   useEffect(() => {
     window.addEventListener("keydown", handleUserKeyPressCallback);
@@ -72,6 +75,12 @@ const Toolbar: React.FC<Props> = () => {
         onClick={() =>
           downloadFile(FILENAME, globalModel.editorModel.getValue())
         }
+      />
+      <MenuItem
+        icon="export"
+        text="Export to VHDL..."
+        label={ctrlKeyShortCut("E")}
+        onClick={() => setShowVhdlExportDialog(true)}
       />
       <MenuItem
         icon="cog"
@@ -247,6 +256,10 @@ const Toolbar: React.FC<Props> = () => {
         isOpen={showOptionsDialog}
         onClose={() => setShowOptionsDialog(false)}
       />
+      <VhdlExportDialog
+        isOpen={showVhdlExportDialog}
+        onClose={() => setShowVhdlExportDialog(false)}
+      />
       <div
         style={{
           display: "flex",
@@ -370,6 +383,7 @@ export default Toolbar;
 function handleUserKeyPress(
   event: KeyboardEvent,
   globalModel: GlobalModel,
+  setShowVhdlExportDialog: (value: boolean) => void,
   setShowOptionsDialog: (value: boolean) => void,
   openFilePicker: () => void
 ) {
@@ -386,6 +400,13 @@ function handleUserKeyPress(
         event.preventDefault();
         if (event.repeat) return;
         downloadFile(FILENAME, globalModel.editorModel.getValue());
+      }
+      break;
+    case "e":
+      if (ctrlKeyPressed(event)) {
+        event.preventDefault();
+        if (event.repeat) return;
+        setShowVhdlExportDialog(true);
       }
       break;
     case ",":

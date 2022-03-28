@@ -6,10 +6,11 @@ mod simulator;
 mod span;
 mod step_result;
 mod util;
+mod vhdl;
 
 use wasm_bindgen::prelude::*;
 
-pub use self::{compiler::*, signals::*, simulator::*, span::*, step_result::*};
+pub use self::{compiler::*, signals::*, simulator::*, span::*, step_result::*, vhdl::*};
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc<'_> = wee_alloc::WeeAlloc::INIT;

@@ -39,6 +39,15 @@ export class RtEasy {
     }
   }
 
+  buildVhdl(code: string): CompilerResult<Vhdl> {
+    try {
+      const vhdlWasm = this.rtEasyWasm.build_vhdl(code);
+      return { tag: "Ok", value: new Vhdl(vhdlWasm) };
+    } catch (e) {
+      return { tag: "Error", error_html: errorToHtml(e as string) };
+    }
+  }
+
   buildSignals(code: string): CompilerResult<Signals> {
     try {
       const signalsWasm = this.rtEasyWasm.build_signals(code);
@@ -314,6 +323,42 @@ export class Simulator {
       this.onChange();
     } catch (e) {
       showErrorToast({ message: e as string });
+    }
+  };
+}
+
+export type RenderResult<T> =
+  | { tag: "Ok"; value: T }
+  | { tag: "Error"; error: string };
+
+export class Vhdl {
+  private vhdlWasm: wasm.Vhdl;
+
+  constructor(vhdlWasm: wasm.Vhdl) {
+    this.vhdlWasm = vhdlWasm;
+  }
+
+  free = (): void => {
+    this.vhdlWasm.free();
+  };
+
+  memories = (): string[] => this.vhdlWasm.memories();
+  render = (
+    moduleName: string,
+    memories: { name: string; file: string }[]
+  ): RenderResult<string> => {
+    try {
+      let memoriesArg: string[] = [];
+      for (const mem of memories) {
+        memoriesArg.push(mem.name);
+        memoriesArg.push(mem.file);
+      }
+      return {
+        tag: "Ok",
+        value: this.vhdlWasm.render(moduleName, memoriesArg),
+      };
+    } catch (e) {
+      return { tag: "Error", error: e as string };
     }
   };
 }
