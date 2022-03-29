@@ -23,6 +23,7 @@ enum CodeKind {
     NoRun,
     ShouldFail,
     CompileFail(Option<HashSet<usize>>),
+    VhdlFail(Option<HashSet<usize>>),
 }
 
 #[derive(Debug)]
@@ -153,6 +154,22 @@ fn get_code_blocks(
     codes
 }
 
+fn fix_code_source(source: &str) -> String {
+    let mut result = String::with_capacity(source.len());
+    for line in source.lines() {
+        if line.trim_start().starts_with('~') {
+            let (ws, rest) = line.split_once('~').unwrap();
+            result += ws;
+            result += rest;
+            result += "\n";
+        } else {
+            result += line;
+            result += "\n";
+        }
+    }
+    result
+}
+
 fn code_kind_from_attributes(attributes: &str) -> Result<CodeKind> {
     let mut kind = CodeKind::Default;
     for attr in attributes.split(',') {
@@ -176,24 +193,17 @@ fn code_kind_from_attributes(attributes: &str) -> Result<CodeKind> {
             }
             _ if attr.starts_with("compile_fail(") && attr.ends_with(")") => {
                 ensure!(kind == CodeKind::Default, "conflicting attributes");
-
                 let errors = &attr["compile_fail(".len()..attr.len() - 1];
-                let errors = if errors.is_empty() {
-                    HashSet::new()
-                } else {
-                    errors
-                        .split(';')
-                        .map(|error| {
-                            ensure!(
-                                error.starts_with('E') && error.len() == 4,
-                                "failed to parse error codes"
-                            );
-                            error[1..].parse().context("failed to parse error codes")
-                        })
-                        .collect::<Result<_>>()?
-                };
-
-                kind = CodeKind::CompileFail(Some(errors));
+                kind = CodeKind::CompileFail(Some(parse_error_codes(errors)?));
+            }
+            "vhdl_fail" => {
+                ensure!(kind == CodeKind::Default, "conflicting attributes");
+                kind = CodeKind::VhdlFail(None);
+            }
+            _ if attr.starts_with("vhdl_fail(") && attr.ends_with(")") => {
+                ensure!(kind == CodeKind::Default, "conflicting attributes");
+                let errors = &attr["vhdl_fail(".len()..attr.len() - 1];
+                kind = CodeKind::VhdlFail(Some(parse_error_codes(errors)?));
             }
             _ => (),
         }
@@ -201,20 +211,18 @@ fn code_kind_from_attributes(attributes: &str) -> Result<CodeKind> {
     Ok(kind)
 }
 
-fn fix_code_source(source: &str) -> String {
-    let mut result = String::with_capacity(source.len());
-    for line in source.lines() {
-        if line.trim_start().starts_with('~') {
-            let (ws, rest) = line.split_once('~').unwrap();
-            result += ws;
-            result += rest;
-            result += "\n";
-        } else {
-            result += line;
-            result += "\n";
-        }
+fn parse_error_codes(errors: &str) -> Result<HashSet<usize>> {
+    if errors.is_empty() {
+        Ok(HashSet::new())
+    } else {
+        errors
+            .split(';')
+            .map(|error| {
+                ensure!(error.starts_with('E') && error.len() == 4, "failed to parse error codes");
+                error[1..].parse().context("failed to parse error codes")
+            })
+            .collect::<Result<_>>()
     }
-    result
 }
 
 fn test_code(code: &Code) -> Result<TestSuccess> {
@@ -246,20 +254,38 @@ fn test_code(code: &Code) -> Result<TestSuccess> {
                 ))
             );
         }
+        CodeKind::VhdlFail(None) => {
+            gen_vhdl(&code.source)
+                .err()
+                .context("code compiled successfully, expected vhdl error")?;
+        }
+        CodeKind::VhdlFail(Some(error_codes)) => {
+            let error = gen_vhdl(&code.source)
+                .err()
+                .context("code compiled successfully, expected vhdl error")?;
+            ensure!(
+                &error.codes == error_codes,
+                error.error.context(format!(
+                    "error codes mismatch, expected {:?}, got {:?}",
+                    error_codes, error.codes
+                ))
+            );
+        }
     }
 
     Ok(TestSuccess::Passed)
 }
 
-struct CheckCodeError {
+struct CompilerError {
     error: Error,
     codes: HashSet<usize>,
 }
-fn check_code(source: &str) -> Result<(), CheckCodeError> {
+
+fn check_code(source: &str) -> Result<(), CompilerError> {
     let ast = match parser::parse(&source) {
         Ok(ast) => ast,
         Err(e) => {
-            return Err(CheckCodeError {
+            return Err(CompilerError {
                 error: anyhow!(parser::pretty_print_error(&e, &source, None, true)),
                 codes: HashSet::new(),
             })
@@ -268,14 +294,47 @@ fn check_code(source: &str) -> Result<(), CheckCodeError> {
     match compiler::check(ast, &Default::default()) {
         Ok(()) => (),
         Err(e) => {
-            return Err(CheckCodeError {
+            return Err(CompilerError {
                 error: anyhow!(e.pretty_print(&source, None, true)),
                 codes: match e {
                     compiler::Error::Errors(errors) => {
                         errors.into_iter().map(|e| e.kind.code()).collect()
                     }
                     compiler::Error::Internal(_) => HashSet::new(),
-                    compiler::Error::Backend(_) => HashSet::new(),
+                    compiler::Error::Backend(e) => match e {},
+                },
+            })
+        }
+    };
+
+    Ok(())
+}
+
+fn gen_vhdl(source: &str) -> Result<(), CompilerError> {
+    let ast = match parser::parse(&source) {
+        Ok(ast) => ast,
+        Err(e) => {
+            return Err(CompilerError {
+                error: anyhow!(parser::pretty_print_error(&e, &source, None, true)),
+                codes: HashSet::new(),
+            })
+        }
+    };
+
+    let backend = compiler_backend_vhdl::BackendVhdl;
+    match compiler::compile(&backend, (), ast, &Default::default()) {
+        Ok(_vhdl) => (),
+        Err(e) => {
+            return Err(CompilerError {
+                error: anyhow!(e.pretty_print(&source, None, true)),
+                codes: match e {
+                    compiler::Error::Errors(errors) => {
+                        errors.into_iter().map(|e| e.kind.code()).collect()
+                    }
+                    compiler::Error::Internal(_) => HashSet::new(),
+                    compiler::Error::Backend(e) => {
+                        e.errors.into_iter().map(|e| e.kind.code()).collect()
+                    }
                 },
             })
         }
