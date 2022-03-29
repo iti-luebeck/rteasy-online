@@ -298,3 +298,45 @@ TODO: ...
 ## E028
 
 TODO: ...
+
+```rteasy
+
+```
+
+## E200
+
+_(VHDL Export only)_
+
+This error indicates that a goto operation before the pipe operator is executed conditionally depending on a bus. The gotos are transformed to a state machine during the VHDL export. A dependency of the next state on an unclocked element is not possible with this.
+
+This can be solved by moving the goto operation(s) after the pipe, but beware: this might change the semantics of the program! For example in the code below if we move `if BUS = 2 then goto END fi` after the pipe, this will change the semantics. Before the pipe `BUS` gets the old value of `X` (3), and after the pipe `BUS` gets the new value of `X` (2).
+
+### Examples
+
+```rteasy,vhdl_fail(E200)
+declare register X(7:0)
+declare bus BUS(7:0)
+
+X <- 3;
+BUS <- X, X <- 2, if BUS = 2 then goto END fi; # error: next state depends on an unclocked item
+X <- X + 42;
+END:
+```
+
+## E201
+
+_(VHDL Export only)_
+
+This error indicates that the first state contains a conditional goto operation before the pipe operator. The gotos are transformed to a state machine during the VHDL export. For this transformation it is not possible that the first state contains a goto before the pipe operator.
+
+If it is not possible to get rid of the conditional goto, there are two possible solutions: First, by simply inserting an empty state before the first state (`nop;`). And second, by moving the goto operation(s) after the pipe, but beware: this might changes the semantics of the program if the registers have different values after the pipe!
+
+### Examples
+
+```rteasy,vhdl_fail(E201)
+declare register X(3:0)
+
+if X(0) then goto SKIP fi; # error: conditional goto in first state
+X <- 4;
+SKIP: X <- X + 1;
+```
