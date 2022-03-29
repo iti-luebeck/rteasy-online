@@ -120,6 +120,13 @@ impl Simulator {
                     // Clock
                     let changed = self.state.clock();
 
+                    // Reevaluate criteria and unclocked assignments after "pipe-clock"
+                    for step in statement.steps.node.front() {
+                        if should_reevaluate_after_pipe(step) {
+                            exec_step(cursor, &self.state, cursor.statement_idx, step)?;
+                        }
+                    }
+
                     // Step result
                     let step_result = StepResult {
                         statement: cursor.statement_idx,
@@ -249,5 +256,25 @@ fn exec_step(
         Ok(Some(StepResult { statement: statement_idx, span: step.span(), kind }))
     } else {
         Ok(None)
+    }
+}
+
+fn should_reevaluate_after_pipe(step: &Step) -> bool {
+    match &step.operation.kind {
+        rtprogram::OperationKind::EvalCriterion(_) => true,
+        rtprogram::OperationKind::EvalCriterionGroup(_) => true,
+        rtprogram::OperationKind::Assignment(assignment) => match &assignment.lhs {
+            rtprogram::Lvalue::Bus(_) | rtprogram::Lvalue::ConcatUnclocked(_) => true,
+
+            rtprogram::Lvalue::Register(_)
+            | rtprogram::Lvalue::RegisterArray(_)
+            | rtprogram::Lvalue::ConcatClocked(_) => false,
+        },
+
+        rtprogram::OperationKind::Nop(_)
+        | rtprogram::OperationKind::Goto(_)
+        | rtprogram::OperationKind::Write(_)
+        | rtprogram::OperationKind::Read(_)
+        | rtprogram::OperationKind::Assert(_) => false,
     }
 }

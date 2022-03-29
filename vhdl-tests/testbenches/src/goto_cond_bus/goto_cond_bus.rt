@@ -1,0 +1,17 @@
+declare output OUT(7:0)
+declare register X(7:0)
+declare bus A(7:0), B(7:0)
+
+A <- X, X <- 1 | if A = 1 then goto SKIP_1 fi;
+goto END;
+SKIP_1: OUT <- 1;
+
+A <- B + 3, B <- X + 2, X <- 1 | if A = 6 then goto SKIP_2 fi;
+goto END;
+SKIP_2: OUT <- 2;
+
+if B + X = 4 then A <- B + 5 fi, B <- X + 2, X <- 1 | if A = 8 then goto SKIP_3 fi;
+goto END;
+SKIP_3: OUT <- 3;
+
+END:
