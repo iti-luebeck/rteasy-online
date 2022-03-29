@@ -324,6 +324,32 @@ if COND then X &lt;- 2 else X &lt;- 1 fi;
 <p>TODO: ...</p>
 <h2 id="e028"><a class="header" href="#e028">E028</a></h2>
 <p>TODO: ...</p>
+<pre><code class="language-rteasy">
+</code></pre>
+<h2 id="e200"><a class="header" href="#e200">E200</a></h2>
+<p><em>(VHDL Export only)</em></p>
+<p>This error indicates that a goto operation before the pipe operator is executed conditionally depending on a bus. The gotos are transformed to a state machine during the VHDL export. A dependency of the next state on an unclocked element is not possible with this.</p>
+<p>This can be solved by moving the goto operation(s) after the pipe, but beware: this might change the semantics of the program! For example in the code below if we move <code>if BUS = 2 then goto END fi</code> after the pipe, this will change the semantics. Before the pipe <code>BUS</code> gets the old value of <code>X</code> (3), and after the pipe <code>BUS</code> gets the new value of <code>X</code> (2).</p>
+<h3 id="examples-11"><a class="header" href="#examples-11">Examples</a></h3>
+<pre><code class="language-rteasy vhdl_fail(E200)">declare register X(7:0)
+declare bus BUS(7:0)
+
+X &lt;- 3;
+BUS &lt;- X, X &lt;- 2, if BUS = 2 then goto END fi; # error: next state depends on an unclocked item
+X &lt;- X + 42;
+END:
+</code></pre>
+<h2 id="e201"><a class="header" href="#e201">E201</a></h2>
+<p><em>(VHDL Export only)</em></p>
+<p>This error indicates that the first state contains a conditional goto operation before the pipe operator. The gotos are transformed to a state machine during the VHDL export. For this transformation it is not possible that the first state contains a goto before the pipe operator.</p>
+<p>If it is not possible to get rid of the conditional goto, there are two possible solutions: First, by simply inserting an empty state before the first state (<code>nop;</code>). And second, by moving the goto operation(s) after the pipe, but beware: this might changes the semantics of the program if the registers have different values after the pipe!</p>
+<h3 id="examples-12"><a class="header" href="#examples-12">Examples</a></h3>
+<pre><code class="language-rteasy vhdl_fail(E201)">declare register X(3:0)
+
+if X(0) then goto SKIP fi; # error: conditional goto in first state
+X &lt;- 4;
+SKIP: X &lt;- X + 1;
+</code></pre>
 
                     </main>
 
