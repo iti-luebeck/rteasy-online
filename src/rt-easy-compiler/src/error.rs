@@ -87,7 +87,7 @@ pub enum CompilerErrorKind {
     AssignmentDoesNotFit { lhs_size: usize, rhs_size: usize },
     RegArrayIndexDoesNotFit { index_size: usize, index_expr_size: usize },
     ConditionTooWide(usize),
-    BitRangeTooWide { max_size: usize, size: usize },
+    BitRangeTooWide { max_size: usize, size: Option<usize> },
     CaseValueTooWide { expr_size: usize, case_value_size: usize },
     DuplicateCaseValue,
     AssignmentLhsContainsClockedAndUnclocked,
@@ -192,9 +192,10 @@ impl fmt::Display for CompilerErrorKind {
                     condition_size
                 )
             }
-            BitRangeTooWide { max_size, size } => {
-                write!(f, "bit range size exceeds max size: {} > {}", size, max_size)
-            }
+            BitRangeTooWide { max_size, size } => match size {
+                Some(size) => write!(f, "bit range size exceeds max size: {} > {}", size, max_size),
+                None => write!(f, "bit range size exceeds max size: {}", max_size),
+            },
             CaseValueTooWide { expr_size, case_value_size } => {
                 write!(f, "case value is too wide: {} > {}", case_value_size, expr_size)
             }

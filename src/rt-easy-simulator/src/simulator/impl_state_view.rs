@@ -26,7 +26,7 @@ impl Simulator {
         value: impl Into<SignedValue>,
     ) -> Result<(), Error> {
         let register = self.state.register_mut(name)?;
-        let value = into_twos_complement(value.into(), register.range().size())?;
+        let value = into_twos_complement(value.into(), register.range().size().unwrap())?;
         register.write(None, value)?;
         register.clock();
 
@@ -45,7 +45,7 @@ impl Simulator {
     }
     pub fn write_bus(&mut self, name: &Ident, value: impl Into<SignedValue>) -> Result<(), Error> {
         let bus = self.state.bus_mut(name)?;
-        let value = into_twos_complement(value.into(), bus.range().size())?;
+        let value = into_twos_complement(value.into(), bus.range().size().unwrap())?;
         bus.write(None, value)?;
 
         // Persist bus value if between statements

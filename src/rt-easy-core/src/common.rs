@@ -162,13 +162,13 @@ impl BitRange {
         (self.msb, self.lsb())
     }
 
-    pub fn size(&self) -> usize {
+    pub fn size(&self) -> Option<usize> {
         let lsb = self.lsb();
-        if self.msb >= lsb {
-            self.msb - lsb + 1
-        } else {
-            lsb - self.msb + 1
-        }
+        let diff = if self.msb >= lsb { self.msb - lsb } else { lsb - self.msb };
+
+        // This overflows if either msb or lsb is usize::MAX and the other is 0. In this case size
+        // can not be represented in a usize.
+        diff.checked_add(1)
     }
 
     pub fn contains(&self, pos: usize) -> bool {
@@ -195,7 +195,7 @@ impl BitRange {
     pub fn bits(&self) -> impl Iterator<Item = usize> {
         let lsb = self.lsb();
         let msb_ge_lsb = self.msb >= lsb;
-        let size = self.size();
+        let size = self.size().unwrap();
 
         (0..size).into_iter().map(move |idx| if msb_ge_lsb { lsb + idx } else { lsb - idx })
     }

@@ -2,7 +2,7 @@ use crate::{CompilerError, CompilerErrorKind};
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-const MAX_BIT_RANGE_SIZE: usize = u16::MAX as usize;
+const MAX_BIT_RANGE_SIZE: usize = u16::MAX as usize + 1;
 const MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER: usize = 64;
 
 #[derive(Debug, Default)]
@@ -36,7 +36,7 @@ impl<'s> Symbols<'s> {
 
                         if let Some(range) = reg.range {
                             let size = range.node.size();
-                            if size > MAX_BIT_RANGE_SIZE {
+                            if size.map(|size| size > MAX_BIT_RANGE_SIZE).unwrap_or(true) {
                                 error_sink(CompilerError::new(
                                     CompilerErrorKind::BitRangeTooWide {
                                         max_size: MAX_BIT_RANGE_SIZE,
@@ -66,7 +66,7 @@ impl<'s> Symbols<'s> {
 
                         if let Some(range) = bus.range {
                             let size = range.node.size();
-                            if size > MAX_BIT_RANGE_SIZE {
+                            if size.map(|size| size > MAX_BIT_RANGE_SIZE).unwrap_or(true) {
                                 error_sink(CompilerError::new(
                                     CompilerErrorKind::BitRangeTooWide {
                                         max_size: MAX_BIT_RANGE_SIZE,
@@ -97,8 +97,12 @@ impl<'s> Symbols<'s> {
                         ] {
                             match symbols.symbol(mem_reg.node) {
                                 Some(Symbol::Register(range, _)) => {
-                                    let size = range.map(|r| r.size()).unwrap_or(1);
-                                    if is_ar && size > MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER {
+                                    let size = range.unwrap_or_default().size();
+                                    if is_ar
+                                        && size
+                                            .map(|size| size > MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER)
+                                            .unwrap_or(true)
+                                    {
                                         error_sink(CompilerError::new(
                                             CompilerErrorKind::BitRangeTooWide {
                                                 max_size: MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER,
@@ -158,7 +162,7 @@ impl<'s> Symbols<'s> {
 
                         if let Some(range) = reg_array.range {
                             let size = range.node.size();
-                            if size > MAX_BIT_RANGE_SIZE {
+                            if size.map(|size| size > MAX_BIT_RANGE_SIZE).unwrap_or(true) {
                                 error_sink(CompilerError::new(
                                     CompilerErrorKind::BitRangeTooWide {
                                         max_size: MAX_BIT_RANGE_SIZE,

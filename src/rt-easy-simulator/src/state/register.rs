@@ -17,7 +17,12 @@ pub struct RegisterState {
 impl RegisterState {
     pub fn init(range: Option<BitRange>, kind: RegisterKind) -> Self {
         let range = range.unwrap_or_default();
-        Self { range, value: Value::zero(range.size()), value_next: RefCell::new(None), kind }
+        Self {
+            range,
+            value: Value::zero(range.size().unwrap()),
+            value_next: RefCell::new(None),
+            kind,
+        }
     }
 
     pub fn value_next(&self) -> Option<Value> {

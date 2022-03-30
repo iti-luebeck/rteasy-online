@@ -117,14 +117,14 @@ impl<'s> CheckExpr<'s> for RegBus<'s> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         let size = match symbols.symbol(self.ident.node) {
             Some(Symbol::Register(range, _)) => match util::range_into(range, self.range) {
-                Ok(size) => Some(size),
+                Ok(maybe_size) => maybe_size,
                 Err(e) => {
                     error_sink(e);
                     None
                 }
             },
             Some(Symbol::Bus(range, _)) => match util::range_into(range, self.range) {
-                Ok(size) => Some(size),
+                Ok(maybe_size) => maybe_size,
                 Err(e) => {
                     error_sink(e);
                     None
@@ -183,7 +183,7 @@ impl<'s> CheckExpr<'s> for RegisterArray<'s> {
                 }
 
                 match util::range_into(range, self.range) {
-                    Ok(size) => Some(size),
+                    Ok(maybe_size) => maybe_size,
                     Err(e) => {
                         error_sink(e);
                         None

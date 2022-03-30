@@ -86,7 +86,7 @@ pub fn is_fixed_size_unary_op(op: UnaryOperator) -> bool {
 pub fn range_into(
     range: Option<BitRange>,
     range_idx: Option<Spanned<BitRange>>,
-) -> Result<usize, CompilerError> {
+) -> Result<Option<usize>, CompilerError> {
     let range = range.unwrap_or_default();
     let range_idx = match range_idx {
         Some(range_idx) => range_idx,

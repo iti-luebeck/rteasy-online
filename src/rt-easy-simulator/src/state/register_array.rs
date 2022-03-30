@@ -117,7 +117,7 @@ impl RegisterArrayState {
     }
 
     pub fn data_size(&self) -> usize {
-        self.range.size()
+        self.range.size().unwrap()
     }
 }
 

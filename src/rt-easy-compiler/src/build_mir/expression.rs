@@ -104,7 +104,8 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
     fn build(item: ast::RegBus<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Register(range, kind)) => {
-                let size = util::range_into(range, item.range)?;
+                let size = util::range_into(range, item.range)?
+                    .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
                     inner: Either::Left(Register {
                         ident: item.ident,
@@ -116,7 +117,8 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
                 })
             }
             Some(Symbol::Bus(range, kind)) => {
-                let size = util::range_into(range, item.range)?;
+                let size = util::range_into(range, item.range)?
+                    .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
                     inner: Either::Right(Bus {
                         ident: item.ident,
@@ -136,7 +138,8 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Register<'s> {
     fn build(item: ast::RegBus<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Register(range, kind)) => {
-                let size = util::range_into(range, item.range)?;
+                let size = util::range_into(range, item.range)?
+                    .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
                     inner: Register { ident: item.ident, range: item.range, kind, span: item.span },
                     size,
@@ -151,7 +154,8 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Bus<'s> {
     fn build(item: ast::RegBus<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Bus(range, kind)) => {
-                let size = util::range_into(range, item.range)?;
+                let size = util::range_into(range, item.range)?
+                    .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
                     inner: Bus { ident: item.ident, range: item.range, kind, span: item.span },
                     size,
@@ -167,7 +171,8 @@ impl<'s> BuildExpr<ast::RegisterArray<'s>> for RegisterArray<'s> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::RegisterArray { range, len }) => {
                 let index = Expression::build(*item.index, symbols)?;
-                let size = util::range_into(range, item.range)?;
+                let size = util::range_into(range, item.range)?
+                    .ok_or_else(|| InternalError("expected size".to_string()))?;
 
                 Ok(Expr {
                     inner: RegisterArray {

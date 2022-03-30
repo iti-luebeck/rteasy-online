@@ -62,8 +62,9 @@ impl State {
             if let Declaration::Memory(declare_memory) = declaration {
                 for mem in &declare_memory.memories {
                     let ar_size =
-                        registers.get(&mem.range.address_register).unwrap().range().size();
-                    let dr_size = registers.get(&mem.range.data_register).unwrap().range().size();
+                        registers.get(&mem.range.address_register).unwrap().range().size().unwrap();
+                    let dr_size =
+                        registers.get(&mem.range.data_register).unwrap().range().size().unwrap();
                     memories.insert(
                         mem.ident.clone(),
                         MemoryState::init(mem.range.clone(), ar_size, dr_size),
@@ -103,7 +104,7 @@ impl State {
     pub fn clear_intern_buses(&self, buses_persist: &HashSet<Ident>) {
         for (ident, bus) in &self.buses {
             if !buses_persist.contains(ident) && bus.kind() == BusKind::Intern {
-                bus.write(None, Value::zero(bus.range().size())).unwrap();
+                bus.write(None, Value::zero(bus.range().size().unwrap())).unwrap();
             }
         }
     }

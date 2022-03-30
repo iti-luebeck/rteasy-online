@@ -16,7 +16,7 @@ pub struct BusState {
 impl BusState {
     pub fn init(range: Option<BitRange>, kind: BusKind) -> Self {
         let range = range.unwrap_or_default();
-        Self { range, value: RefCell::new(Value::zero(range.size())), kind }
+        Self { range, value: RefCell::new(Value::zero(range.size().unwrap())), kind }
     }
 
     pub fn read(&self, idx: Option<BitRange>) -> Result<Value, Error> {
