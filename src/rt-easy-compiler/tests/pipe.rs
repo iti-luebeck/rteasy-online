@@ -31,6 +31,25 @@ fn goto_before_pipe() {
 }
 
 #[test]
+fn ok_after_pipe() {
+    const SOURCES: &'static [&'static str] = &[
+        r#"
+            declare register A(3:0), C
+            START: A <- 2, nop | nop, if A(3) then assert C = 5 fi;
+        "#,
+        r#"
+            declare register A, B
+            nop | assert A, goto END;
+            END:
+        "#,
+    ];
+
+    for source in SOURCES {
+        util::check(source);
+    }
+}
+
+#[test]
 fn mutate_after_pipe() {
     const SOURCES: &'static [&'static str] = &[
         r#"

@@ -351,7 +351,7 @@ impl<'s> CheckOp<'s> for Assert<'s> {
             }
         }
 
-        Ok(Res { contains_goto: false, contains_mutate: true })
+        Ok(Res { contains_goto: false, contains_mutate: false })
     }
 }
 
