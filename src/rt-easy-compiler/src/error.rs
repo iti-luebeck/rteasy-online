@@ -212,8 +212,8 @@ impl fmt::Display for CompilerErrorKind {
             RangeMismatch { range, range_idx } => {
                 write!(f, "bit range {} exceeds declaration {}", range_idx, range)
             }
-            GotoBeforePipe => write!(f, "no goto statements are allowed before pipe (\"|\")"),
-            MutateAfterPipe => write!(f, "no mutating statements allowed after pipe (\"|\")"),
+            GotoBeforePipe => write!(f, "no goto operations are allowed before pipe (\"|\")"),
+            MutateAfterPipe => write!(f, "no mutating operations allowed after pipe (\"|\")"),
             SxtTerm => write!(f, "sxt operator is not supported for terms"),
             WrongSymbolType { expected, found } => {
                 write!(f, "expected {}, found: {}", DisplaySymbolTypes(expected), found)
