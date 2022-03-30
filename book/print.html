@@ -614,36 +614,164 @@ switch &quot;0101&quot; {
 X &lt;- Y.5.Y(0);     # error: concat must not contain numbers other than bit strings
 </code></pre>
 <h2 id="e011"><a class="header" href="#e011">E011</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when the right-hand side of an assignment is wider than the target. Consider restricting the right-hand side to a smaller bit range or making the target wider.</p>
+<h3 id="examples-11"><a class="header" href="#examples-11">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E011)">declare register X(7:0), Y(3:0)
+
+X &lt;- Y;      # ok
+Y &lt;- X(4:1); # ok
+Y &lt;- X;      # error: right-hand side is too wide: 8 &gt; 4
+</code></pre>
 <h2 id="e012"><a class="header" href="#e012">E012</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when the index expression of an register array is too wide. The size of the index must be less than or equal to <code>log2(arr_length)</code>, so that no invalid index can be used.</p>
+<h3 id="examples-12"><a class="header" href="#examples-12">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E012)"><span class="boring">declare register X(7:0)
+</span>declare register array ARR(7:0)[4]
+
+X &lt;- ARR[0b01];  # ok
+X &lt;- ARR[0b11];  # ok
+X &lt;- ARR[0b100]; # error: index expression is too wide: 3 &gt; 2
+</code></pre>
 <h2 id="e013"><a class="header" href="#e013">E013</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when the condition of an assert or if operation is not exactly one bit wide. A condition must always be either <code>0</code> or <code>1</code>.</p>
+<h3 id="examples-13"><a class="header" href="#examples-13">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E013)">declare register X(7:0), Y(3:0)
+
+# error: condition expression must be exactly one bit wide, but is: 8
+assert X + Y;
+
+# error: condition expression must be exactly one bit wide, but is: 4
+if Y then nop fi;
+</code></pre>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0), Y(3:0)
+</span><span class="boring">
+</span>assert X = Y;         # ok
+if X = Y then nop fi; # ok
+</code></pre>
 <h2 id="e014"><a class="header" href="#e014">E014</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates that a bit range exceeds the maximum size. The maximum is <code>65536 = 2^16</code> by default. Address registers of memories are further limited to a size of <code>64 = 2^6</code>.</p>
+<h3 id="examples-14"><a class="header" href="#examples-14">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E014)"># error: bit range size exceeds max size: 65538 &gt; 65536
+declare bus B(0:65537)
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E014)">declare register AR(128:32), DR(3:0)
+declare memory MEM(AR, DR) # error: bit range size exceeds max size: 97 &gt; 64
+</code></pre>
 <h2 id="e015"><a class="header" href="#e015">E015</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when a case value is wider than the expression being compared to. Consider making the expression wider or shrinking the case value.</p>
+<h3 id="examples-15"><a class="header" href="#examples-15">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E015)">declare register X(3:0)
+
+switch X {
+    case 9: nop       # ok
+    case &quot;1111&quot;: nop  # ok
+    case &quot;10001&quot;: nop # error: case value is too wide: 5 &gt; 4
+    default: nop
+};
+</code></pre>
 <h2 id="e016"><a class="header" href="#e016">E016</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates a duplicate case value. Each case arm must have a unique value.</p>
+<h3 id="examples-16"><a class="header" href="#examples-16">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E016)"><span class="boring">declare register X(3:0)
+</span><span class="boring">
+</span>switch X {
+    case 3: nop     # ok
+    case 2 + 1: nop # error: duplicate case value
+
+    case 4: nop # ok
+    case 4: nop # error: duplicate case value
+
+    default: nop
+};
+</code></pre>
 <h2 id="e017"><a class="header" href="#e017">E017</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates that the left-hand side of an assignment contains clocked and unclocked variables. Since they take on their new values at different times, it is not allowed to combine them on the left-hand side.</p>
+<h3 id="examples-17"><a class="header" href="#examples-17">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E017)">declare register REG1(3:0), REG2(3:0)
+declare bus BUS1(3:0), BUS2(3:0)
+
+REG1.REG2 &lt;- 42; # ok
+BUS1.BUS2 &lt;- 42; # ok
+
+# error: the left-hand side of the assignment may contain either clocked or unclocked variables only
+REG1.BUS1 &lt;- 42;
+</code></pre>
 <h2 id="e018"><a class="header" href="#e018">E018</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates that the left-hand side of an assignment contains non-variable items, such as bit strings.</p>
+<h3 id="examples-18"><a class="header" href="#examples-18">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E018)"><span class="boring">declare register X(3:0), Y(3:0)
+</span><span class="boring">
+</span># error: the left-hand side of the assignment must be a variable
+X.&quot;010&quot;.Y &lt;- X + Y;
+</code></pre>
 <h2 id="e019"><a class="header" href="#e019">E019</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates that the left-hand side of an assignment contains an input. Inputs are read-only and therefore cannot be assigned from within the program.</p>
+<h3 id="examples-19"><a class="header" href="#examples-19">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E019)">declare input IN(7:0)
+declare bus BUS(3:0)
+
+IN &lt;- 12;    # error: cannot assign to input (inputs are read-only)
+BUS.IN &lt;- 3; # error: cannot assign to input (inputs are read-only)
+</code></pre>
 <h2 id="e020"><a class="header" href="#e020">E020</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when a used bit range exceeds the declaration. Bit ranges must specify a subrange of the declaration. Furthermore, they must also have the same &quot;direction&quot;, e.g. <code>(2:0)</code> is contained in <code>(3:0)</code>, but <strong>not</strong> in <code>(0:3)</code>.</p>
+<h3 id="examples-20"><a class="header" href="#examples-20">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E020)">declare register X(7:0), Y(0:3)
+
+X &lt;- X(6:2); # ok
+X &lt;- X(15);  # error: bit range (15) exceeds declaration (7:0)
+
+Y &lt;- Y(1:1); # ok
+Y &lt;- Y(2:0); # error: bit range (2:0) exceeds declaration (0:3)
+</code></pre>
 <h2 id="e021"><a class="header" href="#e021">E021</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when a goto operation is used before the pipe. If a statement uses the pipe operator and thus the conditional branch, all gotos must be placed after the pipe.</p>
+<h3 id="examples-21"><a class="header" href="#examples-21">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E021)"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span># ok, since this statement has no conditional branch
+goto L1;
+
+# error: no goto operations are allowed before pipe (&quot;|&quot;)
+goto L1 | if X = 0 then goto L2 fi;
+<span class="boring">
+</span><span class="boring">L1: nop;
+</span><span class="boring">L2: nop;
+</span></code></pre>
 <h2 id="e022"><a class="header" href="#e022">E022</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when mutating operations are used after the pipe. After the pipe only conditional (if/switch), nop and assert operations are allowed.</p>
+<h3 id="examples-22"><a class="header" href="#examples-22">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E022)"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span># error: no mutating operations allowed after pipe (&quot;|&quot;)
+nop | X &lt;- 12;
+</code></pre>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0)
+</span><span class="boring">
+</span><span class="boring">START:
+</span>X &lt;- 2 + 2 | assert X = 4;         # ok
+nop | if X = 5 then goto START fi; # ok
+</code></pre>
 <h2 id="e023"><a class="header" href="#e023">E023</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when a sign extend operator is used on a term. The sign extend operator may only be applied on simple expressions, like registers, buses or concatenations.</p>
+<h3 id="examples-23"><a class="header" href="#examples-23">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E023)"><span class="boring">declare register X(7:0), Y(3:0)
+</span><span class="boring">
+</span>X &lt;- sxt Y;       # ok
+X &lt;- sxt (Y + 1); # error: sxt operator is not supported for terms
+</code></pre>
 <h2 id="e024"><a class="header" href="#e024">E024</a></h2>
-<p>TODO: ...</p>
+<p>This error occurs when a symbol can be found but is of the wrong type. For example, a memory is always expected in a read operation.</p>
+<h3 id="examples-24"><a class="header" href="#examples-24">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E024)">declare register X(7:0), Y(3:0)
+declare memory MEM(X, Y)
+
+read X;   # error: expected memory, found: register
+MEM &lt;- 2; # error: expected register or bus, found: memory
+</code></pre>
 <h2 id="e025"><a class="header" href="#e025">E025</a></h2>
 <p>This error indicates that a register, bus, register array or memory is assigned more than once in a cycle. Only one assignment to an item may be executed per execution path and cycle.</p>
-<h3 id="examples-11"><a class="header" href="#examples-11">Examples</a></h3>
+<h3 id="examples-25"><a class="header" href="#examples-25">Examples</a></h3>
 <pre><code class="language-rteasy compile_fail(E025)"><span class="boring">declare register X(3:0)
 </span><span class="boring">
 </span>X &lt;- 2, X &lt;- 1; # error: register &quot;X&quot; is assigned more than once
@@ -656,22 +784,83 @@ write MEM, write MEM; # error: memory &quot;MEM&quot; is assigned more than once
 </code></pre>
 <pre><code class="language-rteasy"><span class="boring">declare register X(3:0), COND
 </span><span class="boring">
-</span># ok, because always only one of the two assignments is executed in one cycle.
+</span># ok, because always only one of the two assignments is executed in one cycle
 if COND then X &lt;- 2 else X &lt;- 1 fi;
 </code></pre>
 <h2 id="e026"><a class="header" href="#e026">E026</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates that a statement contains multiple gotos on at least one possible execution path. Only one goto may be executed per execution path and cycle.</p>
+<h3 id="examples-26"><a class="header" href="#examples-26">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E026)"># error: statement contains multiple gotos on at least one possible execution path
+goto L1, goto L2;
+<span class="boring">
+</span><span class="boring">L1: nop;
+</span><span class="boring">L2: nop;
+</span></code></pre>
+<pre><code class="language-rteasy compile_fail(E026)"><span class="boring">declare register COND
+</span><span class="boring">
+</span># error: statement contains multiple gotos on at least one possible execution path
+goto L1, if COND then goto L2 fi;
+<span class="boring">
+</span><span class="boring">L1: nop;
+</span><span class="boring">L2: nop;
+</span></code></pre>
+<pre><code class="language-rteasy"><span class="boring">declare register COND
+</span><span class="boring">
+</span># ok, because always only one of the gotos is executed in one cycle
+if COND then goto L1 else goto L2 fi;
+<span class="boring">
+</span><span class="boring">L1: nop;
+</span><span class="boring">L2: nop;
+</span></code></pre>
 <h2 id="e027"><a class="header" href="#e027">E027</a></h2>
-<p>TODO: ...</p>
+<p>This error indicates that a register array is read more than 2 times on at least one possible execution path. Only 2 read ports are available per register array and cycle.</p>
+<h3 id="examples-27"><a class="header" href="#examples-27">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E027)"><span class="boring">declare register X(7:0)
+</span><span class="boring">declare register array ARR(3:0)[4]
+</span><span class="boring">
+</span># error: register array &quot;ARR&quot; is read more than 2 times
+X &lt;- ARR[0] + ARR[1] + ARR[2];
+
+# error: register array &quot;ARR&quot; is read more than 2 times
+X &lt;- ARR[1] + ARR[1] + ARR[1];
+</code></pre>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0), COND
+</span><span class="boring">declare register array ARR(3:0)[4]
+</span><span class="boring">
+</span># ok, since the register array is read at most twice
+if COND then X &lt;- ARR[0] else X &lt;- ARR[1] + ARR[2] fi;
+</code></pre>
 <h2 id="e028"><a class="header" href="#e028">E028</a></h2>
-<p>TODO: ...</p>
-<pre><code class="language-rteasy">
+<p>This error indicates that a statement has a feeback loop. This can happen, for example, when the value of a bus A depends on a bus B, and B in turn depends on A.</p>
+<h3 id="examples-28"><a class="header" href="#examples-28">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E028)">declare bus A, B
+
+# error: statement has a feedback loop
+# (A depends on B and B depends on A)
+A &lt;- B, B &lt;- A;
+</code></pre>
+<pre><code class="language-rteasy compile_fail(E028)">declare bus A, B
+
+# error: statement has a feedback loop
+# (A depends on itself)
+if A then A &lt;- B fi;
+</code></pre>
+<h2 id="e029"><a class="header" href="#e029">E029</a></h2>
+<p>This error occurs when a register array is used with a bit range on the left-hand side of an assignment. With register arrays it is only possible to access individual bits when reading.</p>
+<p>The access to a register in an array is always exhaustive. When writing all bits must be written and when reading all bits must be read. Since single bits can be simply ignored when reading, it is possible to specify a bit range when reading.</p>
+<h3 id="examples-29"><a class="header" href="#examples-29">Examples</a></h3>
+<pre><code class="language-rteasy compile_fail(E029)"><span class="boring">declare register X(3:0)
+</span><span class="boring">declare register array ARR(7:0)[4]
+</span><span class="boring">
+</span>X &lt;- ARR[2](3:0); # ok
+
+ARR[2](3:0) &lt;- X; # error: bit range is not allowed in this position
 </code></pre>
 <h2 id="e200"><a class="header" href="#e200">E200</a></h2>
 <p><em>(VHDL Export only)</em></p>
 <p>This error indicates that a goto operation before the pipe operator is executed conditionally depending on a bus. The gotos are transformed to a state machine during the VHDL export. A dependency of the next state on an unclocked element is not possible with this.</p>
 <p>This can be solved by moving the goto operation(s) after the pipe, but beware: this might change the semantics of the program! For example in the code below if we move <code>if BUS = 2 then goto END fi</code> after the pipe, this will change the semantics. Before the pipe <code>BUS</code> gets the old value of <code>X</code> (3), and after the pipe <code>BUS</code> gets the new value of <code>X</code> (2).</p>
-<h3 id="examples-12"><a class="header" href="#examples-12">Examples</a></h3>
+<h3 id="examples-30"><a class="header" href="#examples-30">Examples</a></h3>
 <pre><code class="language-rteasy vhdl_fail(E200)">declare register X(7:0)
 declare bus BUS(7:0)
 
@@ -684,7 +873,7 @@ END:
 <p><em>(VHDL Export only)</em></p>
 <p>This error indicates that the first state contains a conditional goto operation before the pipe operator. The gotos are transformed to a state machine during the VHDL export. For this transformation it is not possible that the first state contains a goto before the pipe operator.</p>
 <p>If it is not possible to get rid of the conditional goto, there are two possible solutions: First, by simply inserting an empty state before the first state (<code>nop;</code>). And second, by moving the goto operation(s) after the pipe, but beware: this might changes the semantics of the program if the registers have different values after the pipe!</p>
-<h3 id="examples-13"><a class="header" href="#examples-13">Examples</a></h3>
+<h3 id="examples-31"><a class="header" href="#examples-31">Examples</a></h3>
 <pre><code class="language-rteasy vhdl_fail(E201)">declare register X(3:0)
 
 if X(0) then goto SKIP fi; # error: conditional goto in first state

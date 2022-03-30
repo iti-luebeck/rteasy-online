@@ -73,7 +73,7 @@
 <span class="kw">impl</span> <span class="ident">BusState</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="ident">range</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BitRange</span><span class="op">&gt;</span>, <span class="ident">kind</span>: <span class="ident">BusKind</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">range</span> <span class="op">=</span> <span class="ident">range</span>.<span class="ident">unwrap_or_default</span>();
-        <span class="self">Self</span> { <span class="ident">range</span>, <span class="ident">value</span>: <span class="ident">RefCell::new</span>(<span class="ident">Value::zero</span>(<span class="ident">range</span>.<span class="ident">size</span>())), <span class="ident">kind</span> }
+        <span class="self">Self</span> { <span class="ident">range</span>, <span class="ident">value</span>: <span class="ident">RefCell::new</span>(<span class="ident">Value::zero</span>(<span class="ident">range</span>.<span class="ident">size</span>().<span class="ident">unwrap</span>())), <span class="ident">kind</span> }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">idx</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BitRange</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="ident">Error</span><span class="op">&gt;</span> {

@@ -253,6 +253,7 @@
 <span id="251">251</span>
 <span id="252">252</span>
 <span id="253">253</span>
+<span id="254">254</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Backend</span>, <span class="ident">PrettyPrintError</span>, <span class="ident">SymbolType</span>};
 <span class="kw">use</span> <span class="ident">rtcore::common</span>::{<span class="ident">BitRange</span>, <span class="ident">Span</span>};
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
@@ -342,7 +343,7 @@
     <span class="ident">AssignmentDoesNotFit</span> { <span class="ident">lhs_size</span>: <span class="ident">usize</span>, <span class="ident">rhs_size</span>: <span class="ident">usize</span> },
     <span class="ident">RegArrayIndexDoesNotFit</span> { <span class="ident">index_size</span>: <span class="ident">usize</span>, <span class="ident">index_expr_size</span>: <span class="ident">usize</span> },
     <span class="ident">ConditionTooWide</span>(<span class="ident">usize</span>),
-    <span class="ident">BitRangeTooWide</span> { <span class="ident">max_size</span>: <span class="ident">usize</span>, <span class="ident">size</span>: <span class="ident">usize</span> },
+    <span class="ident">BitRangeTooWide</span> { <span class="ident">max_size</span>: <span class="ident">usize</span>, <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> },
     <span class="ident">CaseValueTooWide</span> { <span class="ident">expr_size</span>: <span class="ident">usize</span>, <span class="ident">case_value_size</span>: <span class="ident">usize</span> },
     <span class="ident">DuplicateCaseValue</span>,
     <span class="ident">AssignmentLhsContainsClockedAndUnclocked</span>,
@@ -447,9 +448,10 @@
                     <span class="ident">condition_size</span>
                 )
             }
-            <span class="ident">BitRangeTooWide</span> { <span class="ident">max_size</span>, <span class="ident">size</span> } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;bit range size exceeds max size: {} &gt; {}&quot;</span>, <span class="ident">size</span>, <span class="ident">max_size</span>)
-            }
+            <span class="ident">BitRangeTooWide</span> { <span class="ident">max_size</span>, <span class="ident">size</span> } =&gt; <span class="kw">match</span> <span class="ident">size</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">size</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;bit range size exceeds max size: {} &gt; {}&quot;</span>, <span class="ident">size</span>, <span class="ident">max_size</span>),
+                <span class="prelude-val">None</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;bit range size exceeds max size: {}&quot;</span>, <span class="ident">max_size</span>),
+            },
             <span class="ident">CaseValueTooWide</span> { <span class="ident">expr_size</span>, <span class="ident">case_value_size</span> } =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;case value is too wide: {} &gt; {}&quot;</span>, <span class="ident">case_value_size</span>, <span class="ident">expr_size</span>)
             }
@@ -466,8 +468,8 @@
             <span class="ident">RangeMismatch</span> { <span class="ident">range</span>, <span class="ident">range_idx</span> } =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;bit range {} exceeds declaration {}&quot;</span>, <span class="ident">range_idx</span>, <span class="ident">range</span>)
             }
-            <span class="ident">GotoBeforePipe</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;no goto statements are allowed before pipe (\&quot;|\&quot;)&quot;</span>),
-            <span class="ident">MutateAfterPipe</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;no mutating statements allowed after pipe (\&quot;|\&quot;)&quot;</span>),
+            <span class="ident">GotoBeforePipe</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;no goto operations are allowed before pipe (\&quot;|\&quot;)&quot;</span>),
+            <span class="ident">MutateAfterPipe</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;no mutating operations allowed after pipe (\&quot;|\&quot;)&quot;</span>),
             <span class="ident">SxtTerm</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;sxt operator is not supported for terms&quot;</span>),
             <span class="ident">WrongSymbolType</span> { <span class="ident">expected</span>, <span class="ident">found</span> } =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;expected {}, found: {}&quot;</span>, <span class="ident">DisplaySymbolTypes</span>(<span class="ident">expected</span>), <span class="ident">found</span>)

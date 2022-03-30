@@ -71,6 +71,11 @@
 <span id="69">69</span>
 <span id="70">70</span>
 <span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::util::slice_idx</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 <span class="kw">use</span> <span class="ident">rtcore</span>::{
@@ -90,7 +95,12 @@
 <span class="kw">impl</span> <span class="ident">RegisterState</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="ident">range</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BitRange</span><span class="op">&gt;</span>, <span class="ident">kind</span>: <span class="ident">RegisterKind</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">range</span> <span class="op">=</span> <span class="ident">range</span>.<span class="ident">unwrap_or_default</span>();
-        <span class="self">Self</span> { <span class="ident">range</span>, <span class="ident">value</span>: <span class="ident">Value::zero</span>(<span class="ident">range</span>.<span class="ident">size</span>()), <span class="ident">value_next</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>), <span class="ident">kind</span> }
+        <span class="self">Self</span> {
+            <span class="ident">range</span>,
+            <span class="ident">value</span>: <span class="ident">Value::zero</span>(<span class="ident">range</span>.<span class="ident">size</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">value_next</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
+            <span class="ident">kind</span>,
+        }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">value_next</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span> {
