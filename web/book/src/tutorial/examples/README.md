@@ -1,3 +1,3 @@
 # Examples
 
-TODO: ...
+The following sections contain practical application examples.

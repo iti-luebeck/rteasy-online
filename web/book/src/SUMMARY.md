@@ -14,6 +14,7 @@
   - [Simulation Mode](tutorial/ide/simulation-mode.md)
   - [VHDL Export](tutorial/ide/vhdl-export.md)
 - [Examples](tutorial/examples/README.md)
+  - [Easy Multiplier](tutorial/examples/easy-multiplier.md)
 - [Advanced](tutorial/advanced/README.md)
   - [Evaluation of Expressions](tutorial/advanced/eval-expressions.md)
   - [Memory File Format](tutorial/advanced/memory-file-format.md)
