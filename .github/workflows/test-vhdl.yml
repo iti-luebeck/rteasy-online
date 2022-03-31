@@ -28,12 +28,11 @@ jobs:
         with:
           toolchain: stable
 
-      - run: sudo apt-get update
       - name: Setup ghdl
-        uses: ghdl/setup-ghdl-ci@nightly
-        with:
-          backend: mcode
-      - run: ghdl --version
+        run: |
+          sudo apt-get update
+          sudo apt-get install ghdl
+          ghdl --version
 
       - name: Run tests
         run: cargo run
