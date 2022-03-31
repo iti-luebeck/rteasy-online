@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Declarations - RTeasy-Online</title>
+        <title>Easy Multiplier - RTeasy-Online</title>
 
 
         <!-- Custom HTML head -->
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="../../tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/declarations.html" class="active"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">3.1.</strong> Easy Multiplier</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="../../compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="../../tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/examples/easy-multiplier.html" class="active"><strong aria-hidden="true">3.1.</strong> Easy Multiplier</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="../../compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -143,42 +143,85 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="declarations"><a class="header" href="#declarations">Declarations</a></h1>
-<p>Before the actual algorithm, all items must first be defined. A declaration is composed of a <code>declare</code> followed by the type of the item, e.g. <code>register</code>, and finally the list of items you want to declare, separated by commas. All names may only contain uppercase letters, digits or underscores, whereby the first character may not be a digit.</p>
-<h2 id="registers"><a class="header" href="#registers">Registers</a></h2>
-<p>Declare two registers <code>R</code> and <code>C</code>. Register <code>R</code> is 8 bits wide and ranges from 7 (MSB) to 0 (LSB). The register <code>C</code> is 1 bit wide, with the bit at position 0.</p>
-<pre><code class="language-rteasy">declare register R(7:0), C
+                        <h1 id="easy-multiplier"><a class="header" href="#easy-multiplier">Easy Multiplier</a></h1>
+<h2 id="task"><a class="header" href="#task">Task</a></h2>
+<p>The goal is to design a simple multiplier for two integer, positive fixed point numbers.
+The two factors are to be read in via one input. The result is to be
+output via one output. Both factors must not be greater than 255.</p>
+<h2 id="flowchart"><a class="header" href="#flowchart">Flowchart</a></h2>
+<p>The following flowchart should illustrate the idea of the solution. <code>FACTOR</code> and <code>A</code> are the two factors that are read from the input. <code>RES</code> is the result register.</p>
+<p><img src="../../images/easy-multiplier-flowchart.svg" alt="Flowchart" /></p>
+<h2 id="draft-program"><a class="header" href="#draft-program">Draft Program</a></h2>
+<p>Open the RTeasy-Online IDE. At startup you are automatically in editing mode. If there is already code, it must be removed first.</p>
+<p>Now the following program code can be entered into the editor. The flowchart has already shown that the registers <code>A</code>, <code>FACTOR</code> and <code>RES</code> are needed. Since the factors are maximum 255, two 8-bit registers, as well as a 16-bit result register are sufficient:</p>
+<pre><code class="language-rteasy">declare register A(7:0), FACTOR(7:0), RES(15:0)
 </code></pre>
-<h2 id="buses"><a class="header" href="#buses">Buses</a></h2>
-<p>Declare two buses <code>B</code> and <code>SECOND_BUS</code>. Bus <code>B</code> is 8 bits wide and ranges from 7 (MSB) to 0 (LSB). The bus <code>SECOND_BUS</code> is 1 bit wide, with the bit at position 5.</p>
-<pre><code class="language-rteasy">declare bus B(7:0), SECOND_BUS(5)
+<p>For the input and the output of the program one input and one output are needed, where the input has the size of the factors (8-bit) and the output has the size of the result (16-bit):</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</span>declare input IN(7:0)
+declare output OUT(15:0)
 </code></pre>
-<h2 id="register-arrays"><a class="header" href="#register-arrays">Register Arrays</a></h2>
-<p>Declare a register array named <code>ARR</code>. As with registers and buses, a bit range can be specified. The length of the register array is specified in brackets. The length must be a power of two.</p>
-<pre><code class="language-rteasy">declare register array ARR(7:0)[4]
+<p>The program starts ideally with the initialization of the registers, whereby the label <code>BEGIN</code> is only given here for the sake of clarity. Here in the first cycle the value for <code>A</code> and then in the second cycle the value for <code>FACTOR</code> is read in via the input <code>IN</code>:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</span><span class="boring">declare input IN(7:0)
+</span><span class="boring">declare output OUT(15:0)
+</span><span class="boring">
+</span>BEGIN:
+A &lt;- IN, RES &lt;- 0;
+FACTOR &lt;- IN;
 </code></pre>
-<p>Register arrays may be read no more than twice and written no more than once per execution path and cycle.</p>
-<h2 id="memories"><a class="header" href="#memories">Memories</a></h2>
-<p>Declare a memory named <code>MEM</code>. Memories require two registers, whereby the first is the address register and the second is the data register. So in this case <code>AR</code> is the address register and <code>DR</code> is the data register. Thus the memory is of size 2^16 = 64 KByte and 1 byte wide.</p>
-<pre><code class="language-rteasy">declare register AR(15:0), DR(7:0)
-declare memory MEM(AR, DR)
+<p>A loop follows which checks whether the value in <code>FACTOR</code> is zero. If yes, the result is written to <code>OUT</code>, if not, <code>FACTOR</code> is decremented and the value from <code>A</code> is added to <code>RES</code>:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</span><span class="boring">declare input IN(7:0)
+</span><span class="boring">declare output OUT(15:0)
+</span><span class="boring">
+</span><span class="boring">BEGIN:
+</span><span class="boring">A &lt;- IN, RES &lt;- 0;
+</span><span class="boring">FACTOR &lt;- IN;
+</span><span class="boring">
+</span>LOOP:
+if FACTOR = 0 then
+    OUT &lt;- RES
+else
+    RES &lt;- RES + A,
+    FACTOR &lt;- FACTOR - 1,
+    goto LOOP
+fi;
 </code></pre>
-<h2 id="inputsoutputs"><a class="header" href="#inputsoutputs">Inputs/Outputs</a></h2>
-<p>Declare an input <code>IN</code> and an output <code>OUT</code>. As far as the execution is concerned, outputs behave exactly as registers do. Inputs behave exactly as buses do, except that they are read-only and are not reset between clock cycles.</p>
-<pre><code class="language-rteasy">declare input IN(7:0)
-declare output OUT(7:0)
+<p>The complete program should now look something like this:</p>
+<pre><code class="language-rteasy">declare register A(7:0), FACTOR(7:0), RES(15:0)
+declare input IN(7:0)
+declare output OUT(15:0)
+
+BEGIN:
+A &lt;- IN, RES &lt;- 0;
+FACTOR &lt;- IN;
+
+LOOP:
+if FACTOR = 0 then
+    OUT &lt;- RES
+else
+    RES &lt;- RES + A,
+    FACTOR &lt;- FACTOR - 1,
+    goto LOOP
+fi;
 </code></pre>
-<p>Inputs and outputs define the interface of a program. The inputs and outputs become input and output ports respectively in the VHDL export.</p>
+<h2 id="simulation"><a class="header" href="#simulation">Simulation</a></h2>
+<p>Via the build button (<img src="../../images/icons/build.svg" alt="Build" />) you can now switch to simulation mode.</p>
+<p>Now you can write the first factor of the multiplication into the input <code>IN</code> in the opened state view. If you then click on the step button (<img src="../../images/icons/step.svg" alt="Step" />), the content from <code>IN</code> should appear in the register <code>A</code>. Now the second factor can be written into <code>IN</code> and by clicking again on step (<img src="../../images/icons/step.svg" alt="Step" />) it is transferred into <code>FACTOR</code>.</p>
+<p>With these values the program can now be run by clicking on run (<img src="../../images/icons/run.svg" alt="Run" />). After the calculation is finished, the result of the multiplication is shown in the output <code>OUT</code>.
+If you want to follow the multiplication in detail, you can click step (<img src="../../images/icons/step.svg" alt="Step" />) or micro step (<img src="../../images/icons/micro-step.svg" alt="Micro Step" />) to follow each step of the program.</p>
+<p>You can now reset the program via reset (<img src="../../images/icons/reset.svg" alt="Reset" />) and try another simulation with new values. For changes to the program text you can return to the editing mode via the edit button (<img src="../../images/icons/code.svg" alt="Code" />).</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../tutorial/lang/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../tutorial/examples/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../tutorial/lang/algorithm.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../../tutorial/advanced/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -188,11 +231,11 @@ declare output OUT(7:0)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../tutorial/lang/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../tutorial/examples/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../tutorial/lang/algorithm.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../../tutorial/advanced/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

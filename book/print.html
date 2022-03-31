@@ -31,6 +31,7 @@
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
 
     </head>
     <body>
@@ -82,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">3.1.</strong> Easy Multiplier</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -399,7 +400,7 @@ X &lt;- not BUS.&quot;1&quot; + 42;
 <p>At the start you are always in the editing mode.</p>
 <p>TODO: Options Dialog</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="editing-mode"><a class="header" href="#editing-mode">Editing Mode</a></h1>
-<p>At the top you can see the toolbar. With File and Edit classic IDE functions like loading/saving the file or undo/redo can be done. Under Run you can find the same functionality that is available in the second row in the center of the screen. The first button switches between the two modes. The remaining four are used to control the simulation and are disabled in edit mode.</p>
+<p>At the top you can see the toolbar. With File and Edit classic IDE functions like loading/saving the file or undo/redo can be done. Under Run you can find the same functionality that is available in the second row in the center of the screen. The first button (<img src="tutorial/ide/../../images/icons/build.svg" alt="Build" />) builds the program and, if successful, takes you to the simulation mode. The remaining four are used to control the simulation and are disabled in edit mode.</p>
 <p>Besides syntax highlighting, the code editor supports autocompletion and code snippets for frequently used constructs like switch-case operations. At the same time, all errors, if any, are displayed live on the right side.</p>
 <p>Each error is associated with an error code that can be clicked and leads to the <a href="tutorial/ide/../../compiler-error-index/errors.html">compiler error index</a> that explains the errors in more detail.</p>
 <hr />
@@ -407,7 +408,7 @@ X &lt;- not BUS.&quot;1&quot; + 42;
 <div style="break-before: page; page-break-before: always;"></div><h1 id="simulation-mode"><a class="header" href="#simulation-mode">Simulation Mode</a></h1>
 <p>This mode is for the simulating and testing the program. In addition to the code, the signals and the current state can be viewed here.
 The state view displays the register, bus, register array and memory contents. During simulation, both the code and the state view provide visual hints.</p>
-<p>The buttons at the top center are now all operable. From left to right they let you switches between the two modes, start/stop the simulation, reset the simulation, make a step (execute the next state) and make a micro step (execute the next micro step).</p>
+<p>The buttons at the top center are now all operable. From left to right they let you return to the editing mode (<img src="tutorial/ide/../../images/icons/code.svg" alt="Code" />), start/stop the simulation (<img src="tutorial/ide/../../images/icons/run.svg" alt="Run" />/<img src="tutorial/ide/../../images/icons/stop.svg" alt="Stop" />), reset the simulation (<img src="tutorial/ide/../../images/icons/reset.svg" alt="Reset" />), make a step (execute the next state) (<img src="tutorial/ide/../../images/icons/step.svg" alt="Step" />) and make a micro step (execute the next micro step) (<img src="tutorial/ide/../../images/icons/micro-step.svg" alt="Micro Step" />).</p>
 <hr />
 <p><img src="tutorial/ide/../../images/ide-simulation-mode.png" alt="The RTeasy-Online IDE in the simulation mode." /></p>
 <h2 id="code-view"><a class="header" href="#code-view">Code View</a></h2>
@@ -429,7 +430,76 @@ After executing a complete step, values that have changed are highlighted in yel
 <div style="break-before: page; page-break-before: always;"></div><h1 id="vhdl-export"><a class="header" href="#vhdl-export">VHDL Export</a></h1>
 <p>TODO: ...</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
-<p>TODO: ...</p>
+<p>The following sections contain practical application examples.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="easy-multiplier"><a class="header" href="#easy-multiplier">Easy Multiplier</a></h1>
+<h2 id="task"><a class="header" href="#task">Task</a></h2>
+<p>The goal is to design a simple multiplier for two integer, positive fixed point numbers.
+The two factors are to be read in via one input. The result is to be
+output via one output. Both factors must not be greater than 255.</p>
+<h2 id="flowchart"><a class="header" href="#flowchart">Flowchart</a></h2>
+<p>The following flowchart should illustrate the idea of the solution. <code>FACTOR</code> and <code>A</code> are the two factors that are read from the input. <code>RES</code> is the result register.</p>
+<p><img src="tutorial/examples/../../images/easy-multiplier-flowchart.svg" alt="Flowchart" /></p>
+<h2 id="draft-program"><a class="header" href="#draft-program">Draft Program</a></h2>
+<p>Open the RTeasy-Online IDE. At startup you are automatically in editing mode. If there is already code, it must be removed first.</p>
+<p>Now the following program code can be entered into the editor. The flowchart has already shown that the registers <code>A</code>, <code>FACTOR</code> and <code>RES</code> are needed. Since the factors are maximum 255, two 8-bit registers, as well as a 16-bit result register are sufficient:</p>
+<pre><code class="language-rteasy">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</code></pre>
+<p>For the input and the output of the program one input and one output are needed, where the input has the size of the factors (8-bit) and the output has the size of the result (16-bit):</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</span>declare input IN(7:0)
+declare output OUT(15:0)
+</code></pre>
+<p>The program starts ideally with the initialization of the registers, whereby the label <code>BEGIN</code> is only given here for the sake of clarity. Here in the first cycle the value for <code>A</code> and then in the second cycle the value for <code>FACTOR</code> is read in via the input <code>IN</code>:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</span><span class="boring">declare input IN(7:0)
+</span><span class="boring">declare output OUT(15:0)
+</span><span class="boring">
+</span>BEGIN:
+A &lt;- IN, RES &lt;- 0;
+FACTOR &lt;- IN;
+</code></pre>
+<p>A loop follows which checks whether the value in <code>FACTOR</code> is zero. If yes, the result is written to <code>OUT</code>, if not, <code>FACTOR</code> is decremented and the value from <code>A</code> is added to <code>RES</code>:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register A(7:0), FACTOR(7:0), RES(15:0)
+</span><span class="boring">declare input IN(7:0)
+</span><span class="boring">declare output OUT(15:0)
+</span><span class="boring">
+</span><span class="boring">BEGIN:
+</span><span class="boring">A &lt;- IN, RES &lt;- 0;
+</span><span class="boring">FACTOR &lt;- IN;
+</span><span class="boring">
+</span>LOOP:
+if FACTOR = 0 then
+    OUT &lt;- RES
+else
+    RES &lt;- RES + A,
+    FACTOR &lt;- FACTOR - 1,
+    goto LOOP
+fi;
+</code></pre>
+<p>The complete program should now look something like this:</p>
+<pre><code class="language-rteasy">declare register A(7:0), FACTOR(7:0), RES(15:0)
+declare input IN(7:0)
+declare output OUT(15:0)
+
+BEGIN:
+A &lt;- IN, RES &lt;- 0;
+FACTOR &lt;- IN;
+
+LOOP:
+if FACTOR = 0 then
+    OUT &lt;- RES
+else
+    RES &lt;- RES + A,
+    FACTOR &lt;- FACTOR - 1,
+    goto LOOP
+fi;
+</code></pre>
+<h2 id="simulation"><a class="header" href="#simulation">Simulation</a></h2>
+<p>Via the build button (<img src="tutorial/examples/../../images/icons/build.svg" alt="Build" />) you can now switch to simulation mode.</p>
+<p>Now you can write the first factor of the multiplication into the input <code>IN</code> in the opened state view. If you then click on the step button (<img src="tutorial/examples/../../images/icons/step.svg" alt="Step" />), the content from <code>IN</code> should appear in the register <code>A</code>. Now the second factor can be written into <code>IN</code> and by clicking again on step (<img src="tutorial/examples/../../images/icons/step.svg" alt="Step" />) it is transferred into <code>FACTOR</code>.</p>
+<p>With these values the program can now be run by clicking on run (<img src="tutorial/examples/../../images/icons/run.svg" alt="Run" />). After the calculation is finished, the result of the multiplication is shown in the output <code>OUT</code>.
+If you want to follow the multiplication in detail, you can click step (<img src="tutorial/examples/../../images/icons/step.svg" alt="Step" />) or micro step (<img src="tutorial/examples/../../images/icons/micro-step.svg" alt="Micro Step" />) to follow each step of the program.</p>
+<p>You can now reset the program via reset (<img src="tutorial/examples/../../images/icons/reset.svg" alt="Reset" />) and try another simulation with new values. For changes to the program text you can return to the editing mode via the edit button (<img src="tutorial/examples/../../images/icons/code.svg" alt="Code" />).</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="advanced"><a class="header" href="#advanced">Advanced</a></h1>
 <p>The following sections contain advanced/in-depth material.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="evaluation-of-expressions"><a class="header" href="#evaluation-of-expressions">Evaluation of Expressions</a></h1>
