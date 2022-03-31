@@ -3,7 +3,7 @@
 This mode is for the simulating and testing the program. In addition to the code, the signals and the current state can be viewed here.
 The state view displays the register, bus, register array and memory contents. During simulation, both the code and the state view provide visual hints.
 
-The buttons at the top center are now all operable. From left to right they let you switches between the two modes, start/stop the simulation, reset the simulation, make a step (execute the next state) and make a micro step (execute the next micro step).
+The buttons at the top center are now all operable. From left to right they let you return to the editing mode (![Code](../../images/icons/code.svg)), start/stop the simulation (![Run](../../images/icons/run.svg)/![Stop](../../images/icons/stop.svg)), reset the simulation (![Reset](../../images/icons/reset.svg)), make a step (execute the next state) (![Step](../../images/icons/step.svg)) and make a micro step (execute the next micro step) (![Micro Step](../../images/icons/micro-step.svg)).
 
 ---
 

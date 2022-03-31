@@ -7,6 +7,7 @@ title = "RTeasy-Online"
 
 [output.html]
 site-url = "/rteasy-online/book/"
+additional-css = ["theme/custom.css"]
 
 [output.html.code.hidelines]
 rteasy = "~"
