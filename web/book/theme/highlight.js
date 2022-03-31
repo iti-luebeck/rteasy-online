@@ -1123,7 +1123,19 @@ hljs.registerLanguage(
         aliases: ["rt"],
         keywords:
           "declare goto nop read write if then else fi switch case default assert input output register bus memory array",
-        contains: [e.QUOTE_STRING_MODE, e.HASH_COMMENT_MODE],
+        contains: [
+          {
+            className: "number",
+            relevance: 0,
+            variants: [
+              { begin: "($|\\b0[xX])[0-9a-fA-F]+" },
+              { begin: "(%|\\b0[bB])[01]+" },
+              { begin: "\\b[0-9_]+" },
+            ],
+          },
+          e.QUOTE_STRING_MODE,
+          e.HASH_COMMENT_MODE,
+        ],
       };
     };
   })()
