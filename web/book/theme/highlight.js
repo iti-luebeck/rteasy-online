@@ -1140,3 +1140,29 @@ hljs.registerLanguage(
     };
   })()
 );
+hljs.registerLanguage(
+  "rtmem",
+  (function () {
+    "use strict";
+    return function (e) {
+      return {
+        name: "RTeasy Memory",
+        aliases: ["rtmem"],
+        keywords: "",
+        contains: [
+          {
+            className: "keyword",
+            relevance: 0,
+            begin: "\\n[0-9a-fA-F]+:",
+          },
+          {
+            className: "number",
+            relevance: 0,
+            begin: "\\n[0-9a-fA-F]+(?!:)",
+          },
+          e.HASH_COMMENT_MODE,
+        ],
+      };
+    };
+  })()
+);

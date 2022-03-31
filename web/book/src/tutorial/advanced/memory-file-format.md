@@ -6,13 +6,13 @@ The memory file format is a simple line-based file format.
 
 The first line is the header, which indicates in which base the numbers are stored and how large the memory is. The header must always be in the following shape:
 
-```rteasy,ignore
+```rtmem
 [B|b|H|h] <ADDRESS_SIZE> <DATA_SIZE>
 ```
 
 `B` or `b` means binary, `H` or `h` means hexadecimal. `ADDRESS_SIZE` specifies the bit width of the address space and `DATA_SIZE` specifies the bit width of the data. For example, a memory that is stored in a binary base, with 65536 (= 2^16) entries and a width of 1 byte, has the following header:
 
-```rteasy,ignore
+```rtmem
 B 16 8
 ```
 
@@ -20,7 +20,7 @@ B 16 8
 
 After the header, the data is stored line by line. The first line, unless otherwise specified, is at address 0. Subsequent lines are always located at the next address. For example, the following describes a memory with the numbers `0x1`, `0x7` and `0xF1` at address `0x0`, `0x1` and `0x2`:
 
-```rteasy,ignore
+```rtmem
 H 4 16
 
 1
@@ -30,7 +30,7 @@ F1
 
 Additionally, it is possible to store data at a specific address. With `<ADDRESS>:` the address for the next line can be specified. For example, in the following, the values `0xFF` and `0xC` are stored at the addresses `0x9` and `0xA`:
 
-```rteasy,ignore
+```rtmem
 H 4 16
 
 9:
@@ -40,7 +40,7 @@ C
 
 Of course, this can be combined in any way:
 
-```rteasy,ignore
+```rtmem
 H 4 16
 
 3
@@ -58,7 +58,7 @@ C:
 
 The memory format allows simple line comments starting with the hash (#) character. Comments are allowed in all lines including the header. Example:
 
-```rteasy,ignore
+```rtmem
 H 8 32 # Memory in hexadecimal base
 
 # Hello World
