@@ -1123,7 +1123,45 @@ hljs.registerLanguage(
         aliases: ["rt"],
         keywords:
           "declare goto nop read write if then else fi switch case default assert input output register bus memory array",
-        contains: [e.QUOTE_STRING_MODE, e.HASH_COMMENT_MODE],
+        contains: [
+          {
+            className: "number",
+            relevance: 0,
+            variants: [
+              { begin: "($|\\b0[xX])[0-9a-fA-F]+" },
+              { begin: "(%|\\b0[bB])[01]+" },
+              { begin: "\\b[0-9_]+" },
+            ],
+          },
+          e.QUOTE_STRING_MODE,
+          e.HASH_COMMENT_MODE,
+        ],
+      };
+    };
+  })()
+);
+hljs.registerLanguage(
+  "rtmem",
+  (function () {
+    "use strict";
+    return function (e) {
+      return {
+        name: "RTeasy Memory",
+        aliases: ["rtmem"],
+        keywords: "",
+        contains: [
+          {
+            className: "keyword",
+            relevance: 0,
+            begin: "\\n[0-9a-fA-F]+:",
+          },
+          {
+            className: "number",
+            relevance: 0,
+            begin: "\\n[0-9a-fA-F]+(?!:)",
+          },
+          e.HASH_COMMENT_MODE,
+        ],
       };
     };
   })()

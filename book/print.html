@@ -438,28 +438,28 @@ After executing a complete step, values that have changed are highlighted in yel
 <p>The memory file format is a simple line-based file format.</p>
 <h2 id="header"><a class="header" href="#header">Header</a></h2>
 <p>The first line is the header, which indicates in which base the numbers are stored and how large the memory is. The header must always be in the following shape:</p>
-<pre><code class="language-rteasy ignore">[B|b|H|h] &lt;ADDRESS_SIZE&gt; &lt;DATA_SIZE&gt;
+<pre><code class="language-rtmem">[B|b|H|h] &lt;ADDRESS_SIZE&gt; &lt;DATA_SIZE&gt;
 </code></pre>
 <p><code>B</code> or <code>b</code> means binary, <code>H</code> or <code>h</code> means hexadecimal. <code>ADDRESS_SIZE</code> specifies the bit width of the address space and <code>DATA_SIZE</code> specifies the bit width of the data. For example, a memory that is stored in a binary base, with 65536 (= 2^16) entries and a width of 1 byte, has the following header:</p>
-<pre><code class="language-rteasy ignore">B 16 8
+<pre><code class="language-rtmem">B 16 8
 </code></pre>
 <h2 id="data"><a class="header" href="#data">Data</a></h2>
 <p>After the header, the data is stored line by line. The first line, unless otherwise specified, is at address 0. Subsequent lines are always located at the next address. For example, the following describes a memory with the numbers <code>0x1</code>, <code>0x7</code> and <code>0xF1</code> at address <code>0x0</code>, <code>0x1</code> and <code>0x2</code>:</p>
-<pre><code class="language-rteasy ignore">H 4 16
+<pre><code class="language-rtmem">H 4 16
 
 1
 7
 F1
 </code></pre>
 <p>Additionally, it is possible to store data at a specific address. With <code>&lt;ADDRESS&gt;:</code> the address for the next line can be specified. For example, in the following, the values <code>0xFF</code> and <code>0xC</code> are stored at the addresses <code>0x9</code> and <code>0xA</code>:</p>
-<pre><code class="language-rteasy ignore">H 4 16
+<pre><code class="language-rtmem">H 4 16
 
 9:
 FF
 C
 </code></pre>
 <p>Of course, this can be combined in any way:</p>
-<pre><code class="language-rteasy ignore">H 4 16
+<pre><code class="language-rtmem">H 4 16
 
 3
 4
@@ -473,7 +473,7 @@ C:
 </code></pre>
 <h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
 <p>The memory format allows simple line comments starting with the hash (#) character. Comments are allowed in all lines including the header. Example:</p>
-<pre><code class="language-rteasy ignore">H 8 32 # Memory in hexadecimal base
+<pre><code class="language-rtmem">H 8 32 # Memory in hexadecimal base
 
 # Hello World
 
