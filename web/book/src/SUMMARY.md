@@ -22,3 +22,7 @@
 # Compiler Error Index
 
 - [Errors](compiler-error-index/errors.md)
+
+---
+
+[Appendix](appendix.md)
