@@ -4,7 +4,19 @@ The micro operations are the building blocks of the algorithm. Besides the uncon
 
 ## Assignment
 
-...
+Use assignments to store the result of an expression in a register, bus, output or register array. Assignments are written as `Target <- Expression`. The target can be either a single item or a concatenation. So for example `X(3:0).Z(1:0)` would be a six bit wide target. When assigned, the two least significant bits from the expression would end up in `Z` and the four bits above would end up in `X`. A concatenation can contain either only clocked or only unclocked items.
+
+When assigning registers, outputs and buses, individual bits can be addressed as just shown. In contrast, register arrays can only be assigned as a whole. So you can write `ARR[2] <- EXPR` but not `ARR(3:0)[2] <- EXPR`. The reason for this is that the access to a register in an array is always exhaustive. When writing all bits must be written and when reading all bits must be read. Since single bits can be simply ignored when reading, it is possible to specify a bit range when reading but not when writing.
+
+```rteasy
+declare register X(3:0), Y(3:0)
+
+# Store the result of 2 + 2 in X
+X <- 2 + 2;
+
+# Store 0b10010011 into X.Y (=> X = 0b1001, Y = 0b0011)
+X.Y <- 0b10010011;
+```
 
 ## No Operation
 
