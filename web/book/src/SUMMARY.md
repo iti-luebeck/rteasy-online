@@ -13,6 +13,7 @@
   - [Editing Mode](tutorial/ide/editing-mode.md)
   - [Simulation Mode](tutorial/ide/simulation-mode.md)
   - [VHDL Export](tutorial/ide/vhdl-export.md)
+- [CLI User Guide](tutorial/cli/README.md)
 - [Examples](tutorial/examples/README.md)
   - [Easy Multiplier](tutorial/examples/easy-multiplier.md)
 - [Advanced](tutorial/advanced/README.md)
