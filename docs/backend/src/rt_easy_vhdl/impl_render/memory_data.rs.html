@@ -65,7 +65,7 @@
                 .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">RenderError::MemoryNotFound</span>(<span class="ident">name</span>.<span class="ident">clone</span>()))<span class="question-mark">?</span>;
 
             <span class="comment">// Check size</span>
-            <span class="kw">if</span> <span class="ident">file</span>.<span class="ident">ar_size</span>() <span class="op">&gt;</span> <span class="ident">ar</span>.<span class="number">1</span>.<span class="ident">size</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">file</span>.<span class="ident">dr_size</span>() <span class="op">&gt;</span> <span class="ident">dr</span>.<span class="number">1</span>.<span class="ident">size</span>() {
+            <span class="kw">if</span> <span class="ident">file</span>.<span class="ident">ar_size</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">ar</span>.<span class="number">1</span>.<span class="ident">size</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">file</span>.<span class="ident">dr_size</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">dr</span>.<span class="number">1</span>.<span class="ident">size</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RenderError::InvalidMemorySize</span> {
                     <span class="ident">name</span>,
                     <span class="ident">expected</span>: (<span class="ident">ar</span>.<span class="number">1</span>.<span class="ident">size</span>(), <span class="ident">dr</span>.<span class="number">1</span>.<span class="ident">size</span>()),

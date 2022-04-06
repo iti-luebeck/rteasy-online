@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="../../tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/vhdl-export.html" class="active"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">3.1.</strong> Easy Multiplier</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="../../compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="../../tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/vhdl-export.html" class="active"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/cli/index.html"><strong aria-hidden="true">3.</strong> CLI User Guide</a></li><li class="chapter-item expanded "><a href="../../tutorial/examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">4.1.</strong> Easy Multiplier</a></li><li class="chapter-item expanded "><a href="../../tutorial/examples/register-register-machine.html"><strong aria-hidden="true">4.2.</strong> Register-Register-Machine</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">5.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">5.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="../../compiler-error-index/errors.html"><strong aria-hidden="true">6.</strong> Errors</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../../appendix.html">Appendix</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,7 +144,14 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="vhdl-export"><a class="header" href="#vhdl-export">VHDL Export</a></h1>
-<p>TODO: ...</p>
+<p>The VHDL export is accessible via the toolbar: <code>File -&gt; Export to VHDL...</code>.</p>
+<p>If your code does not contain any errors you should see a dialog like below. Note: Some errors occur only during VHDL export. So you might see errors even though you can simulate your code without problems.</p>
+<hr />
+<p><img src="../../images/vhdl-export-dialog.png" alt="VHDL Export Dialog" /></p>
+<h2 id="module-name"><a class="header" href="#module-name">Module name</a></h2>
+<p>Choose a module name for the export. The generated VHDL code will contain the entities <code>CU_my_module</code> (control unit) and <code>EU_my_module</code> (execution unit). If not specified, <code>my_module</code> will be used.</p>
+<h2 id="memories"><a class="header" href="#memories">Memories</a></h2>
+<p>For each memory in your code you can select a memory file with which this memory is pre-initialized. The size of the address and data register must match exactly.</p>
 
                     </main>
 
@@ -154,7 +161,7 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../tutorial/examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../../tutorial/cli/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -168,7 +175,7 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../tutorial/examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../../tutorial/cli/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

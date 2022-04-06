@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/examples/index.html"><strong aria-hidden="true">3.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">3.1.</strong> Easy Multiplier</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">4.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">4.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="compiler-error-index/errors.html"><strong aria-hidden="true">5.</strong> Errors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/cli/index.html"><strong aria-hidden="true">3.</strong> CLI User Guide</a></li><li class="chapter-item expanded "><a href="tutorial/examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">4.1.</strong> Easy Multiplier</a></li><li class="chapter-item expanded "><a href="tutorial/examples/register-register-machine.html"><strong aria-hidden="true">4.2.</strong> Register-Register-Machine</a></li></ol></li><li class="chapter-item expanded "><a href="tutorial/advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">5.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">5.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="compiler-error-index/errors.html"><strong aria-hidden="true">6.</strong> Errors</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="appendix.html">Appendix</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,15 +145,29 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>...</p>
-<p>RTeasy-Online is a development environment for the register transfer language RTeasy. With RTeasy it is possible to design and simulate register transfer programs.</p>
-<p>A register transfer language (RT language) is used to describe the hardware using
-register operations. The following basic pattern is used for the operations:</p>
+<p>RTeasy-Online is a development environment for the register transfer language RTeasy. With RTeasy it is possible to design and simulate register transfer programs. Moreover, execution unit and control unit can be extracted from the algorithms. Among other things, this makes it possible to export an RTeasy program to VHDL.</p>
+<h2 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h2>
+<p>The tutorial is the main part of this book. It starts with an <a href="tutorial/lang">explanation of the language</a>. After that there is a user guide for the <a href="tutorial/ide">IDE</a> and for the <a href="tutorial/cli">CLI</a>. This is followed by a few practical application <a href="tutorial/examples">examples</a> and additional <a href="tutorial/advanced">advanced/in-depth material</a>.</p>
+<p>If you are already familiar with RTeasy or RT code in general, you may want to jump straight to the <a href="tutorial/examples">examples</a> to see what can be done with RTeasy.</p>
+<h2 id="compiler-error-index"><a class="header" href="#compiler-error-index">Compiler Error Index</a></h2>
+<p>The <a href="compiler-error-index/errors.html">compiler error index</a> serves as an overview of all possible errors that can occur during compilation.</p>
+<h2 id="code-blocks"><a class="header" href="#code-blocks">Code Blocks</a></h2>
+<p>You will find code blocks in many places in this book. They may contain several different icons for interacting with them:</p>
+<table><thead><tr><th>Icon</th><th>Description</th></tr></thead><tbody>
+<tr><td><i class="fa fa-copy"></i></td><td>Copies the code block into your local clipboard.</td></tr>
+<tr><td><i class="fa fa-eye"></i></td><td>Toggle visibility of &quot;hidden&quot; lines. Some examples will hide lines that are not particularly relevant to what is being illustrated.</td></tr>
+</tbody></table>
+<p>Here is an example:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register X(7:0) # &lt;-- hidden by default
+</span><span class="boring">
+</span># Increment X by 1
+X &lt;- X + 1;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-register-transfer-language-rteasy"><a class="header" href="#the-register-transfer-language-rteasy">The Register Transfer Language RTeasy</a></h1>
+<p>A register transfer language (RT language) is used to describe the hardware using register operations. The following basic pattern is used for the operations:</p>
 <pre><code>Z &lt;- f(X_1, X_2, ..., X_m)
 </code></pre>
 <p>where <code>Z</code>, <code>X_1</code>, <code>X_2</code>, ... , <code>X_m</code> represent identifiers for registers and the function <code>f</code> describes the operation. The result is then stored in <code>Z</code>.</p>
-<p>This book contains a tutorial for RTeasy-Online and RTeasy as well as a list and explanation of all possible errors that can occur during compilation.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="the-register-transfer-language-rteasy"><a class="header" href="#the-register-transfer-language-rteasy">The Register Transfer Language RTeasy</a></h1>
 <p>An RTeasy program consists of a set of declarations followed by the actual algorithm. All declarations must be placed in the header of the program. Besides registers, buses, register arrays and memories can be declared. These are all explained in more detail in the next section.</p>
 <p>An important concept in RTeasy is the difference between the clocked and the unclocked items. While registers, register arrays and memories are clocked, buses are unclocked. This means that values assigned to a register are only available in the next clock cycle. In contrast, values assigned to a bus are yet available in the same and only in this clock cycle.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="declarations"><a class="header" href="#declarations">Declarations</a></h1>
@@ -221,7 +235,16 @@ CHECK: if COUNTER &lt; 20 then goto LOOP fi;
 <div style="break-before: page; page-break-before: always;"></div><h1 id="micro-operations"><a class="header" href="#micro-operations">Micro Operations</a></h1>
 <p>The micro operations are the building blocks of the algorithm. Besides the unconditional operations (assignment, no operation and read/write) there are jumps (goto) and conditional operations (if and switch).</p>
 <h2 id="assignment"><a class="header" href="#assignment">Assignment</a></h2>
-<p>...</p>
+<p>Use assignments to store the result of an expression in a register, bus, output or register array. Assignments are written as <code>Target &lt;- Expression</code>. The target can be either a single item or a concatenation. So for example <code>X(3:0).Z(1:0)</code> would be a six bit wide target. When assigned, the two least significant bits from the expression would end up in <code>Z</code> and the four bits above would end up in <code>X</code>. A concatenation can contain either only clocked or only unclocked items.</p>
+<p>When assigning registers, outputs and buses, individual bits can be addressed as just shown. In contrast, register arrays can only be assigned as a whole. So you can write <code>ARR[2] &lt;- EXPR</code> but not <code>ARR(3:0)[2] &lt;- EXPR</code>. The reason for this is that the access to a register in an array is always exhaustive. When writing all bits must be written and when reading all bits must be read. Since single bits can be simply ignored when reading, it is possible to specify a bit range when reading but not when writing.</p>
+<pre><code class="language-rteasy">declare register X(3:0), Y(3:0)
+
+# Store the result of 2 + 2 in X
+X &lt;- 2 + 2;
+
+# Store 0b10010011 into X.Y (=&gt; X = 0b1001, Y = 0b0011)
+X.Y &lt;- 0b10010011;
+</code></pre>
 <h2 id="no-operation"><a class="header" href="#no-operation">No Operation</a></h2>
 <p>The <code>nop</code> operation will not trigger any operation and can be used to have an empty state.</p>
 <pre><code class="language-rteasy">nop;
@@ -396,11 +419,18 @@ X &lt;- not BUS.&quot;1&quot; + 42;
 <tr><td>0</td><td>Bitwise XOR</td><td>left-to-right</td><td><code>... xor ...</code></td></tr>
 </tbody></table>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ide-user-guide"><a class="header" href="#ide-user-guide">IDE User Guide</a></h1>
-<p>The RTeasy-Online IDE has two different modes. On the one hand there is the editing mode, in which the program is developed. On the other hand there is the simulation mode, where you can execute the program and display the register, bus, register array and memory contents. In this mode, you cannot modify the program. In both modes all views can be moved around freely.</p>
+<p>The <a href="tutorial/ide/../../..">RTeasy-Online IDE</a> has two different modes. On the one hand there is the editing mode, in which the program is developed. On the other hand there is the simulation mode, where you can execute the program and display the register, bus, register array and memory contents. In this mode, you cannot modify the program. In both modes all views can be moved around freely.</p>
 <p>At the start you are always in the editing mode.</p>
-<p>TODO: Options Dialog</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="editing-mode"><a class="header" href="#editing-mode">Editing Mode</a></h1>
+<h2 id="toolbar"><a class="header" href="#toolbar">Toolbar</a></h2>
 <p>At the top you can see the toolbar. With File and Edit classic IDE functions like loading/saving the file or undo/redo can be done. Under Run you can find the same functionality that is available in the second row in the center of the screen. The first button (<img src="tutorial/ide/../../images/icons/build.svg" alt="Build" />) builds the program and, if successful, takes you to the simulation mode. The remaining four are used to control the simulation and are disabled in edit mode.</p>
+<hr />
+<p><img src="tutorial/ide/../../images/toolbar.png" alt="Toolbar" /></p>
+<h2 id="options-dialog"><a class="header" href="#options-dialog">Options Dialog</a></h2>
+<p>The options dialog is accessible via the toolbar: <code>File -&gt; Options...</code>.</p>
+<p>Here you can set the clock rate for the simulation. Furthermore, it is possible to reset changes to the layout.</p>
+<hr />
+<p><img src="tutorial/ide/../../images/options-dialog.png" alt="Options Dialog" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="editing-mode"><a class="header" href="#editing-mode">Editing Mode</a></h1>
 <p>Besides syntax highlighting, the code editor supports autocompletion and code snippets for frequently used constructs like switch-case operations. At the same time, all errors, if any, are displayed live on the right side.</p>
 <p>Each error is associated with an error code that can be clicked and leads to the <a href="tutorial/ide/../../compiler-error-index/errors.html">compiler error index</a> that explains the errors in more detail.</p>
 <hr />
@@ -421,14 +451,138 @@ When executing a step, the complete current step is highlighted in yellow.</p>
 <p>During simulation, the state view provide visual hints.
 When executing with micro steps, writes to registers are represented by an arrow, with the value that is assigned after the clock cycle on the right-hand side.
 After executing a complete step, values that have changed are highlighted in yellow.</p>
-<p>TODO: Memory/Register Array View</p>
+<h3 id="register-array-and-memory-view"><a class="header" href="#register-array-and-memory-view">Register Array and Memory View</a></h3>
+<p>Register array and memory views are not shown by default and can be opened by clicking the <em>Content</em> button next to their name in the state view.</p>
+<p>Both allow you to set a base in which the values are presented. The content is divided over several pages.
+For memories it is possible to jump to a specific address via <em>Goto</em>. You can load a memory state or save the current state via <em>Load</em> and <em>Save</em>.</p>
+<hr />
+<p><img src="tutorial/ide/../../images/reg-array-and-memory.png" alt="Register Array and Memory View" /></p>
 <h2 id="signals-view"><a class="header" href="#signals-view">Signals View</a></h2>
 <p>The signals view shows the condition signals and control signals of a resulting execution unit and control unit respectively.</p>
 <h2 id="breakpoints"><a class="header" href="#breakpoints">Breakpoints</a></h2>
-<p>By clicking on the line numbers it is possible to set or remove breakpoints. If the simulation is now started via the play button, it will pause as soon as a breakpoint is reached.</p>
-<p>TODO: Image</p>
+<p>By clicking on the line numbers it is possible to set or remove breakpoints. If the simulation is now started via the play button, it will pause as soon as a breakpoint is reached. For an example, see below. The execution was paused just before <code>X &lt;- X + 1</code>.</p>
+<hr />
+<p><img src="tutorial/ide/../../images/breakpoint.png" alt="Breakpoint Example" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="vhdl-export"><a class="header" href="#vhdl-export">VHDL Export</a></h1>
-<p>TODO: ...</p>
+<p>The VHDL export is accessible via the toolbar: <code>File -&gt; Export to VHDL...</code>.</p>
+<p>If your code does not contain any errors you should see a dialog like below. Note: Some errors occur only during VHDL export. So you might see errors even though you can simulate your code without problems.</p>
+<hr />
+<p><img src="tutorial/ide/../../images/vhdl-export-dialog.png" alt="VHDL Export Dialog" /></p>
+<h2 id="module-name"><a class="header" href="#module-name">Module name</a></h2>
+<p>Choose a module name for the export. The generated VHDL code will contain the entities <code>CU_my_module</code> (control unit) and <code>EU_my_module</code> (execution unit). If not specified, <code>my_module</code> will be used.</p>
+<h2 id="memories-1"><a class="header" href="#memories-1">Memories</a></h2>
+<p>For each memory in your code you can select a memory file with which this memory is pre-initialized. The size of the address and data register must match exactly.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cli-user-guide"><a class="header" href="#cli-user-guide">CLI User Guide</a></h1>
+<p>The CLI (command-line interface) is a alternative frontend to the graphical user interface. It currently supports the help, check, gen-vhdl and test commands. The help command displays a general help page or help for a subcommand. The check command checks if the given RTeasy program is syntactically and semantically valid. The gen-vhdl command can be used to export an RTeasy program to VHDL. The test command allows automatic testing of an RTeasy program against a test file.</p>
+<p>The CLI can be downloaded from <a href="https://github.com/iti-luebeck/rteasy-online/releases">GitHub</a>.</p>
+<h2 id="help"><a class="header" href="#help">Help</a></h2>
+<p>Run <code>rt-easy-cli --help</code> to display the message below, or run, for example, <code>rt-easy-cli test --help</code> to get more detailed information about a specific subcommand.</p>
+<pre><code class="language-bash">rt-easy-cli 0.1.0
+rt easy cli
+
+USAGE:
+    rt-easy-cli [FLAGS] &lt;SUBCOMMAND&gt;
+
+FLAGS:
+    -h, --help       Prints help information
+        --no-ansi    Disable ansi colors
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    check       Check the rt file
+    gen-vhdl    Generate VHDL code
+    help        Prints this message or the help of the given subcommand(s)
+    test        Test the rt file
+</code></pre>
+<h2 id="check"><a class="header" href="#check">Check</a></h2>
+<p>The check command checks if the given RTeasy program is syntactically and semantically valid. The program to be checked is passed as a file path.</p>
+<pre><code class="language-shell">$ rt-easy-cli check path/to/my/code.rt
+</code></pre>
+<h2 id="generate-vhdl-code"><a class="header" href="#generate-vhdl-code">Generate VHDL Code</a></h2>
+<p>The gen-vhdl command can be used to export an RTeasy program to VHDL. The first argument is the path to the RTeasy program and the second argument is the path where the generated VHDL code is to be saved.</p>
+<pre><code class="language-shell">$ rt-easy-cli gen-vhdl path/to/my/code.rt path/to/generated.vhdl
+</code></pre>
+<p>The name of the generated VHDL module can be specified via <code>--module-name &lt;module-name&gt;</code>, otherwise the name of the VHDL file is used. In addition, memories can be pre-initialized via <code>--memories MEM_A path/to/MEM_A.rtmem MEM_B path/to/MEM_B.rtmem</code> (see <a href="tutorial/cli/../advanced/memory-file-format.html">Memory File Format</a>).</p>
+<h2 id="test"><a class="header" href="#test">Test</a></h2>
+<p>The test command allows automatic testing of an RTeasy program against a test file. The first argument is the path to the RTeasy program and the second argument is the path to the test file.</p>
+<pre><code class="language-shell">$ rt-easy-cli test path/to/my/code.rt path/to/my/test_file.rtt
+</code></pre>
+<p>The test only has access to the interface of the program, meaning only to the inputs and ouputs. The syntax and semantic of a test file is explained in the following example:</p>
+<pre><code class="language-rteasy ignore"># Test files support line comments prefixed by a `#`.
+# All statements are newline terminated and are simply executed sequentially.
+
+# Step: Execute one or more steps on the simulator.
+# If no amount is given, one step is performed. Examples:
+step
+step 5
+step 1
+step 2
+
+# Micro step: Execute one or more micro steps on the simulator.
+# If no amount is given, one micro step is performed. Examples:
+microStep
+microStep 5
+microStep 1
+microStep 2
+
+# Run: Run the simulator to the end or until a breakpoint is reached.
+run
+
+# Reset: Reset the simulator and all breakpoints.
+reset
+
+# Set/Remove breakpoint: Set or remove a breakpoint at the given label. Examples:
+set breakpoint MY_LABEL
+set breakpoint LABEL_B
+remove breakpoint MY_LABEL
+
+# Set input: Writing to inputs is similar to assigning in RTeasy programs.
+# The expression can use all inputs and outputs of the program. Examples:
+MY_INPUT &lt;- 42 + -1
+MY_INPUT &lt;- MY_OUTPUT(3:0).&quot;1&quot;
+
+# Assert: Assert statements work the same way as in RTeasy with the restriction
+# that only inputs and ouputs can be accessed. Examples:
+assert MY_OUTPUT = 28
+assert 1
+assert MY_INPUT + 4 = MY_OUTPUT
+</code></pre>
+<h3 id="example-usage"><a class="header" href="#example-usage">Example Usage</a></h3>
+<p><strong>Task</strong>: Find the sum of two numbers in the two's complement. For the calculation 8 bit wide registers are to be used. The two summands are to be read in via an input named <code>IN</code> in the first and second clock cycle respectively. After termination the result is to be available in the output <code>OUT</code>.</p>
+<p><strong>Test file</strong>:</p>
+<pre><code class="language-rteasy ignore"># Test various additions. Always reset after each test case.
+
+# Test 8 + 3 = 11
+IN &lt;- 8
+step
+IN &lt;- 3
+run
+assert OUT = 11
+reset
+
+# Test 255 + 1 = 0
+IN &lt;- 255
+step
+IN &lt;- 1
+run
+assert OUT = 0
+reset
+</code></pre>
+<p><strong>Possible valid solutions:</strong></p>
+<pre><code class="language-rteasy">declare input IN(7:0)
+declare output OUT(7:0)
+
+OUT &lt;- IN;
+OUT &lt;- OUT + IN;
+</code></pre>
+<pre><code class="language-rteasy">declare input IN(7:0)
+declare output OUT(7:0)
+declare register A(7:0), B(7:0)
+
+A &lt;- IN;
+B &lt;- IN;
+OUT &lt;- A + B;
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <p>The following sections contain practical application examples.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="easy-multiplier"><a class="header" href="#easy-multiplier">Easy Multiplier</a></h1>
@@ -500,10 +654,307 @@ fi;
 <p>With these values the program can now be run by clicking on run (<img src="tutorial/examples/../../images/icons/run.svg" alt="Run" />). After the calculation is finished, the result of the multiplication is shown in the output <code>OUT</code>.
 If you want to follow the multiplication in detail, you can click step (<img src="tutorial/examples/../../images/icons/step.svg" alt="Step" />) or micro step (<img src="tutorial/examples/../../images/icons/micro-step.svg" alt="Micro Step" />) to follow each step of the program.</p>
 <p>You can now reset the program via reset (<img src="tutorial/examples/../../images/icons/reset.svg" alt="Reset" />) and try another simulation with new values. For changes to the program text you can return to the editing mode via the edit button (<img src="tutorial/examples/../../images/icons/code.svg" alt="Code" />).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="register-register-machine"><a class="header" href="#register-register-machine">Register-Register-Machine</a></h1>
+<h2 id="task-1"><a class="header" href="#task-1">Task</a></h2>
+<p><img src="tutorial/examples/../../images/rrm-block-diagram.png" alt="Block Diagram" /></p>
+<p>Using the above block diagram, a simple processor is to be realized. For this a register array is to be used to manage the 8-bit source and destination registers. Via the shown data path instructions and data are loaded from the memory into the instruction register <em>IR</em>. The instruction format is given as follows:</p>
+<p><img src="tutorial/examples/../../images/rrm-instruction-format.png" alt="Instruction Format" /></p>
+<p>Each instruction consists of at least one byte. For jump instructions a second byte with the destination address is needed. The source and destination registers of the register array <em>Rm</em> and <em>Rn</em> are specified via two 2-bit wide numbers. A 4 bit wide number encodes the instruction to be executed. The processor has the following instructions for unsigned numbers:</p>
+<table><thead><tr><th>Instruction</th><th>Opcode</th><th>Description</th></tr></thead><tbody>
+<tr><td>ADD <em>Rm</em>, <em>Rn</em></td><td>0001</td><td>Adds <em>Rm</em> and <em>Rn</em>, result in <em>Rm</em></td></tr>
+<tr><td>SHL <em>Rm</em></td><td>0010</td><td>Shifts <em>Rm</em> by one bit to the left and sets the vacant bit to 0</td></tr>
+<tr><td>LOAD <em>Rm</em></td><td>0011</td><td>Loads <em>Rm</em> with the memory contents specified by <em>R3</em></td></tr>
+<tr><td>STORE <em>Rm</em></td><td>0100</td><td>Writes <em>Rm</em> to the memory location specified in <em>R3</em></td></tr>
+<tr><td>JMP address</td><td>0101</td><td>Continues the program execution at <em>address</em></td></tr>
+<tr><td>BREQ address</td><td>0110</td><td>Continues the program execution at <em>address</em> if the result of the last result of the last operation was 0</td></tr>
+</tbody></table>
+<p>The arithmetic logic unit (ALU) does not consider overflows, which means that in this case only the lower 8 bits of the result are output. To be able to execute the BREQ instruction more easily, the ALU has an additional flag <em>Z</em>, which takes the value value 1 if the result of the last operation was 0. Otherwise Z is set to 0.</p>
+<h2 id="draft-program-1"><a class="header" href="#draft-program-1">Draft Program</a></h2>
+<p>First you can see from the block diagram which registers, memories and register arrays are needed:</p>
+<pre><code class="language-rteasy">declare register IR(7:0), AR(7:0), DR(7:0), PC(7:0), Z
+declare register array R(7:0)[4]
+declare memory MEM(AR, DR)
+</code></pre>
+<p>Next, the registers that are read from at the beginning should be initialized with 0. Since one reads an instruction from the memory first, <code>PC</code> and <code>AR</code> should be initialized. This can be done under a label <code>INIT</code> for the sake of clarity:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register IR(7:0), AR(7:0), DR(7:0), PC(7:0), Z
+</span><span class="boring">declare register array R(7:0)[4]
+</span><span class="boring">declare memory MEM(AR, DR)
+</span><span class="boring">
+</span>INIT:
+    PC &lt;- 0, AR &lt;- 0;
+</code></pre>
+<p>With the declaration and initialization completed, the first program step follows, the fetching of instructions from memory, whereby the incrementing of the program counter <code>PC</code> already prepares for the next instruction:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register IR(7:0), AR(7:0), DR(7:0), PC(7:0), Z
+</span><span class="boring">declare register array R(7:0)[4]
+</span><span class="boring">declare memory MEM(AR, DR)
+</span><span class="boring">
+</span><span class="boring">INIT:
+</span><span class="boring">    PC &lt;- 0, AR &lt;- 0;
+</span><span class="boring">
+</span>FETCH:
+    AR &lt;- PC;
+    PC &lt;- PC + 1, read MEM;
+</code></pre>
+<p>Now the instruction must go into <code>IR</code>, where it is processed. For this purpose a switch case is used, which compares the upper 4 bits of the instruction stored in <code>IR</code> to the values 0 to 6 and jumps to the label where the respective instruction is executed in case of a match:</p>
+<!-- compile_fail(E006) since goto labels are not yet defined -->
+<pre><code class="language-rteasy compile_fail(E006)"><span class="boring">declare register IR(7:0), AR(7:0), DR(7:0), PC(7:0), Z
+</span><span class="boring">declare register array R(7:0)[4]
+</span><span class="boring">declare memory MEM(AR, DR)
+</span><span class="boring">
+</span><span class="boring">INIT:
+</span><span class="boring">    PC &lt;- 0, AR &lt;- 0;
+</span><span class="boring">
+</span><span class="boring">FETCH:
+</span><span class="boring">    AR &lt;- PC;
+</span><span class="boring">    PC &lt;- PC + 1, read MEM;
+</span><span class="boring">
+</span>    IR &lt;- DR | switch IR(7:4) {
+        case 0: goto FETCH
+        case 1: goto ADD
+        case 2: goto SHL
+        case 3: goto LOAD
+        case 4: goto STORE
+        case 5: goto JMP
+        case 6: goto BREQ
+        default: goto END
+    };
+</code></pre>
+<p>The instruction executions follow:</p>
+<pre><code class="language-rteasy"><span class="boring">declare register IR(7:0), AR(7:0), DR(7:0), PC(7:0), Z
+</span><span class="boring">declare register array R(7:0)[4]
+</span><span class="boring">declare memory MEM(AR, DR)
+</span><span class="boring">
+</span><span class="boring">INIT:
+</span><span class="boring">    PC &lt;- 0, AR &lt;- 0;
+</span><span class="boring">
+</span><span class="boring">FETCH:
+</span><span class="boring">    AR &lt;- PC;
+</span><span class="boring">    PC &lt;- PC + 1, read MEM;
+</span><span class="boring">
+</span><span class="boring">    IR &lt;- DR | switch IR(7:4) {
+</span><span class="boring">        case 0: goto FETCH
+</span><span class="boring">        case 1: goto ADD
+</span><span class="boring">        case 2: goto SHL
+</span><span class="boring">        case 3: goto LOAD
+</span><span class="boring">        case 4: goto STORE
+</span><span class="boring">        case 5: goto JMP
+</span><span class="boring">        case 6: goto BREQ
+</span><span class="boring">        default: goto END
+</span><span class="boring">    };
+</span><span class="boring">
+</span>ADD:
+    # Add Rm and Rn and write the result into Rm
+    R[IR(3:2)] &lt;- R[IR(3:2)] + R[IR(1:0)];
+    # If the result is 0, then set Z otherwise set Z to 0
+    # and fetch the next instruction
+    if R[IR(3:2)] = 0 then Z &lt;- 1 else Z &lt;- 0 fi, goto FETCH;
+
+SHL:
+    # Shift Rm by one bit to the left and set the vacant bit to 0
+    R[IR(3:2)] &lt;- R[IR(3:2)](6:0).&quot;0&quot;;
+    # If the result is 0, then set Z otherwise set Z to 0
+    # and fetch the next instruction
+    if R[IR(3:2)] = 0 then Z &lt;- 1 else Z &lt;- 0 fi, goto FETCH;
+
+LOAD:
+    # Write the content of R3 into the address register
+    AR &lt;- R[3];
+    # Read from memory
+    read MEM;
+    # Store the memory contents in the register array and fetch the next instruction
+    R[IR(3:2)] &lt;- DR, goto FETCH;
+
+STORE:
+    # Write the content of R3 into the address register
+    # and write Rm into the data register
+    AR &lt;- R[3], DR &lt;- R[IR(3:2)];
+    # Write the data into the memory and fetch the next instruction
+    write MEM, goto FETCH;
+
+
+JMP:
+    # Get the jump address from the memory
+    AR &lt;- PC;
+    read MEM;
+    # Set PC to this address and fetch the next instruction
+    PC &lt;- DR | goto FETCH;
+
+BREQ:
+    # If Z is set then execute a jump (JMP),
+    # otherwise continue in the program as usual (fetch the next instruction)
+    if Z = 1 then goto JMP else goto FETCH fi;
+
+END:
+    # If undefined instructions occur, the program ends here
+    nop;
+</code></pre>
+<p>The complete program should now look something like this:</p>
+<pre><code class="language-rteasy">declare register IR(7:0), AR(7:0), DR(7:0), PC(7:0), Z
+declare register array R(7:0)[4]
+declare memory MEM(AR, DR)
+
+INIT:
+    PC &lt;- 0, AR &lt;- 0;
+
+FETCH:
+    AR &lt;- PC;
+    PC &lt;- PC + 1, read MEM;
+
+    IR &lt;- DR | switch IR(7:4) {
+        case 0: goto FETCH
+        case 1: goto ADD
+        case 2: goto SHL
+        case 3: goto LOAD
+        case 4: goto STORE
+        case 5: goto JMP
+        case 6: goto BREQ
+        default: goto END
+    };
+
+ADD:
+    # Add Rm and Rn and write the result into Rm
+    R[IR(3:2)] &lt;- R[IR(3:2)] + R[IR(1:0)];
+    # If the result is 0, then set Z otherwise set Z to 0
+    # and fetch the next instruction
+    if R[IR(3:2)] = 0 then Z &lt;- 1 else Z &lt;- 0 fi, goto FETCH;
+
+SHL:
+    # Shift Rm by one bit to the left and set the vacant bit to 0
+    R[IR(3:2)] &lt;- R[IR(3:2)](6:0).&quot;0&quot;;
+    # If the result is 0, then set Z otherwise set Z to 0
+    # and fetch the next instruction
+    if R[IR(3:2)] = 0 then Z &lt;- 1 else Z &lt;- 0 fi, goto FETCH;
+
+LOAD:
+    # Write the content of R3 into the address register
+    AR &lt;- R[3];
+    # Read from memory
+    read MEM;
+    # Store the memory contents in the register array and fetch the next instruction
+    R[IR(3:2)] &lt;- DR, goto FETCH;
+
+STORE:
+    # Write the content of R3 into the address register
+    # and write Rm into the data register
+    AR &lt;- R[3], DR &lt;- R[IR(3:2)];
+    # Write the data into the memory and fetch the next instruction
+    write MEM, goto FETCH;
+
+
+JMP:
+    # Write the content of PC into the address register
+    AR &lt;- PC;
+    # Get the jump address from the memory
+    read MEM;
+    # Set PC to this address and fetch the next instruction
+    PC &lt;- DR | goto FETCH;
+
+BREQ:
+    # If Z is set then execute a jump (JMP),
+    # otherwise continue in the program as usual (fetch the next instruction)
+    if Z = 1 then goto JMP else goto FETCH fi;
+
+END:
+    # If undefined instructions occur, the program ends here
+    nop;
+</code></pre>
+<h2 id="simulation-1"><a class="header" href="#simulation-1">Simulation</a></h2>
+<p>To simulate the program, a memory content containing the instructions is necessary. For this you can download <a href="tutorial/examples/../../files/rrm-memory.rtmem">this memory file</a> (same as below). Then load it into <code>MEM</code> as shown <a href="tutorial/examples/../ide/simulation-mode.html#register-array-and-memory-view">here</a>.</p>
+<pre><code class="language-rtmem">B 8 8
+
+         # | Address | Opcode | m  | n  | Instruction |
+         # | ------- | ------ | -- | -- | ----------- |
+00110000 # | 0       | 0011   | 00 | 00 | LOAD Rm     |
+00010100 # | 1       | 0001   | 01 | 00 | ADD Rm, Rn  |
+00100100 # | 2       | 0010   | 01 | 00 | SHL Rm      |
+01001000 # | 3       | 0100   | 10 | 00 | STORE Rm    |
+01010000 # | 4       | 0101   | 00 | 00 | JMP address |
+00000001 # | 5       | 0000   | 00 | 01 | -           |
+01100000 # | 6       | 0110   | 00 | 00 | BREQ adress |
+00000000 # | 7       | 0000   | 00 | 00 | -           |
+</code></pre>
+<p>After you have set up the memory, you can start simulating the program. The table below shows what effect the memory content should have.</p>
+<table><thead><tr><th>Address</th><th>Description</th><th>Rm</th><th>Rn</th></tr></thead><tbody>
+<tr><td>0</td><td>Load the value at address <code>R3</code> (= 0) into register array at position <em>m</em> (= 0)</td><td>00110000</td><td>x</td></tr>
+<tr><td>1</td><td>Add register at position <em>m</em> (= 1) and at position <em>n</em> (= 0)</td><td>00110000</td><td>00110000</td></tr>
+<tr><td>2</td><td>Shift register at position <em>m</em> (= 1) by 1 bit to the left</td><td>01100000</td><td>x</td></tr>
+<tr><td>3</td><td>Write the value from register <em>m</em> (= 2) to the memory at address <code>R3</code></td><td>x</td><td>x</td></tr>
+<tr><td>4</td><td>Jump to value from next address</td><td>x</td><td>x</td></tr>
+<tr><td>5</td><td>Address to jump to</td><td>x</td><td>x</td></tr>
+<tr><td>6</td><td>(should not be reached!) If <code>Z=1</code> jump to value from next address</td><td>x</td><td>x</td></tr>
+<tr><td>7</td><td>Address to jump to</td><td>x</td><td>x</td></tr>
+</tbody></table>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="advanced"><a class="header" href="#advanced">Advanced</a></h1>
 <p>The following sections contain advanced/in-depth material.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="evaluation-of-expressions"><a class="header" href="#evaluation-of-expressions">Evaluation of Expressions</a></h1>
-<p>TODO: ...</p>
+<p>This chapter describes in detail how expressions are evaluated. Starting with the local concepts of signedness and overflow behavior. Next, the precedence and associativity of operators is defined. The last section defines in which size expressions are evaluated in and how this is derived.</p>
+<h2 id="signedness"><a class="header" href="#signedness">Signedness</a></h2>
+<p>Signedness specifies whether a numeric data type can represent negative and positive numbers or only non-negative numbers. For example C has <code>unsigned int</code> and <code>signed int</code>.</p>
+<p>RTeasy has no concept of signed variables or numbers. All operations always treat the operands as unsigned numbers.</p>
+<p>Although there are no signed numbers, expressions like <code>-1</code> are still valid. This is possible because this is parsed as <code>neg 1</code> where <code>neg</code> is just the arithmetic negation operator.
+This also fits well with how the size of expressions is calculated, as shown in <a href="tutorial/advanced/eval-expressions.html#expression-size-and-context-size">Expression Size and Context Size</a>.</p>
+<p>For operations like add, subtract and negate there is nothing to consider, because they behave the same for signed and unsigned numbers in the 2's complement anyway. Care must be taken with comparisons. Since every number is always treated as unsigned, unexpected things can happen as seen in the following example:</p>
+<pre><code class="language-rteasy"># The following assert will hold,
+# because it is equivalent to 0b1111 &gt; 0b1100
+assert -1 &gt; 12;
+</code></pre>
+<h2 id="overflow-behavior"><a class="header" href="#overflow-behavior">Overflow Behavior</a></h2>
+<p>Arithmetic overflow can occur if the result of an operation is outside of the range of the value produced. Since registers and buses are sized in RTeasy this behavior can occur.</p>
+<p>Overflow behavior affects only two operators in RTeasy: Addition and subtraction. These two arithmetic operations will always overflow and wrap, for example:</p>
+<pre><code class="language-rteasy">declare register X(2:0) # 0b000 to 0b111, or 0 to 7
+X &lt;- 0b100 + 0b101; # 4 + 5
+assert X = 0b001; # X = 9 mod 8 = 1
+</code></pre>
+<h2 id="operator-precedence-and-associativity"><a class="header" href="#operator-precedence-and-associativity">Operator Precedence and Associativity</a></h2>
+<p>Operator precedence and associativity forms the basis for how an expression is parsed. The following table gives an overview of all operators. Operators with higher precedence are executed before operators with lower precedence. Precedence comes before associativity.</p>
+<table><thead><tr><th>Precedence</th><th>Operator</th><th>Associativity</th><th>Individual operators</th></tr></thead><tbody>
+<tr><td>10</td><td>Unary Sign</td><td>right-to-left</td><td><code>- ... </code></td></tr>
+<tr><td>10</td><td>Unary Negation</td><td>right-to-left</td><td><code>neg ... </code></td></tr>
+<tr><td>9</td><td>Sign Extend</td><td>right-to-left</td><td><code>sxt ... </code></td></tr>
+<tr><td>8</td><td>Addition</td><td>left-to-right</td><td><code>... + ...</code></td></tr>
+<tr><td>8</td><td>Subtraction</td><td>left-to-right</td><td><code>... - ...</code></td></tr>
+<tr><td>7</td><td>Less Than</td><td>left-to-right</td><td><code>... &lt; ...</code></td></tr>
+<tr><td>7</td><td>Less Than Or Equal</td><td>left-to-right</td><td><code>... &lt;= ...</code></td></tr>
+<tr><td>7</td><td>Greater Than</td><td>left-to-right</td><td><code>... &gt; ...</code></td></tr>
+<tr><td>7</td><td>Greater Than Or Equal</td><td>left-to-right</td><td><code>... &gt;= ...</code></td></tr>
+<tr><td>6</td><td>Equality</td><td>left-to-right</td><td><code>... = ...</code></td></tr>
+<tr><td>6</td><td>Inequality</td><td>left-to-right</td><td><code>... &lt;&gt; ...</code></td></tr>
+<tr><td>5</td><td>Bitwise NOT</td><td>right-to-left</td><td><code>not ...</code></td></tr>
+<tr><td>4</td><td>Bitwise NAND</td><td>left-to-right</td><td><code>... nand ...</code></td></tr>
+<tr><td>3</td><td>Bitwise AND</td><td>left-to-right</td><td><code>... and ...</code></td></tr>
+<tr><td>2</td><td>Bitwise NOR</td><td>left-to-right</td><td><code>... nor ...</code></td></tr>
+<tr><td>1</td><td>Bitwise OR</td><td>left-to-right</td><td><code>... or ...</code></td></tr>
+<tr><td>0</td><td>Bitwise XOR</td><td>left-to-right</td><td><code>... xor ...</code></td></tr>
+</tbody></table>
+<h2 id="expression-size-and-context-size"><a class="header" href="#expression-size-and-context-size">Expression Size and Context Size</a></h2>
+<p>At first glance it may seem that there is only one type in RTeasy: unsigned integer.
+But in fact RTeasy considers the exact size of each expression. Thus, each possible size of an expression results in a different type. This raises the question what happens when two expressions with different sizes are added, for example.
+In RTeasy there are no explicit casts, instead there are rules about which expression yields which size.</p>
+<p>To determine the size there are actually two algorithms. One for calculating the (minimum) size of an expression and one for providing a size an expression will actually evaluate in.</p>
+<h3 id="size"><a class="header" href="#size">Size</a></h3>
+<p>The first algorithm runs at compile time. It annotates each expression with the calculated size. The algorithm operates bottom-up. The resulting size is used for two purposes: First, to check if an expression can fit into a target, e.g. a register. So an expression of size 7 can fit into an 8 bit wide register, but not into a 4 bit wide register. Second, the calculated size is needed for the second algorithm. The rules for calculating the size are specified in the following table:</p>
+<table><thead><tr><th>Expression type</th><th>Size</th></tr></thead><tbody>
+<tr><td>Register/Bus/Register Array</td><td>Size of bit range</td></tr>
+<tr><td>Bit string literal</td><td>Amount of digits</td></tr>
+<tr><td>Other literals</td><td>Size of shortest binary representation</td></tr>
+<tr><td>Concatenation</td><td>Sum of the sizes of all subexpressions</td></tr>
+<tr><td>Unary operators (-, neg, sxt, not)</td><td>Size of inner expression</td></tr>
+<tr><td>Comparisons (&lt;, &lt;=, &gt;, &gt;=, =, &lt;&gt;)</td><td>1</td></tr>
+<tr><td>Other binary operators (+, -, nand, and, nor, or, xor)</td><td>Maximum size of left and right expression</td></tr>
+</tbody></table>
+<h3 id="context-size"><a class="header" href="#context-size">Context Size</a></h3>
+<p>The second algorithm runs at runtime in the case of the simulator. When generating hardware, it is part of the compiler instead. The algorithm operates top-down. The size calculated by the algorithm will be called &quot;context size&quot; in the following. An expression that is evaluated with the context size <em>n</em> always returns a result that is <em>n</em> bit wide.</p>
+<p>For leaf expressions, like literals or registers, this is achieved by just zero extending the value to the context size. For unary/binary operations, like a comparison, this is achieved by zero extending the result of the operation, except for <code>sxt</code> where the result of the inner expression is sign extended.</p>
+<p>The algorithm is used when executing assignments, if conditions and switch-case values. Depending on where it is used, the initial context size will vary. For assignments, the initial context size is equal to the size of the target. For if conditions the initial size is always one and for switch-case values it is equal to the size of the expression which it is matched against. The rules for passing down the context size are specified in the following table (Inherit means that the context size received is simply passed on):</p>
+<table><thead><tr><th>Expression type</th><th>Passed down context size</th></tr></thead><tbody>
+<tr><td>Register/Bus/Register Array</td><td>n/a</td></tr>
+<tr><td>Literals</td><td>n/a</td></tr>
+<tr><td>Concatenation</td><td>Each subexpression gets its own size</td></tr>
+<tr><td>Sign Extend (sxt)</td><td>Size of inner expression</td></tr>
+<tr><td>Other unary operators (-, neg, not)</td><td>Inherit</td></tr>
+<tr><td>Comparisons (&lt;, &lt;=, &gt;, &gt;=, =, &lt;&gt;)</td><td>Maximum size of left and right expression</td></tr>
+<tr><td>Other binary operators (+, -, nand, and, nor, or, xor</td><td>Inherit</td></tr>
+</tbody></table>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="memory-file-format"><a class="header" href="#memory-file-format">Memory File Format</a></h1>
 <p>The memory file format is a simple line-based file format.</p>
 <h2 id="header"><a class="header" href="#header">Header</a></h2>
@@ -950,6 +1401,13 @@ if X(0) then goto SKIP fi; # error: conditional goto in first state
 X &lt;- 4;
 SKIP: X &lt;- X + 1;
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="appendix"><a class="header" href="#appendix">Appendix</a></h1>
+<h2 id="literature"><a class="header" href="#literature">Literature</a></h2>
+<p>[1] Hagen Schendel, Carsten Albrecht, Erik Maehle. RTeasy: An Algorithmic Design Environment on Register Transfer Level. In WCAE ’04: Proceedings of the 2004 Workshop on Computer Architecture Education, pages 29–35, New York, NY, USA, June 2004. ACM.</p>
+<p>[2] Christian Friedrich. Porting RTeasy to the NetBeans Platform. In: 2014.</p>
+<p>[3] Jannik Obermann. RTeasy-Online – A Redesign and Extension of RTeasy2. In: 2022.</p>
+<h2 id="credits"><a class="header" href="#credits">Credits</a></h2>
+<p>Large parts of the tutorial, especially the application examples, are based on the previous version of the <a href="https://www.iti.uni-luebeck.de/fileadmin/Lehre/RTeasy/Tutorial.pdf">RTeasy Tutorial (2012)</a>.</p>
 
                     </main>
 

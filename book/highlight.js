@@ -1166,3 +1166,90 @@ hljs.registerLanguage(
     };
   })()
 );
+hljs.registerLanguage(
+  "bash",
+  (function () {
+    "use strict";
+    return function (e) {
+      const s = {};
+      Object.assign(s, {
+        className: "variable",
+        variants: [
+          { begin: /\$[\w\d#@][\w\d_]*/ },
+          {
+            begin: /\$\{/,
+            end: /\}/,
+            contains: [{ begin: /:-/, contains: [s] }],
+          },
+        ],
+      });
+      const t = {
+          className: "subst",
+          begin: /\$\(/,
+          end: /\)/,
+          contains: [e.BACKSLASH_ESCAPE],
+        },
+        n = {
+          className: "string",
+          begin: /"/,
+          end: /"/,
+          contains: [e.BACKSLASH_ESCAPE, s, t],
+        };
+      t.contains.push(n);
+      const a = {
+          begin: /\$\(\(/,
+          end: /\)\)/,
+          contains: [
+            { begin: /\d+#[0-9a-f]+/, className: "number" },
+            e.NUMBER_MODE,
+            s,
+          ],
+        },
+        i = e.SHEBANG({
+          binary: "(fish|bash|zsh|sh|csh|ksh|tcsh|dash|scsh)",
+          relevance: 10,
+        }),
+        c = {
+          className: "function",
+          begin: /\w[\w\d_]*\s*\(\s*\)\s*\{/,
+          returnBegin: !0,
+          contains: [e.inherit(e.TITLE_MODE, { begin: /\w[\w\d_]*/ })],
+          relevance: 0,
+        };
+      return {
+        name: "Bash",
+        aliases: ["sh", "zsh"],
+        contains: [
+          i,
+          e.SHEBANG(),
+          c,
+          a,
+          e.HASH_COMMENT_MODE,
+          n,
+          { className: "", begin: /\\"/ },
+          { className: "string", begin: /'/, end: /'/ },
+          s,
+        ],
+      };
+    };
+  })()
+);
+hljs.registerLanguage(
+  "shell",
+  (function () {
+    "use strict";
+    return function (s) {
+      return {
+        name: "Shell Session",
+        aliases: ["console"],
+        contains: [
+          {
+            className: "meta",
+            begin: "^\\s{0,3}[/\\w\\d\\[\\]()@-]*[>%$#]",
+            starts: { end: "$", subLanguage: "bash" },
+          },
+        ],
+      };
+    };
+  })()
+);
