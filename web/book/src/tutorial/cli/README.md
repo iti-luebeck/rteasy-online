@@ -1,6 +1,6 @@
 # CLI User Guide
 
-The CLI is a alternative frontend to the graphical user interface. It currently supports the help, check, gen-vhdl and test commands. The help command displays a general help page or help for a subcommand. The check command checks if the given RTeasy program is syntactically and semantically valid. The gen-vhdl command can be used to export an RTeasy program to VHDL. The test command allows automatic testing of an RTeasy program against a test file.
+The CLI (command-line interface) is a alternative frontend to the graphical user interface. It currently supports the help, check, gen-vhdl and test commands. The help command displays a general help page or help for a subcommand. The check command checks if the given RTeasy program is syntactically and semantically valid. The gen-vhdl command can be used to export an RTeasy program to VHDL. The test command allows automatic testing of an RTeasy program against a test file.
 
 The CLI can be downloaded from [GitHub](https://github.com/iti-luebeck/rteasy-online/releases).
 
