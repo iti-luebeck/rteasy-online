@@ -25,7 +25,16 @@ During simulation, the state view provide visual hints.
 When executing with micro steps, writes to registers are represented by an arrow, with the value that is assigned after the clock cycle on the right-hand side.
 After executing a complete step, values that have changed are highlighted in yellow.
 
-TODO: Memory/Register Array View
+### Register Array and Memory View
+
+Register array and memory views are not shown by default and can be opened by clicking the _Content_ button next to their name in the state view.
+
+Both allow you to set a base in which the values are presented. The content is divided over several pages.
+For memories it is possible to jump to a specific address via _Goto_. You can load a memory state or save the current state via _Load_ and _Save_.
+
+---
+
+![Register Array and Memory View](../../images/reg-array-and-memory.png)
 
 ## Signals View
 
