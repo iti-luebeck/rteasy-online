@@ -42,6 +42,8 @@ The signals view shows the condition signals and control signals of a resulting 
 
 ## Breakpoints
 
-By clicking on the line numbers it is possible to set or remove breakpoints. If the simulation is now started via the play button, it will pause as soon as a breakpoint is reached.
+By clicking on the line numbers it is possible to set or remove breakpoints. If the simulation is now started via the play button, it will pause as soon as a breakpoint is reached. For an example, see below. The execution was paused just before `X <- X + 1`.
 
-TODO: Image
+---
+
+![Breakpoint Example](../../images/breakpoint.png)
