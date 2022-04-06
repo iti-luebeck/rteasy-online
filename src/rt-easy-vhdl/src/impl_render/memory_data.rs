@@ -22,7 +22,7 @@ pub fn memories(
                 .ok_or_else(|| RenderError::MemoryNotFound(name.clone()))?;
 
             // Check size
-            if file.ar_size() > ar.1.size() || file.dr_size() > dr.1.size() {
+            if file.ar_size() != ar.1.size() || file.dr_size() != dr.1.size() {
                 return Err(RenderError::InvalidMemorySize {
                     name,
                     expected: (ar.1.size(), dr.1.size()),
