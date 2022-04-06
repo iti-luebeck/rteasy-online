@@ -306,7 +306,7 @@ const Toolbar: React.FC<Props> = () => {
             margin: "auto",
           }}
         >
-          <Text>RTeasy</Text>
+          <Text>RTeasy-Online</Text>
         </div>
         <div
           className="displayOnlyLarge"
@@ -320,7 +320,7 @@ const Toolbar: React.FC<Props> = () => {
             pointerEvents: "none",
           }}
         >
-          <Text>RTeasy</Text>
+          <Text>RTeasy-Online</Text>
         </div>
       </div>
 
