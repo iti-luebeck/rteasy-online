@@ -12,6 +12,7 @@ import {
 
 import { VhdlExportDialog } from "./";
 import { OptionsDialog } from "./";
+import { AboutDialog } from "./";
 
 import { useFilePicker } from "../hooks/useFilePicker";
 import { downloadFile } from "../util/downloadFile";
@@ -25,6 +26,7 @@ const Toolbar: React.FC<Props> = () => {
   const globalModel = useContext(GlobalContext);
   const [showVhdlExportDialog, setShowVhdlExportDialog] = useState(false);
   const [showOptionsDialog, setShowOptionsDialog] = useState(false);
+  const [showAboutDialog, setShowAboutDialog] = useState(false);
   const openFilePicker = useFilePicker({
     accept: [".rt", ".txt"],
     onChange: (_name, content) => {
@@ -250,6 +252,11 @@ const Toolbar: React.FC<Props> = () => {
         text="Tutorial"
         onClick={() => window.open("/rteasy-online/book", "_blank")}
       />
+      <MenuItem
+        icon="info-sign"
+        text="About"
+        onClick={() => setShowAboutDialog(true)}
+      />
     </Menu>
   );
 
@@ -262,6 +269,10 @@ const Toolbar: React.FC<Props> = () => {
         flexDirection: "column",
       }}
     >
+      <AboutDialog
+        isOpen={showAboutDialog}
+        onClose={() => setShowAboutDialog(false)}
+      />
       <OptionsDialog
         isOpen={showOptionsDialog}
         onClose={() => setShowOptionsDialog(false)}
