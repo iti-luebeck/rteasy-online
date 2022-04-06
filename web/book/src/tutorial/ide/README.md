@@ -4,4 +4,12 @@ The [RTeasy-Online IDE](../../..) has two different modes. On the one hand there
 
 At the start you are always in the editing mode.
 
-TODO: Options Dialog
+## Options Dialog
+
+The options dialog is accessible via the toolbar: `File -> Options...`.
+
+Here you can set the clock rate for the simulation. Furthermore, it is possible to reset changes to the layout.
+
+---
+
+![Options Dialog](../../images/options-dialog.png)
