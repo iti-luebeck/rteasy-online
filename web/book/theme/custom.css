@@ -1,3 +1,7 @@
 p > img {
   vertical-align: sub;
 }
+
+hr + p > img {
+  filter: drop-shadow(0px 0px 1px #222);
+}
