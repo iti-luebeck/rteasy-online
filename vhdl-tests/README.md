@@ -1,8 +1,10 @@
-# Test VHDL Export
+# Test the VHDL Export
 
 Tests for the VHDL export of RTeasy-Online. To run the tests first `cd` into this directory and then execute `cargo run`.
 
 ## How it works
+
+The basic idea is to compile each RTeasy program to VHDL and then run the associated testbench with [ghdl](https://github.com/ghdl/ghdl).
 
 All tests are located in the [testbenches](./testbenches) folder. A test `X` always consists of the rt code `src/X/X.rt` and a testbench `src/X/X_tb.vhdl`. Tests whose name begins with `fail` must have a failing assert to be considered successful.
 

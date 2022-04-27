@@ -1,0 +1,17 @@
+[package]
+name = "program"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../rtcore" }
+
+split-vec = { path = "../_lib/split-vec" }
+
+[dev-dependencies]
+parser = { path = "../parser" }
+compiler = { path = "../compiler" }
+compiler-backend-simulator = { path = "../compiler-backend-simulator" }

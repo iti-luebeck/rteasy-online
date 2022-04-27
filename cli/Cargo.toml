@@ -1,0 +1,24 @@
+[package]
+name = "rt-easy-cli"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../backend/rtcore" }
+vhdl = { path = "../backend/vhdl" }
+memory-file = { path = "../backend/memory-file" }
+parser = { path = "../backend/parser" }
+compiler = { path = "../backend/compiler" }
+compiler-backend-simulator = { path = "../backend/compiler-backend-simulator" }
+compiler-backend-vhdl = { path = "../backend/compiler-backend-vhdl" }
+unit-test = { path = "../backend/unit-test" }
+
+structopt = "0.3.25"
+anyhow = "1.0.44"
+ansi_term = "0.12.1"
+
+[dev-dependencies]
+tempfile = "3.3.0"

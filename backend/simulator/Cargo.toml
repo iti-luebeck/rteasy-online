@@ -1,0 +1,18 @@
+[package]
+name = "simulator"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../rtcore" }
+program = { path = "../program" }
+memory-file = { path = "../memory-file" }
+anyhow = "1.0.44"
+
+[dev-dependencies]
+parser = { path = "../parser" }
+compiler = { path = "../compiler" }
+compiler-backend-simulator = { path = "../compiler-backend-simulator" }
