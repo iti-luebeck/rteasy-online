@@ -1,0 +1,20 @@
+[package]
+name = "rt-easy"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../rtcore" }
+memory-file = { path = "../memory-file" }
+ast = { path = "../ast" }
+program = { path = "../program" }
+vhdl = { path = "../vhdl" }
+parser = { path = "../parser" }
+compiler = { path = "../compiler" }
+compiler-backend-simulator = { path = "../compiler-backend-simulator" }
+compiler-backend-vhdl = { path = "../compiler-backend-vhdl" }
+simulator = { path = "../simulator" }
+unit-test = { path = "../unit-test" }

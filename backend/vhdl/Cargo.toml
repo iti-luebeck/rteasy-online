@@ -1,0 +1,21 @@
+[package]
+name = "vhdl"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../rtcore" }
+memory-file = { path = "../memory-file" }
+
+thiserror = "1.0.30"
+temply = "0.3.0"
+indexmap = "1.8.0"
+vec1 = "1.8.0"
+
+[dev-dependencies]
+parser = { path = "../parser" }
+compiler = { path = "../compiler" }
+compiler-backend-vhdl = { path = "../compiler-backend-vhdl" }

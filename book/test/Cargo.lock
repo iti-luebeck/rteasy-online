@@ -56,6 +56,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "compiler-backend-simulator"
+version = "0.1.0"
+dependencies = [
+ "compiler",
+ "program",
+ "rtcore",
+]
+
+[[package]]
 name = "compiler-backend-vhdl"
 version = "0.1.0"
 dependencies = [
@@ -140,6 +149,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "once_cell"
+version = "1.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87f3e037eac156d1775da914196f0f37741a274155e34a0b7e427c35d2a2ecb9"
+
+[[package]]
 name = "parser"
 version = "0.1.0"
 dependencies = [
@@ -164,6 +179,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec757218438d5fda206afc041538b2f6d889286160d649a86a24d37e1235afd1"
 dependencies = [
  "unicode-xid",
+]
+
+[[package]]
+name = "program"
+version = "0.1.0"
+dependencies = [
+ "rtcore",
+ "split-vec",
 ]
 
 [[package]]
@@ -237,10 +260,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "simulator"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "memory-file",
+ "program",
+ "rtcore",
+]
+
+[[package]]
 name = "smawk"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f67ad224767faa3c7d8b6d91985b78e70a1324408abcb1cfcc2be4c06bc06043"
+
+[[package]]
+name = "split-vec"
+version = "0.1.0"
 
 [[package]]
 name = "syn"
@@ -271,6 +308,20 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "test-code"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "compiler",
+ "compiler-backend-simulator",
+ "compiler-backend-vhdl",
+ "once_cell",
+ "parser",
+ "regex",
+ "simulator",
 ]
 
 [[package]]
@@ -369,18 +420,6 @@ dependencies = [
  "temply",
  "thiserror",
  "vec1",
-]
-
-[[package]]
-name = "vhdl-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "compiler",
- "compiler-backend-vhdl",
- "memory-file",
- "parser",
- "vhdl",
 ]
 
 [[package]]

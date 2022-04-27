@@ -197,7 +197,7 @@ impl Tb {
                 let source = fs::read_to_string(path)?;
                 let memory_file = MemoryFile::parse(&source)
                     .map_err(|()| anyhow!("failed to parse memory `{}`", name))?;
-                memories.insert(rtvhdl::Ident(name), memory_file);
+                memories.insert(vhdl::Ident(name), memory_file);
             }
         }
 

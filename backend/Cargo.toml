@@ -1,0 +1,25 @@
+[workspace]
+members = [
+    "_lib/split-vec",
+    "_lib/value",
+    "_lib/pretty-error",
+    "_lib/toktok",
+    "_lib/toktok-generator",
+    "_lib/toktok-generator-tests",
+
+    "rtcore",
+    "memory-file",
+    "ast",
+    "program",
+    "vhdl",
+    "parser",
+    "compiler",
+    "compiler-backend-simulator",
+    "compiler-backend-vhdl",
+    "simulator",
+    "unit-test",
+    "rt-easy",
+]
+
+[profile.dev]
+opt-level = 1

@@ -1,0 +1,15 @@
+[package]
+name = "compiler"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../rtcore" }
+ast = { path = "../ast" }
+pretty-error = { path = "../_lib/pretty-error" }
+
+[dev-dependencies]
+parser = { path = "../parser" }

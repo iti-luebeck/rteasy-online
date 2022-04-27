@@ -1,0 +1,10 @@
+[package]
+name = "rtcore"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+value = { path = "../_lib/value" }

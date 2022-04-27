@@ -27,8 +27,10 @@ jobs:
 
       - name: Build
         run: cargo build --verbose
+        working-directory: backend
       - name: Run tests
         run: cargo test --verbose
+        working-directory: backend
 
   backend_code_coverage:
     name: Coverage backend
@@ -52,10 +54,11 @@ jobs:
 
       - name: Generate code coverage
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+        working-directory: backend
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          files: lcov.info
+          files: backend/lcov.info
           fail_ci_if_error: true
 
   backend_check_fmt:
@@ -68,6 +71,7 @@ jobs:
 
       - name: fmt
         run: cargo fmt -- --check
+        working-directory: backend
 
   # ----------------------------------------------------------------------------
   # VHDL
@@ -122,10 +126,10 @@ jobs:
 
       - name: Build
         run: cargo build
-        working-directory: web/book/test
+        working-directory: book/test
       - name: Run tests
         run: cargo run
-        working-directory: web/book/test
+        working-directory: book/test
 
   # ----------------------------------------------------------------------------
   # Tests
@@ -189,8 +193,11 @@ jobs:
         uses: Swatinem/rust-cache@v1
 
       - name: Build
+        run: cargo build --release
+        working-directory: cli
+
+      - name: Copy to ci-dist
         run: |
-          cargo build --package rt-easy-cli --release
           mkdir ci-dist
           cp target/release/rt-easy-cli${{ matrix.file_ext }} ci-dist/${{ matrix.asset_name }}${{ matrix.file_ext }}
 
@@ -242,27 +249,25 @@ jobs:
         # TODO: run: cargo install mdbook --no-default-features --features search --vers "^0.4" --locked
         run: cargo install mdbook --no-default-features --features search --git https://github.com/rust-lang/mdBook --rev refs/pull/1761/head
 
-      - name: Build Backend Api Docs
-        run: cargo doc --no-deps
-
       - name: Build Web App
         run: |
           npm install
           npm run build
-        working-directory: web/rt-easy
+        working-directory: app
 
       - name: Build book
         run: mdbook build
-        working-directory: web/book
+        working-directory: book
+
+      - name: Build Backend Api Docs
+        run: cargo doc --no-deps
+        working-directory: backend
 
       - name: Copy to ci-dist
         run: |
-          mkdir -p ci-dist/docs/backend
-          cp -r target/doc/* ci-dist/docs/backend/
-          mkdir -p ci-dist
-          cp -r web/rt-easy/build/* ci-dist/
-          mkdir -p ci-dist/book
-          cp -r web/book/build/* ci-dist/book/
+          mkdir -p ci-dist                  && cp -r app/build/*  ci-dist/
+          mkdir -p ci-dist/book             && cp -r book/build/* ci-dist/book/
+          mkdir -p ci-dist/dev/docs/backend && cp -r target/doc/* ci-dist/dev/docs/backend/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5

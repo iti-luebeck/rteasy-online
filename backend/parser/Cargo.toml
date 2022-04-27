@@ -1,0 +1,17 @@
+[package]
+name = "parser"
+version = "0.1.0"
+authors = ["Jannik Obermann <jannik.obermann@gmail.com>"]
+edition = "2021"
+rust-version = "1.56"
+publish = false
+
+[dependencies]
+rtcore = { path = "../rtcore" }
+ast = { path = "../ast" }
+
+toktok = { path = "../_lib/toktok" }
+logos = "0.12.0"
+
+[build-dependencies]
+toktok-generator = { path = "../_lib/toktok-generator" }
