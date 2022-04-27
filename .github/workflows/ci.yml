@@ -1,0 +1,271 @@
+name: ci
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # ----------------------------------------------------------------------------
+  # Backend
+  # ----------------------------------------------------------------------------
+  backend_build_and_test:
+    name: Build and test backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose
+
+  backend_code_coverage:
+    name: Coverage backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: llvm-tools-preview
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: Generate code coverage
+        run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: lcov.info
+          fail_ci_if_error: true
+
+  backend_check_fmt:
+    name: Check fmt backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: fmt
+        run: cargo fmt -- --check
+
+  # ----------------------------------------------------------------------------
+  # VHDL
+  # ----------------------------------------------------------------------------
+  vhdl_tests:
+    name: Test VHDL
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Setup ghdl
+        run: |
+          sudo apt-get update
+          sudo apt-get install ghdl
+          ghdl --version
+
+      - name: Build
+        run: cargo build
+        working-directory: vhdl-tests
+      - name: Run tests
+        run: cargo run
+        working-directory: vhdl-tests
+
+  # ----------------------------------------------------------------------------
+  # Book
+  # ----------------------------------------------------------------------------
+  book_test:
+    name: Test book
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build
+        run: cargo build
+        working-directory: web/book/test
+      - name: Run tests
+        run: cargo run
+        working-directory: web/book/test
+
+  # ----------------------------------------------------------------------------
+  # Tests
+  # ----------------------------------------------------------------------------
+  all_tests:
+    needs: [backend_build_and_test, backend_check_fmt, vhdl_tests, book_test]
+
+    name: All tests passed
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All tests passed"
+
+  # ----------------------------------------------------------------------------
+  # Pre-release CLI
+  # ----------------------------------------------------------------------------
+  pre_release_cli_prepare:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    needs: [all_tests]
+    concurrency: pre_release_cli
+
+    name: Prepare CLI pre-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: dev
+          prerelease: true
+          title: Development Build
+
+  pre_release_cli:
+    needs: [pre_release_cli_prepare]
+
+    name: Pre-release CLI
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: rt-easy-cli-linux
+            file_ext: ~
+          - os: macos-latest
+            asset_name: rt-easy-cli-macos
+            file_ext: ~
+          - os: windows-latest
+            asset_name: rt-easy-cli-windows
+            file_ext: .exe
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build
+        run: |
+          cargo build --package rt-easy-cli --release
+          mkdir ci-dist
+          cp target/release/rt-easy-cli${{ matrix.file_ext }} ci-dist/${{ matrix.asset_name }}${{ matrix.file_ext }}
+
+      - name: Upload Release Asset
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: dev
+          overwrite: true
+          file: ci-dist/*
+          file_glob: true
+
+  # ----------------------------------------------------------------------------
+  # Github Pages
+  # ----------------------------------------------------------------------------
+  gh_pages:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    needs: [all_tests]
+    concurrency: gh_pages
+
+    name: Github Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install mdbook
+        # TODO: run: cargo install mdbook --no-default-features --features search --vers "^0.4" --locked
+        run: cargo install mdbook --no-default-features --features search --git https://github.com/rust-lang/mdBook --rev refs/pull/1761/head
+
+      - name: Build Backend Api Docs
+        run: cargo doc --no-deps
+
+      - name: Build Web App
+        run: |
+          npm install
+          npm run build
+        working-directory: web/rt-easy
+
+      - name: Build book
+        run: mdbook build
+        working-directory: web/book
+
+      - name: Copy to ci-dist
+        run: |
+          mkdir -p ci-dist/docs/backend
+          cp -r target/doc/* ci-dist/docs/backend/
+          mkdir -p ci-dist
+          cp -r web/rt-easy/build/* ci-dist/
+          mkdir -p ci-dist/book
+          cp -r web/book/build/* ci-dist/book/
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: ci-dist
