@@ -249,11 +249,11 @@ jobs:
         # TODO: run: cargo install mdbook --no-default-features --features search --vers "^0.4" --locked
         run: cargo install mdbook --no-default-features --features search --git https://github.com/rust-lang/mdBook --rev refs/pull/1761/head
 
-      - name: Build Web App
+      - name: Build IDE
         run: |
           npm install
           npm run build
-        working-directory: app
+        working-directory: ide
 
       - name: Build book
         run: mdbook build
@@ -265,7 +265,7 @@ jobs:
 
       - name: Copy to ci-dist
         run: |
-          mkdir -p ci-dist                  && cp -r app/build/*  ci-dist/
+          mkdir -p ci-dist                  && cp -r ide/build/*  ci-dist/
           mkdir -p ci-dist/book             && cp -r book/build/* ci-dist/book/
           mkdir -p ci-dist/dev/docs/backend && cp -r target/doc/* ci-dist/dev/docs/backend/
 
