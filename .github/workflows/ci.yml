@@ -74,6 +74,82 @@ jobs:
         working-directory: backend
 
   # ----------------------------------------------------------------------------
+  # CLI
+  # ----------------------------------------------------------------------------
+  cli_build_and_test:
+    name: Build and test cli
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build
+        run: cargo build --verbose
+        working-directory: cli
+      - name: Run tests
+        run: cargo test --verbose
+        working-directory: cli
+
+  cli_check_fmt:
+    name: Check fmt cli
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: fmt
+        run: cargo fmt -- --check
+        working-directory: cli
+
+  # ----------------------------------------------------------------------------
+  # Wasm
+  # ----------------------------------------------------------------------------
+  wasm_build_and_test:
+    name: Build and test wasm
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build
+        run: cargo build --verbose
+        working-directory: wasm
+      - name: Run tests
+        run: cargo test --verbose
+        working-directory: wasm
+
+  wasm_check_fmt:
+    name: Check fmt wasm
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: fmt
+        run: cargo fmt -- --check
+        working-directory: wasm
+
+  # ----------------------------------------------------------------------------
   # VHDL
   # ----------------------------------------------------------------------------
   vhdl_tests:
@@ -135,7 +211,17 @@ jobs:
   # Tests
   # ----------------------------------------------------------------------------
   all_tests:
-    needs: [backend_build_and_test, backend_check_fmt, vhdl_tests, book_test]
+    needs:
+      [
+        backend_build_and_test,
+        backend_check_fmt,
+        cli_build_and_test,
+        cli_check_fmt,
+        wasm_build_and_test,
+        wasm_check_fmt,
+        vhdl_tests,
+        book_test,
+      ]
 
     name: All tests passed
     runs-on: ubuntu-latest
