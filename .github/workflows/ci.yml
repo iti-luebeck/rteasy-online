@@ -249,6 +249,7 @@ jobs:
 
   pre_release_cli:
     needs: [pre_release_cli_prepare]
+    concurrency: pre_release_cli
 
     name: Pre-release CLI
     runs-on: ${{ matrix.os }}
