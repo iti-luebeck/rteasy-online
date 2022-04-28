@@ -22,7 +22,7 @@ This repository contains the complete source code for RTeasy-Online and is divid
 
 - **[Backend](./backend/README.md)**: The backend contains the core logic for RTeasy. Here you can find among others the parser, compiler and simulator. All code in here is frontend agnostic and can be used from a graphical as well as from a console-based interface. The [API Docs](https://iti-luebeck.github.io/rteasy-online/dev/docs/backend/rt_easy) for the backend are built automatically.
 
-- **[IDE](./app/README.md)**: The IDE is a graphical frontend built on top of the backend.
+- **[IDE](./ide/README.md)**: The IDE is a graphical frontend built on top of the backend.
 
 - **[CLI](./cli/README.md)**: The CLI is a console-based frontend built on top of the backend.
 
