@@ -21,19 +21,22 @@ The CLI can be downloaded from the [releases](https://github.com/iti-luebeck/rte
 A simple multiplier for two integer, positive fixed point numbers. The two factors are read in via one input. The result is output via one output.
 
 ```bash
-# Declare the registers. FACTOR and A are the two factors that are read from the input. RES is the result register.
+# Declare the registers. FACTOR and A are the two factors that are read from the input.
+# RES is the result register.
 declare register A(7:0), FACTOR(7:0), RES(15:0)
 
 # Declare input and output.
 declare input IN(7:0)
 declare output OUT(15:0)
 
-# Here in the first cycle the value for A and then in the second cycle the value for FACTOR is read in via the input IN.
+# Here in the first cycle the value for A and then in the second cycle the value for
+# FACTOR is read in via the input IN.
 BEGIN:
 A <- IN, RES <- 0;
 FACTOR <- IN;
 
-# A loop follows which checks whether the value in FACTOR is zero. If yes, the result is written to OUT, if not, FACTOR is decremented and the value from A is added to RES.
+# A loop follows which checks whether the value in FACTOR is zero. If yes, the result
+# is written to OUT, if not, FACTOR is decremented and the value from A is added to RES.
 LOOP:
 if FACTOR = 0 then
     OUT <- RES
