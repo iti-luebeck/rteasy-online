@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["CompilerErrorKind",""],["Error",""],["SymbolType",""]],"fn":[["check",""],["compile",""]],"mod":[["mir",""]],"struct":[["CompilerError",""],["InternalError",""],["Options",""]],"trait":[["Backend",""],["PrettyPrintError",""]]});

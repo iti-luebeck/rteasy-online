@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["build",""],["build_signals",""],["build_vhdl",""],["check",""],["setPanicHook",""]],"struct":[["Signals",""],["Simulator",""],["Span",""],["StepResult",""],["StepResultCondition",""],["Vhdl",""]]});

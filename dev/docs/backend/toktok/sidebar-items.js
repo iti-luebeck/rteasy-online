@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["ErrorKind",""],["Span",""],["TokenOrEoi",""]],"mod":[["combinator",""]],"struct":[["Error",""],["Input",""],["Map",""],["ParserError",""],["ParserRef",""],["PrettyPrintOptions",""],["SpannedToken",""],["State",""],["StateError",""]],"trait":[["Parser",""]],"type":[["PResult",""]]});
