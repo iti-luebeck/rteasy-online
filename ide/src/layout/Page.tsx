@@ -93,7 +93,6 @@ function loadModel(id: string, defaultModel: IJsonModel): Model {
   return Model.fromJson(defaultModel);
 }
 
-// TODO: debounce?
 function saveModel(id: string, model: Model) {
   Storage.setLayoutModel(id, model.toString());
 }
