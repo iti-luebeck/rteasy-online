@@ -1,13 +1,7 @@
 use super::*;
 
 #[derive(Debug)]
-pub struct Operation {
-    pub kind: OperationKind,
-    pub span: Span,
-}
-
-#[derive(Debug)]
-pub enum OperationKind {
+pub enum Operation {
     EvalCriterion(EvalCriterion),
     EvalCriterionGroup(EvalCriterionGroup),
     Nop(Nop),

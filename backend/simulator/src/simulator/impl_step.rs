@@ -161,9 +161,7 @@ impl Simulator {
                             .program
                             .statements()
                             .iter()
-                            .position(|stmt| {
-                                stmt.label.as_ref().map(|s| &s.node) == Some(goto_label)
-                            })
+                            .position(|stmt| stmt.label.as_ref() == Some(goto_label))
                             .ok_or(anyhow!(
                                 "[[internal error]] failed to find goto label `{}`",
                                 goto_label.0
@@ -253,17 +251,17 @@ fn exec_step(
             }
             ExecuteResult::AssertError => StepResultKind::AssertError,
         };
-        Ok(Some(StepResult { statement: statement_idx, span: step.span(), kind }))
+        Ok(Some(StepResult { statement: statement_idx, span: step.span, kind }))
     } else {
         Ok(None)
     }
 }
 
 fn should_reevaluate_after_pipe(step: &Step) -> bool {
-    match &step.operation.kind {
-        program::OperationKind::EvalCriterion(_) => true,
-        program::OperationKind::EvalCriterionGroup(_) => true,
-        program::OperationKind::Assignment(assignment) => match &assignment.lhs {
+    match &step.operation {
+        program::Operation::EvalCriterion(_) => true,
+        program::Operation::EvalCriterionGroup(_) => true,
+        program::Operation::Assignment(assignment) => match &assignment.lhs {
             program::Lvalue::Bus(_) | program::Lvalue::ConcatUnclocked(_) => true,
 
             program::Lvalue::Register(_)
@@ -271,10 +269,10 @@ fn should_reevaluate_after_pipe(step: &Step) -> bool {
             | program::Lvalue::ConcatClocked(_) => false,
         },
 
-        program::OperationKind::Nop(_)
-        | program::OperationKind::Goto(_)
-        | program::OperationKind::Write(_)
-        | program::OperationKind::Read(_)
-        | program::OperationKind::Assert(_) => false,
+        program::Operation::Nop(_)
+        | program::Operation::Goto(_)
+        | program::Operation::Write(_)
+        | program::Operation::Read(_)
+        | program::Operation::Assert(_) => false,
     }
 }

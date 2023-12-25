@@ -28,10 +28,10 @@ impl Generate<mir::Declaration<'_>> for Declaration {
 impl Generate<mir::Memory<'_>> for Memory {
     fn generate(memory: mir::Memory<'_>) -> Result<Self> {
         Ok(Memory {
-            ident: gen_ident(memory.ident.node),
+            ident: gen_ident(memory.ident),
             range: MemoryRange {
-                address_register: gen_ident(memory.range.address_register.node),
-                data_register: gen_ident(memory.range.data_register.node),
+                address_register: gen_ident(memory.range.address_register),
+                data_register: gen_ident(memory.range.data_register),
             },
         })
     }
@@ -40,8 +40,8 @@ impl Generate<mir::Memory<'_>> for Memory {
 impl Generate<mir::DeclareRegisterArrayItem<'_>> for DeclareRegisterArrayItem {
     fn generate(declare_register_array_item: mir::DeclareRegisterArrayItem<'_>) -> Result<Self> {
         Ok(DeclareRegisterArrayItem {
-            ident: gen_ident(declare_register_array_item.ident.node),
-            range: declare_register_array_item.range.map(|s| s.node),
+            ident: gen_ident(declare_register_array_item.ident),
+            range: declare_register_array_item.range,
             len: declare_register_array_item.len,
         })
     }

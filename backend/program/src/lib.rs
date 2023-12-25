@@ -32,7 +32,7 @@ impl Program {
 
 #[derive(Debug)]
 pub struct Statement {
-    pub label: Option<Spanned<Label>>,
+    pub label: Option<Label>,
     pub steps: Spanned<SplitVec<Step>>,
     pub span: Span,
     pub span_semicolon: Span,
@@ -43,12 +43,7 @@ pub struct Statement {
 pub struct Step {
     pub criteria: Vec<Criterion>,
     pub operation: Operation,
-}
-
-impl Step {
-    pub fn span(&self) -> Span {
-        self.operation.span
-    }
+    pub span: Span,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

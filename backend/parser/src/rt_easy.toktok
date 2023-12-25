@@ -201,8 +201,8 @@ concat_part -> ConcatPart<'s>:
 
 // Common rules
 bit_range -> BitRange:
-      "(" number_usize ":" number_usize ")" { BitRange { msb: $2, lsb: Some($4) } }
-    | "(" number_usize ")" { BitRange { msb: $2, lsb: None } };
+      "(" number_usize ":" number_usize ")" { BitRange($2, $4) }
+    | "(" number_usize ")" { BitRange($2, $2) };
 memory_range -> MemoryRange<'s>:
     "(" spanned(ident) "," spanned(ident) ")" { MemoryRange { address_register: $2, data_register: $4, span: $span.into() } };
 

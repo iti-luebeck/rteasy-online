@@ -148,63 +148,74 @@ pub enum BusKind {
 }
 
 #[derive(Debug, Default, Clone, Copy)]
-pub struct BitRange {
-    pub msb: usize,
-    pub lsb: Option<usize>,
-}
+pub struct BitRange(pub usize, pub usize);
 
 impl BitRange {
-    pub fn lsb(&self) -> usize {
-        self.lsb.unwrap_or(self.msb)
+    pub fn is_downto(&self) -> bool {
+        self.0 >= self.1
     }
 
-    pub fn msb_lsb(&self) -> (usize, usize) {
-        (self.msb, self.lsb())
+    pub fn normalize(&self) -> Self {
+        if self.is_downto() {
+            BitRange(self.0 - self.1, 0)
+        } else {
+            BitRange(0, self.1 - self.0)
+        }
     }
 
     pub fn size(&self) -> Option<usize> {
-        let lsb = self.lsb();
-        let diff = if self.msb >= lsb { self.msb - lsb } else { lsb - self.msb };
-
         // This overflows if either msb or lsb is usize::MAX and the other is 0. In this case size
         // can not be represented in a usize.
-        diff.checked_add(1)
+        if self.is_downto() {
+            usize::checked_add(self.0 - self.1, 1)
+        } else {
+            usize::checked_add(self.1 - self.0, 1)
+        }
     }
 
     pub fn contains(&self, pos: usize) -> bool {
-        let lsb = self.lsb();
-        if self.msb >= lsb {
-            pos >= lsb && pos <= self.msb
+        if self.is_downto() {
+            pos >= self.1 && pos <= self.0
         } else {
-            pos >= self.msb && pos <= lsb
+            pos >= self.0 && pos <= self.1
         }
     }
 
     pub fn contains_range(&self, idx: Self) -> bool {
-        let contains_msb = self.contains(idx.msb);
-        let contains_lsb = self.contains(idx.lsb());
-        let msb_lsb_order = if idx.lsb() == idx.msb {
-            true
-        } else {
-            (self.msb >= self.lsb()) == (idx.msb >= idx.lsb())
-        };
+        let contains_0 = self.contains(idx.0);
+        let contains_1 = self.contains(idx.1);
+        let is_in_order = (idx.1 == idx.0) || (self.is_downto() == idx.is_downto());
+        contains_0 && contains_1 && is_in_order
+    }
 
-        contains_msb && contains_lsb && msb_lsb_order
+    pub fn slice_relative(&self, range: Self) -> Option<Self> {
+        if self.is_downto() != range.is_downto() {
+            return None;
+        } else if self.normalize().contains_range(range) {
+            // !todo: check if this is correct
+            if self.is_downto() {
+                Some(Self(self.1 + range.0, self.1 + range.1))
+            } else {
+                Some(Self(self.0 + range.0, self.0 + range.1))
+            }
+        } else {
+            None
+        }
     }
 
     pub fn bits(&self) -> impl Iterator<Item = usize> {
-        let lsb = self.lsb();
-        let msb_ge_lsb = self.msb >= lsb;
+        let start = self.1;
         let size = self.size().unwrap();
+        let is_downto = self.is_downto();
 
-        (0..size).into_iter().map(move |idx| if msb_ge_lsb { lsb + idx } else { lsb - idx })
+        (0..size).into_iter().map(move |idx| if is_downto { start + idx } else { start - idx })
     }
 
     pub fn intersect(a: Option<Self>, b: Option<Self>) -> bool {
         match (a, b) {
             (None, _) | (_, None) => true,
             (Some(a), Some(b)) => {
-                a.contains(b.msb) || a.contains(b.lsb()) || b.contains(a.msb) || b.contains(a.lsb())
+                a.contains(b.0) || a.contains(b.1) || b.contains(a.0) || b.contains(a.1)
             }
         }
     }
@@ -212,9 +223,10 @@ impl BitRange {
 
 impl fmt::Display for BitRange {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self.lsb {
-            Some(lsb) => write!(f, "({}:{})", self.msb, lsb),
-            None => write!(f, "({})", self.msb),
+        if self.0 == self.1 {
+            write!(f, "({})", self.0)
+        } else {
+            write!(f, "({}:{})", self.0, self.1)
         }
     }
 }
@@ -278,6 +290,10 @@ pub struct Spanned<T> {
 }
 
 impl<T> Spanned<T> {
+    pub fn new(node: T, span: Span) -> Spanned<T> {
+        Self { node, span }
+    }
+
     pub fn map<F, U>(self, f: F) -> Spanned<U>
     where
         F: FnOnce(T) -> U,

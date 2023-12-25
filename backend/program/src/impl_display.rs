@@ -15,7 +15,7 @@ impl Display for Program {
 impl Display for Statement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match &self.label {
-            Some(label) => write!(f, "{}:\n", label.node.0)?,
+            Some(label) => write!(f, "{}:\n", label.0)?,
             None => write!(f, "_:\n")?,
         }
 
@@ -55,8 +55,8 @@ impl Display for Criterion {
 
 impl Display for Operation {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        use OperationKind::*;
-        match &self.kind {
+        use Operation::*;
+        match &self {
             EvalCriterion(op) => write!(f, "{}", op),
             EvalCriterionGroup(op) => write!(f, "{}", op),
             Nop(op) => write!(f, "{}", op),

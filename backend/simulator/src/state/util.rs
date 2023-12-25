@@ -8,10 +8,10 @@ pub fn slice_idx(range: BitRange, idx: BitRange) -> Result<Range<usize>, Error> 
         return Err(anyhow!("failed to index `{:?}` `{:?}`", range, idx));
     }
 
-    let (self_msb, self_lsb) = range.msb_lsb();
-    let (idx_msb, idx_lsb) = idx.msb_lsb();
+    let BitRange(_self_msb, self_lsb) = range;
+    let BitRange(idx_msb, idx_lsb) = idx;
 
-    let slice_idx = if self_msb >= self_lsb {
+    let slice_idx = if range.is_downto() {
         let start = idx_lsb - self_lsb;
         let end = idx_msb - self_lsb + 1;
         start..end

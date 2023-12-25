@@ -17,7 +17,7 @@ pub fn generate_expression<'s>(
             let kind = ExpressionKind::BinaryTerm(Box::new(BinaryTerm {
                 lhs: generate_expression(&binary_term.lhs, declarations, ctx_size_inner),
                 rhs: generate_expression(&binary_term.rhs, declarations, ctx_size_inner),
-                operator: binary_term.operator.node,
+                operator: binary_term.operator,
             }));
             (kind, Extend::Zero(ctx_size))
         }
@@ -29,9 +29,9 @@ pub fn generate_expression<'s>(
                     declarations,
                     ctx_size_inner,
                 ),
-                operator: unary_term.operator.node,
+                operator: unary_term.operator,
             }));
-            let extend_to = match unary_term.operator.node {
+            let extend_to = match unary_term.operator {
                 UnaryOperator::Sxt => Extend::Sign(ctx_size),
                 _ => Extend::Zero(ctx_size),
             };
@@ -50,32 +50,32 @@ pub fn generate_atom<'s>(atom: &mir::Atom<'s>, declarations: &Declarations) -> A
         mir::Atom::RegisterArray(reg_array) => {
             Atom::RegisterArray(generate_register_array(reg_array, declarations))
         }
-        mir::Atom::Number(number) => Atom::Number(generate_number(&number.node)),
+        mir::Atom::Number(number) => Atom::Number(generate_number(&number)),
     }
 }
 
 pub fn generate_register<'s>(reg: &mir::Register<'s>, declarations: &Declarations) -> Register {
-    let ident = gen_ident(reg.ident.node);
+    let ident = gen_ident(reg.ident);
 
     let range_declaration =
         declarations.registers.iter().find(|(name, _, _)| ident == *name).unwrap().1;
 
     Register {
         ident,
-        range: generate_bit_range(reg.range.map(|s| s.node), range_declaration),
+        range: generate_bit_range(reg.range.map(|s| s), range_declaration),
         kind: reg.kind,
     }
 }
 
 pub fn generate_bus<'s>(bus: &mir::Bus<'s>, declarations: &Declarations) -> Bus {
-    let ident = gen_ident(bus.ident.node);
+    let ident = gen_ident(bus.ident);
 
     let range_declaration =
         declarations.buses.iter().find(|(name, _, _)| ident == *name).unwrap().1;
 
     Bus {
         ident,
-        range: generate_bit_range(bus.range.map(|s| s.node), range_declaration),
+        range: generate_bit_range(bus.range.map(|s| s), range_declaration),
         kind: bus.kind,
     }
 }
@@ -84,7 +84,7 @@ pub fn generate_register_array<'s>(
     reg_array: &mir::RegisterArray<'s>,
     declarations: &Declarations,
 ) -> RegisterArray {
-    let ident = gen_ident(reg_array.ident.node);
+    let ident = gen_ident(reg_array.ident);
 
     let range_declaration =
         declarations.register_arrays.iter().find(|(name, _, _)| ident == *name).unwrap().1;
@@ -96,7 +96,7 @@ pub fn generate_register_array<'s>(
             declarations,
             reg_array.index_ctx_size,
         )),
-        range: generate_bit_range(reg_array.range.map(|s| s.node), range_declaration),
+        range: generate_bit_range(reg_array.range.map(|s| s), range_declaration),
     }
 }
 
@@ -113,8 +113,8 @@ fn generate_bit_range(
 
     // Map range
     let range = match range_declaration {
-        BitRange::Downto(_, _) => BitRange::Downto(range.msb, range.lsb()),
-        BitRange::To(_, _) => BitRange::To(range.msb, range.lsb()),
+        BitRange::Downto(_, _) => BitRange::Downto(range.0, range.1),
+        BitRange::To(_, _) => BitRange::To(range.0, range.1),
     };
 
     // Full range (= None) if range is equals range_declaration

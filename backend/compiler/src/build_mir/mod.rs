@@ -11,13 +11,14 @@ pub fn build_mir<'s>(ast: ast::Ast<'s>, symbols: &Symbols<'s>) -> Result<Mir<'s>
     let mut statements = build_statements(ast.statements, symbols)?;
     if let Some(trailing_label) = ast.trailing_label {
         statements.push(Statement {
-            label: Some(trailing_label),
+            label: Some(trailing_label.node),
             steps: Spanned {
                 node: vec![Step {
                     id: StepId(0),
                     criteria: Vec::new(),
-                    operation: Operation::Nop(Nop { span: Span::dummy() }),
+                    operation: Operation::Nop(Nop),
                     annotation: Annotation::new(false, false),
+                    span: Span::dummy(),
                 }],
                 span: Span::dummy(),
             },
@@ -45,7 +46,7 @@ fn build_statements<'s>(
         .into_iter()
         .map(|statement| {
             Ok(Statement {
-                label: statement.label,
+                label: statement.label.map(|label| label.node),
                 steps: Spanned {
                     node: step::build(
                         statement.operations.operations,

@@ -11,16 +11,8 @@ impl Expression<'_> {
     pub fn precedence(&self) -> u32 {
         match self {
             Self::Atom(_) => u32::MAX,
-            Self::BinaryTerm(binary) => binary.operator.node.precedence(),
-            Self::UnaryTerm(unary) => unary.operator.node.precedence(),
-        }
-    }
-
-    pub fn span(&self) -> Span {
-        match self {
-            Self::Atom(n) => n.span(),
-            Self::BinaryTerm(n) => n.span,
-            Self::UnaryTerm(n) => n.span,
+            Self::BinaryTerm(binary) => binary.operator.precedence(),
+            Self::UnaryTerm(unary) => unary.operator.precedence(),
         }
     }
 }
@@ -31,26 +23,14 @@ pub enum Atom<'s> {
     Register(Register<'s>),
     Bus(Bus<'s>),
     RegisterArray(RegisterArray<'s>),
-    Number(Spanned<Number>),
-}
-
-impl Atom<'_> {
-    pub fn span(&self) -> Span {
-        match self {
-            Self::Concat(n) => n.span,
-            Self::Register(n) => n.span,
-            Self::Bus(n) => n.span,
-            Self::RegisterArray(n) => n.span,
-            Self::Number(n) => n.span,
-        }
-    }
+    Number(Number),
 }
 
 #[derive(Debug, Clone)]
 pub struct BinaryTerm<'s> {
     pub lhs: Expression<'s>,
     pub rhs: Expression<'s>,
-    pub operator: Spanned<BinaryOperator>,
+    pub operator: BinaryOperator,
     pub ctx_size: CtxSize,
     pub span: Span,
 }
@@ -58,32 +38,29 @@ pub struct BinaryTerm<'s> {
 #[derive(Debug, Clone)]
 pub struct UnaryTerm<'s> {
     pub expression: Expression<'s>,
-    pub operator: Spanned<UnaryOperator>,
+    pub operator: UnaryOperator,
     pub ctx_size: CtxSize,
     pub span: Span,
 }
 
 #[derive(Debug, Clone)]
 pub struct Register<'s> {
-    pub ident: Spanned<Ident<'s>>,
-    pub range: Option<Spanned<BitRange>>,
+    pub ident: Ident<'s>,
+    pub range: Option<BitRange>,
     pub kind: RegisterKind,
-    pub span: Span,
 }
 
 #[derive(Debug, Clone)]
 pub struct Bus<'s> {
-    pub ident: Spanned<Ident<'s>>,
-    pub range: Option<Spanned<BitRange>>,
+    pub ident: Ident<'s>,
+    pub range: Option<BitRange>,
     pub kind: BusKind,
-    pub span: Span,
 }
 
 #[derive(Debug, Clone)]
 pub struct RegisterArray<'s> {
-    pub ident: Spanned<Ident<'s>>,
+    pub ident: Ident<'s>,
     pub index: Box<Expression<'s>>,
     pub index_ctx_size: usize,
-    pub range: Option<Spanned<BitRange>>,
-    pub span: Span,
+    pub range: Option<BitRange>,
 }

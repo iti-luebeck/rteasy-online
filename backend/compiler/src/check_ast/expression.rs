@@ -12,11 +12,11 @@ pub struct Res {
     pub constant: bool,
 }
 
-pub trait CheckExpr<'s> {
+pub trait CheckExpr {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res;
 }
 
-impl<'s> CheckExpr<'s> for Expression<'s> {
+impl CheckExpr for Expression<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         match self {
             Self::Atom(atom) => atom.check_expr(symbols, error_sink),
@@ -26,7 +26,7 @@ impl<'s> CheckExpr<'s> for Expression<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for Atom<'s> {
+impl CheckExpr for Atom<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         match self {
             Self::Concat(concat) => concat.check_expr(symbols, error_sink),
@@ -37,7 +37,7 @@ impl<'s> CheckExpr<'s> for Atom<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for BinaryTerm<'s> {
+impl CheckExpr for BinaryTerm<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         let lhs = self.lhs.check_expr(symbols, error_sink);
         let rhs = self.rhs.check_expr(symbols, error_sink);
@@ -53,7 +53,7 @@ impl<'s> CheckExpr<'s> for BinaryTerm<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for UnaryTerm<'s> {
+impl CheckExpr for UnaryTerm<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         if self.operator.node == UnaryOperator::Sxt {
             match self.expression {
@@ -77,7 +77,7 @@ impl<'s> CheckExpr<'s> for UnaryTerm<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for Concat<'s> {
+impl CheckExpr for Concat<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         let info = util::concat_info(self, symbols);
         if info.contains_number_non_bit_string {
@@ -103,7 +103,7 @@ impl<'s> CheckExpr<'s> for Concat<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for ConcatPart<'s> {
+impl CheckExpr for ConcatPart<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         match self {
             Self::RegBus(reg_bus) => reg_bus.check_expr(symbols, error_sink),
@@ -113,7 +113,7 @@ impl<'s> CheckExpr<'s> for ConcatPart<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for RegBus<'s> {
+impl CheckExpr for RegBus<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         let size = match symbols.symbol(self.ident.node) {
             Some(Symbol::Register(range, _)) => match util::range_into(range, self.range) {
@@ -163,7 +163,7 @@ impl<'s> CheckExpr<'s> for RegBus<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for RegisterArray<'s> {
+impl CheckExpr for RegisterArray<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         let index_expr = self.index.check_expr(symbols, error_sink);
 
@@ -216,7 +216,7 @@ impl<'s> CheckExpr<'s> for RegisterArray<'s> {
     }
 }
 
-impl<'s> CheckExpr<'s> for Number {
+impl CheckExpr for Number {
     fn check_expr(&self, _: &Symbols<'_>, _: &mut impl FnMut(CompilerError)) -> Res {
         Res {
             size: Some(self.value.size()),

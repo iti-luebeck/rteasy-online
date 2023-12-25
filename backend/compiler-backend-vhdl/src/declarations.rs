@@ -15,8 +15,8 @@ pub fn generate_declarations<'s>(mir_declarations: &[mir::Declaration<'s>]) -> D
             mir::Declaration::Register(declaration) => {
                 for register in &declaration.registers {
                     declarations.registers.push((
-                        gen_ident(register.ident.node),
-                        generate_bit_range(register.range.map(|s| s.node)),
+                        gen_ident(register.ident),
+                        generate_bit_range(register.range),
                         register.kind,
                     ));
                 }
@@ -24,8 +24,8 @@ pub fn generate_declarations<'s>(mir_declarations: &[mir::Declaration<'s>]) -> D
             mir::Declaration::Bus(declaration) => {
                 for bus in &declaration.buses {
                     declarations.buses.push((
-                        gen_ident(bus.ident.node),
-                        generate_bit_range(bus.range.map(|s| s.node)),
+                        gen_ident(bus.ident),
+                        generate_bit_range(bus.range),
                         bus.kind,
                     ));
                 }
@@ -35,16 +35,16 @@ pub fn generate_declarations<'s>(mir_declarations: &[mir::Declaration<'s>]) -> D
                     let (ar_name, ar_range, ar_kind) = declarations
                         .registers
                         .iter()
-                        .find(|(name, _, _)| name.0 == memory.range.address_register.node.0)
+                        .find(|(name, _, _)| name.0 == memory.range.address_register.0)
                         .unwrap();
                     let (dr_name, dr_range, dr_kind) = declarations
                         .registers
                         .iter()
-                        .find(|(name, _, _)| name.0 == memory.range.data_register.node.0)
+                        .find(|(name, _, _)| name.0 == memory.range.data_register.0)
                         .unwrap();
 
                     declarations.memories.push((
-                        gen_ident(memory.ident.node),
+                        gen_ident(memory.ident),
                         (ar_name.clone(), *ar_range, *ar_kind),
                         (dr_name.clone(), *dr_range, *dr_kind),
                     ));
@@ -53,8 +53,8 @@ pub fn generate_declarations<'s>(mir_declarations: &[mir::Declaration<'s>]) -> D
             mir::Declaration::RegisterArray(declaration) => {
                 for register_array in &declaration.register_arrays {
                     declarations.register_arrays.push((
-                        gen_ident(register_array.ident.node),
-                        generate_bit_range(register_array.range.map(|s| s.node)),
+                        gen_ident(register_array.ident),
+                        generate_bit_range(register_array.range),
                         register_array.len,
                     ));
                 }
@@ -67,14 +67,13 @@ pub fn generate_declarations<'s>(mir_declarations: &[mir::Declaration<'s>]) -> D
 
 fn generate_bit_range(range: Option<mir::BitRange>) -> BitRange {
     match range {
-        Some(mir::BitRange { msb, lsb: Some(lsb) }) => {
-            if msb >= lsb {
-                BitRange::Downto(msb, lsb)
+        Some(range) => {
+            if range.is_downto() {
+                BitRange::Downto(range.0, range.1)
             } else {
-                BitRange::To(msb, lsb)
+                BitRange::To(range.0, range.1)
             }
         }
-        Some(mir::BitRange { msb, lsb: None }) => BitRange::Downto(msb, msb),
         None => BitRange::Downto(0, 0),
     }
 }

@@ -13,7 +13,7 @@ impl Generate<mir::Mir<'_>> for Program {
 impl Generate<mir::Statement<'_>> for Statement {
     fn generate(statement: mir::Statement<'_>) -> Result<Self> {
         Ok(Statement {
-            label: statement.label.map(|s| Spanned { node: gen_label(s.node), span: s.span }),
+            label: statement.label.map(|s| gen_label(s)),
             steps: {
                 let split_at = statement
                     .steps
@@ -39,6 +39,7 @@ impl Generate<mir::Step<'_>> for Step {
         Ok(Step {
             criteria: Generate::generate(step.criteria)?,
             operation: Generate::generate(step.operation)?,
+            span: step.span,
         })
     }
 }

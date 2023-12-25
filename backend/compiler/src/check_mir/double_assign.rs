@@ -32,7 +32,6 @@ struct AssignTarget<'s> {
 #[derive(Debug, Clone)]
 struct AssignInfo {
     range: Option<BitRange>,
-    _span: Span,
 }
 
 impl<'s> State<'s> {
@@ -40,11 +39,8 @@ impl<'s> State<'s> {
         Self { symbols, assigned: HashMap::new() }
     }
 
-    fn insert(&mut self, name: Ident<'s>, type_: SymbolType, range: Option<BitRange>, span: Span) {
-        self.assigned
-            .entry(AssignTarget { name, type_ })
-            .or_default()
-            .push(AssignInfo { range, _span: span });
+    fn insert(&mut self, name: Ident<'s>, type_: SymbolType, range: Option<BitRange>) {
+        self.assigned.entry(AssignTarget { name, type_ }).or_default().push(AssignInfo { range });
     }
 }
 
@@ -59,59 +55,39 @@ impl<'s> SimState<'s> for State<'s> {
         Ok(())
     }
     fn write(&mut self, write: &Write<'s>) -> Result {
-        self.insert(write.ident.node, SymbolType::Memory, None, write.span);
+        self.insert(write.ident, SymbolType::Memory, None);
         Ok(())
     }
 
     fn read(&mut self, read: &Read<'s>) -> Result {
-        match self.symbols.symbol(read.ident.node) {
-            Some(Symbol::Memory(mem_range)) => {
-                self.insert(mem_range.data_register.node, SymbolType::Register, None, read.span);
+        match self.symbols.symbol(read.ident) {
+            Some(Symbol::Memory { data_register, .. }) => {
+                self.insert(data_register, SymbolType::Register, None);
                 Ok(())
             }
-            _ => Err(InternalError(format!("missing memory: {}", read.ident.node.0))),
+            _ => Err(InternalError(format!("missing memory: {}", read.ident.0))),
         }
     }
 
     fn assignment(&mut self, assignment: &Assignment<'s>) -> Result {
         match &assignment.lhs {
             Lvalue::Register(reg) => {
-                self.insert(
-                    reg.ident.node,
-                    SymbolType::Register,
-                    reg.range.map(|s| s.node),
-                    assignment.span,
-                );
+                self.insert(reg.ident, SymbolType::Register, reg.range);
             }
             Lvalue::Bus(bus) => {
-                self.insert(
-                    bus.ident.node,
-                    SymbolType::Bus,
-                    bus.range.map(|s| s.node),
-                    assignment.span,
-                );
+                self.insert(bus.ident, SymbolType::Bus, bus.range);
             }
             Lvalue::RegisterArray(reg_array) => {
-                self.insert(reg_array.ident.node, SymbolType::RegisterArray, None, assignment.span);
+                self.insert(reg_array.ident, SymbolType::RegisterArray, None);
             }
             Lvalue::ConcatClocked(concat) => {
                 for part in &concat.parts {
                     match part {
                         ConcatPartLvalueClocked::Register(reg, _) => {
-                            self.insert(
-                                reg.ident.node,
-                                SymbolType::Register,
-                                reg.range.map(|s| s.node),
-                                assignment.span,
-                            );
+                            self.insert(reg.ident, SymbolType::Register, reg.range);
                         }
                         ConcatPartLvalueClocked::RegisterArray(reg_array, _) => {
-                            self.insert(
-                                reg_array.ident.node,
-                                SymbolType::RegisterArray,
-                                None,
-                                assignment.span,
-                            );
+                            self.insert(reg_array.ident, SymbolType::RegisterArray, None);
                         }
                     }
                 }
@@ -120,12 +96,7 @@ impl<'s> SimState<'s> for State<'s> {
                 for part in &concat.parts {
                     match part {
                         ConcatPartLvalueUnclocked::Bus(bus, _) => {
-                            self.insert(
-                                bus.ident.node,
-                                SymbolType::Bus,
-                                bus.range.map(|s| s.node),
-                                assignment.span,
-                            );
+                            self.insert(bus.ident, SymbolType::Bus, bus.range);
                         }
                     }
                 }

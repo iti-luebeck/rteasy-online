@@ -24,12 +24,12 @@ impl Res {
     }
 }
 
-pub trait CheckOp<'s> {
+pub trait CheckOp {
     fn check_op(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError))
         -> Result;
 }
 
-impl<'s> CheckOp<'s> for [Operation<'s>] {
+impl CheckOp for [Operation<'_>] {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -49,7 +49,7 @@ impl<'s> CheckOp<'s> for [Operation<'s>] {
     }
 }
 
-impl<'s> CheckOp<'s> for Operation<'s> {
+impl CheckOp for Operation<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -68,13 +68,13 @@ impl<'s> CheckOp<'s> for Operation<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for Nop {
+impl CheckOp for Nop {
     fn check_op(&self, _: &Symbols<'_>, _: &mut impl FnMut(CompilerError)) -> Result {
         Ok(Res::default())
     }
 }
 
-impl<'s> CheckOp<'s> for Goto<'s> {
+impl CheckOp for Goto<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -97,7 +97,7 @@ impl<'s> CheckOp<'s> for Goto<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for If<'s> {
+impl CheckOp for If<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -121,7 +121,7 @@ impl<'s> CheckOp<'s> for If<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for Switch<'s> {
+impl CheckOp for Switch<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -180,14 +180,14 @@ impl<'s> CheckOp<'s> for Switch<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for Write<'s> {
+impl CheckOp for Write<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
         error_sink: &mut impl FnMut(CompilerError),
     ) -> Result {
         match symbols.symbol(self.ident.node) {
-            Some(Symbol::Memory(_)) => (),
+            Some(Symbol::Memory { .. }) => (),
             Some(symbol) => error_sink(CompilerError::new(
                 CompilerErrorKind::WrongSymbolType {
                     expected: &[SymbolType::Memory],
@@ -208,14 +208,14 @@ impl<'s> CheckOp<'s> for Write<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for Read<'s> {
+impl CheckOp for Read<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
         error_sink: &mut impl FnMut(CompilerError),
     ) -> Result {
         match symbols.symbol(self.ident.node) {
-            Some(Symbol::Memory(_)) => (),
+            Some(Symbol::Memory { .. }) => (),
             Some(symbol) => error_sink(CompilerError::new(
                 CompilerErrorKind::WrongSymbolType {
                     expected: &[SymbolType::Memory],
@@ -236,7 +236,7 @@ impl<'s> CheckOp<'s> for Read<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for Assignment<'s> {
+impl CheckOp for Assignment<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -336,7 +336,7 @@ impl<'s> CheckOp<'s> for Assignment<'s> {
     }
 }
 
-impl<'s> CheckOp<'s> for Assert<'s> {
+impl CheckOp for Assert<'_> {
     fn check_op(
         &self,
         symbols: &Symbols<'_>,
@@ -355,10 +355,10 @@ impl<'s> CheckOp<'s> for Assert<'s> {
     }
 }
 
-impl<'s, L, R> CheckOp<'s> for Either<L, R>
+impl<L, R> CheckOp for Either<L, R>
 where
-    L: CheckOp<'s>,
-    R: CheckOp<'s>,
+    L: CheckOp,
+    R: CheckOp,
 {
     fn check_op(
         &self,

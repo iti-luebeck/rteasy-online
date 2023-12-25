@@ -29,9 +29,7 @@ fn generate_concat_part_expr<'s>(
         mir::ConcatPartExpr::RegisterArray(reg_array) => {
             ConcatPartExpr::RegisterArray(generate_register_array(reg_array, declarations))
         }
-        mir::ConcatPartExpr::Number(number) => {
-            ConcatPartExpr::Number(generate_number(&number.node))
-        }
+        mir::ConcatPartExpr::Number(number) => ConcatPartExpr::Number(generate_number(&number)),
     }
 }
 

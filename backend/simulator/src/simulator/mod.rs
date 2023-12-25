@@ -85,10 +85,7 @@ impl Simulator {
     }
 
     fn statement_idx(&self, label: &Label) -> Option<usize> {
-        self.program
-            .statements()
-            .iter()
-            .position(|stmt| stmt.label.as_ref().map(|s| &s.node) == Some(label))
+        self.program.statements().iter().position(|stmt| stmt.label.as_ref() == Some(label))
     }
 }
 

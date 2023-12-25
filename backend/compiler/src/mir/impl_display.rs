@@ -15,7 +15,7 @@ impl Display for Mir<'_> {
 impl Display for Statement<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self.label {
-            Some(label) => write!(f, "{}:\n", label.node.0)?,
+            Some(label) => write!(f, "{}:\n", label.0)?,
             None => write!(f, "_:\n")?,
         }
 
@@ -106,19 +106,19 @@ impl Display for Nop {
 
 impl Display for Goto<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "goto {}", self.label.node.0)
+        write!(f, "goto {}", self.label.0)
     }
 }
 
 impl Display for Write<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "write {}", self.ident.node.0)
+        write!(f, "write {}", self.ident.0)
     }
 }
 
 impl Display for Read<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "read {}", self.ident.node.0)
+        write!(f, "read {}", self.ident.0)
     }
 }
 
@@ -166,7 +166,7 @@ impl Display for Atom<'_> {
             Register(atom) => write!(f, "{}", atom),
             Bus(atom) => write!(f, "{}", atom),
             RegisterArray(atom) => write!(f, "{}", atom),
-            Number(atom) => write!(f, "{}", atom.node),
+            Number(atom) => write!(f, "{}", atom),
         }
     }
 }
@@ -174,21 +174,21 @@ impl Display for Atom<'_> {
 impl Display for BinaryTerm<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         if util::parentheses_binary_left(
-            self.operator.node.precedence(),
+            self.operator.precedence(),
             self.lhs.precedence(),
-            self.operator.node.associativity(),
+            self.operator.associativity(),
         ) {
             write!(f, "({})", self.lhs)?;
         } else {
             write!(f, "{}", self.lhs)?;
         }
 
-        write!(f, " {} ", self.operator.node)?;
+        write!(f, " {} ", self.operator)?;
 
         if util::parentheses_binary_right(
-            self.operator.node.precedence(),
+            self.operator.precedence(),
             self.rhs.precedence(),
-            self.operator.node.associativity(),
+            self.operator.associativity(),
         ) {
             write!(f, "({})", self.rhs)?;
         } else {
@@ -201,15 +201,15 @@ impl Display for BinaryTerm<'_> {
 
 impl Display for UnaryTerm<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        let ws = match self.operator.node {
+        let ws = match self.operator {
             UnaryOperator::Sign => "",
             UnaryOperator::Neg | UnaryOperator::Not | UnaryOperator::Sxt => " ",
         };
 
-        if util::parentheses_unary(self.operator.node.precedence(), self.expression.precedence()) {
-            write!(f, "{}{}({})", self.operator.node, ws, self.expression)
+        if util::parentheses_unary(self.operator.precedence(), self.expression.precedence()) {
+            write!(f, "{}{}({})", self.operator, ws, self.expression)
         } else {
-            write!(f, "{}{}{}", self.operator.node, ws, self.expression)
+            write!(f, "{}{}{}", self.operator, ws, self.expression)
         }
     }
 }
@@ -217,8 +217,8 @@ impl Display for UnaryTerm<'_> {
 impl Display for Register<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self.range {
-            Some(range) => write!(f, "{}{}", self.ident.node.0, range.node),
-            None => write!(f, "{}", self.ident.node.0),
+            Some(range) => write!(f, "{}{}", self.ident.0, range),
+            None => write!(f, "{}", self.ident.0),
         }
     }
 }
@@ -226,17 +226,17 @@ impl Display for Register<'_> {
 impl Display for Bus<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self.range {
-            Some(range) => write!(f, "{}{}", self.ident.node.0, range.node),
-            None => write!(f, "{}", self.ident.node.0),
+            Some(range) => write!(f, "{}{}", self.ident.0, range),
+            None => write!(f, "{}", self.ident.0),
         }
     }
 }
 
 impl Display for RegisterArray<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}[{}]", self.ident.node.0, self.index)?;
+        write!(f, "{}[{}]", self.ident.0, self.index)?;
         if let Some(range) = self.range {
-            write!(f, "{}", range.node)?;
+            write!(f, "{}", range)?;
         }
         Ok(())
     }
@@ -285,7 +285,7 @@ impl Display for ConcatPartExpr<'_> {
             Register(reg) => write!(f, "{}", reg),
             Bus(bus) => write!(f, "{}", bus),
             RegisterArray(reg_array) => write!(f, "{}", reg_array),
-            Number(number) => write!(f, "{}", number.node),
+            Number(number) => write!(f, "{}", number),
         }
     }
 }

@@ -8,10 +8,10 @@ use vhdl::*;
 
 pub fn generate_read<'s>(read: &mir::Read<'s>, declarations: &Declarations) -> Read {
     let (_, (ar_name, _, ar_kind), (dr_name, _, dr_kind)) =
-        declarations.memories.iter().find(|(name, _, _)| name.0 == read.ident.node.0).unwrap();
+        declarations.memories.iter().find(|(name, _, _)| name.0 == read.ident.0).unwrap();
 
     Read {
-        memory: gen_ident(read.ident.node),
+        memory: gen_ident(read.ident),
         ar: Register { ident: ar_name.clone(), range: None, kind: *ar_kind },
         dr: Register { ident: dr_name.clone(), range: None, kind: *dr_kind },
     }
@@ -19,10 +19,10 @@ pub fn generate_read<'s>(read: &mir::Read<'s>, declarations: &Declarations) -> R
 
 pub fn generate_write<'s>(write: &mir::Write<'s>, declarations: &Declarations) -> Write {
     let (_, (ar_name, _, ar_kind), (dr_name, _, dr_kind)) =
-        declarations.memories.iter().find(|(name, _, _)| name.0 == write.ident.node.0).unwrap();
+        declarations.memories.iter().find(|(name, _, _)| name.0 == write.ident.0).unwrap();
 
     Write {
-        memory: gen_ident(write.ident.node),
+        memory: gen_ident(write.ident),
         ar: Register { ident: ar_name.clone(), range: None, kind: *ar_kind },
         dr: Register { ident: dr_name.clone(), range: None, kind: *dr_kind },
     }

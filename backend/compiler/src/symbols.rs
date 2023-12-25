@@ -24,7 +24,10 @@ impl<'s> Symbols<'s> {
                             .symbols
                             .insert(
                                 reg.ident.node,
-                                Symbol::Register(reg.range.map(|s| s.node), declare_register.kind),
+                                Symbol::Register(
+                                    reg.range.map(|s| s.node).unwrap_or_default(),
+                                    declare_register.kind,
+                                ),
                             )
                             .is_some()
                         {
@@ -54,7 +57,10 @@ impl<'s> Symbols<'s> {
                             .symbols
                             .insert(
                                 bus.ident.node,
-                                Symbol::Bus(bus.range.map(|s| s.node), declare_bus.kind),
+                                Symbol::Bus(
+                                    bus.range.map(|s| s.node).unwrap_or_default(),
+                                    declare_bus.kind,
+                                ),
                             )
                             .is_some()
                         {
@@ -146,7 +152,7 @@ impl<'s> Symbols<'s> {
                             .insert(
                                 reg_array.ident.node,
                                 Symbol::RegisterArray {
-                                    range: reg_array.range.map(|s| s.node),
+                                    range: reg_array.range.map(|s| s.node).unwrap_or_default(),
                                     len: reg_array.len,
                                 },
                             )
@@ -211,10 +217,16 @@ impl<'s> Symbols<'s> {
 
 #[derive(Debug, Clone, Copy)]
 pub enum Symbol<'s> {
-    Register(Option<ast::BitRange>, ast::RegisterKind),
-    Bus(Option<ast::BitRange>, ast::BusKind),
-    Memory(ast::MemoryRange<'s>),
-    RegisterArray { range: Option<ast::BitRange>, len: usize },
+    Register(ast::BitRange, ast::RegisterKind),
+    Bus(ast::BitRange, ast::BusKind),
+    Memory {
+        address_register: ast::Ident<'s>,
+        data_register: ast::Ident<'s>,
+    },
+    RegisterArray {
+        range: ast::BitRange,
+        len: usize,
+    },
 }
 
 impl Symbol<'_> {
@@ -222,7 +234,7 @@ impl Symbol<'_> {
         match self {
             Self::Register(_, _) => SymbolType::Register,
             Self::Bus(_, _) => SymbolType::Bus,
-            Self::Memory(_) => SymbolType::Memory,
+            Self::Memory { .. } => SymbolType::Memory,
             Self::RegisterArray { .. } => SymbolType::RegisterArray,
         }
     }

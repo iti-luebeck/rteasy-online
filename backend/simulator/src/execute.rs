@@ -1,8 +1,7 @@
 use crate::{evaluate::Evaluate, state::State, Error};
 use program::{
     Assert, Assignment, ConcatPartLvalueClocked, ConcatPartLvalueUnclocked, Criterion,
-    EvalCriterion, EvalCriterionGroup, Goto, Label, Lvalue, Nop, Operation, OperationKind, Read,
-    Span, Write,
+    EvalCriterion, EvalCriterionGroup, Goto, Label, Lvalue, Nop, Operation, Read, Span, Write,
 };
 use rtcore::value::Value;
 
@@ -22,17 +21,17 @@ pub trait Execute {
 
 impl Execute for Operation {
     fn execute(&self, state: &State) -> Result {
-        match &self.kind {
-            OperationKind::EvalCriterion(eval_criterion) => eval_criterion.execute(state),
-            OperationKind::EvalCriterionGroup(eval_criterion_group) => {
+        match &self {
+            Operation::EvalCriterion(eval_criterion) => eval_criterion.execute(state),
+            Operation::EvalCriterionGroup(eval_criterion_group) => {
                 eval_criterion_group.execute(state)
             }
-            OperationKind::Nop(nop) => nop.execute(state),
-            OperationKind::Goto(goto) => goto.execute(state),
-            OperationKind::Write(write) => write.execute(state),
-            OperationKind::Read(read) => read.execute(state),
-            OperationKind::Assignment(assignment) => assignment.execute(state),
-            OperationKind::Assert(assert) => assert.execute(state),
+            Operation::Nop(nop) => nop.execute(state),
+            Operation::Goto(goto) => goto.execute(state),
+            Operation::Write(write) => write.execute(state),
+            Operation::Read(read) => read.execute(state),
+            Operation::Assignment(assignment) => assignment.execute(state),
+            Operation::Assert(assert) => assert.execute(state),
         }
     }
 }

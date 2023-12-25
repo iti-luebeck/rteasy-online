@@ -6,7 +6,7 @@ use ast::Either;
 pub fn build<'s>(
     operations: Vec<ast::Operation<'s>>,
     operations_post: Option<Vec<ast::Operation<'s>>>,
-    symbols: &Symbols<'_>,
+    symbols: &Symbols<'s>,
 ) -> Result<Vec<Step<'s>>> {
     let mut build = Build::new();
 
@@ -27,7 +27,7 @@ pub fn build<'s>(
 
 fn build_operation<'s>(
     operation: ast::Operation<'s>,
-    symbols: &Symbols<'_>,
+    symbols: &Symbols<'s>,
     context: &Context,
     build: &mut Build<'s>,
 ) -> Result<()> {
@@ -35,26 +35,30 @@ fn build_operation<'s>(
         ast::Operation::Nop(nop) => build.push(Step {
             id: build.next_step_id(),
             criteria: context.criteria.clone(),
-            operation: Operation::Nop(Nop { span: nop.span }),
+            operation: Operation::Nop(Nop),
             annotation: Annotation::new(false, context.is_post_pipe),
+            span: nop.span,
         }),
         ast::Operation::Goto(goto) => build.push(Step {
             id: build.next_step_id(),
             criteria: context.criteria.clone(),
-            operation: Operation::Goto(Goto { label: goto.label, span: goto.span }),
+            operation: Operation::Goto(Goto { label: goto.label.node }),
             annotation: Annotation::new(false, context.is_post_pipe),
+            span: goto.span,
         }),
         ast::Operation::Write(write) => build.push(Step {
             id: build.next_step_id(),
             criteria: context.criteria.clone(),
-            operation: Operation::Write(Write { ident: write.ident, span: write.span }),
+            operation: Operation::Write(Write { ident: write.ident.node }),
             annotation: Annotation::new(false, context.is_post_pipe),
+            span: write.span,
         }),
         ast::Operation::Read(read) => build.push(Step {
             id: build.next_step_id(),
             criteria: context.criteria.clone(),
-            operation: Operation::Read(Read { ident: read.ident, span: read.span }),
+            operation: Operation::Read(Read { ident: read.ident.node }),
             annotation: Annotation::new(false, context.is_post_pipe),
+            span: read.span,
         }),
         ast::Operation::If(if_) => {
             // EvalCriterion
@@ -70,6 +74,7 @@ fn build_operation<'s>(
                         condition: condition.inner,
                     }),
                     annotation: Annotation::new(false, context.is_post_pipe),
+                    span: if_.span,
                 });
 
                 criterion_id
@@ -131,9 +136,9 @@ fn build_operation<'s>(
                 operation: Operation::EvalCriterionSwitchGroup(EvalCriterionSwitchGroup {
                     eval_criteria,
                     switch_expression_size,
-                    span: switch_expression.span(),
                 }),
                 annotation: Annotation::new(false, context.is_post_pipe),
+                span: switch.span,
             });
 
             // Build default operations
@@ -171,9 +176,9 @@ fn build_operation<'s>(
                     lhs,
                     rhs: rhs.inner,
                     size: lhs_size,
-                    span: assignment.span,
                 }),
                 annotation: Annotation::new(is_unclocked_assign, context.is_post_pipe),
+                span: assignment.span,
             });
         }
         ast::Operation::Assert(assert) => build.push(Step {
@@ -181,9 +186,9 @@ fn build_operation<'s>(
             criteria: context.criteria.clone(),
             operation: Operation::Assert(Assert {
                 condition: Expression::build(assert.condition, symbols)?.inner,
-                span: assert.span,
             }),
             annotation: Annotation::new(false, context.is_post_pipe),
+            span: assert.span,
         }),
     }
 
@@ -209,7 +214,7 @@ fn split_clauses<'s>(
     Ok((cases, default.ok_or_else(|| InternalError("missing default clause".to_owned()))?))
 }
 
-fn build_lvalue<'s>(lvalue: ast::Lvalue<'s>, symbols: &Symbols<'_>) -> Result<(Lvalue<'s>, usize)> {
+fn build_lvalue<'s>(lvalue: ast::Lvalue<'s>, symbols: &Symbols<'s>) -> Result<(Lvalue<'s>, usize)> {
     Ok(match lvalue {
         ast::Lvalue::RegBus(reg_bus) => {
             let reg_bus = <Either<_, _>>::build(reg_bus, symbols)?;

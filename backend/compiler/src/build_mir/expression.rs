@@ -6,8 +6,8 @@ use crate::{
 };
 use ast::Either;
 
-pub trait BuildExpr<I>: Sized {
-    fn build(item: I, symbols: &Symbols<'_>) -> Result<Expr<Self>>;
+pub trait BuildExpr<'s, I>: Sized {
+    fn build(item: I, symbols: &Symbols<'s>) -> Result<Expr<Self>>;
 }
 
 #[derive(Debug)]
@@ -16,8 +16,8 @@ pub struct Expr<T> {
     pub size: usize,
 }
 
-impl<'s> BuildExpr<ast::Expression<'s>> for Expression<'s> {
-    fn build(item: ast::Expression<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::Expression<'s>> for Expression<'s> {
+    fn build(item: ast::Expression<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
             ast::Expression::Atom(atom) => {
                 let atom = Atom::build(atom, symbols)?;
@@ -41,8 +41,8 @@ impl<'s> BuildExpr<ast::Expression<'s>> for Expression<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::Atom<'s>> for Atom<'s> {
-    fn build(item: ast::Atom<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::Atom<'s>> for Atom<'s> {
+    fn build(item: ast::Atom<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
             ast::Atom::Concat(concat) => {
                 let concat = ConcatExpr::build(concat, symbols)?;
@@ -60,14 +60,14 @@ impl<'s> BuildExpr<ast::Atom<'s>> for Atom<'s> {
                 Expr { inner: Atom::RegisterArray(reg_array.inner), size: reg_array.size }
             }
             ast::Atom::Number(number) => {
-                Expr { size: number.node.value.size(), inner: Atom::Number(number) }
+                Expr { size: number.node.value.size(), inner: Atom::Number(number.node) }
             }
         })
     }
 }
 
-impl<'s> BuildExpr<ast::BinaryTerm<'s>> for BinaryTerm<'s> {
-    fn build(item: ast::BinaryTerm<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::BinaryTerm<'s>> for BinaryTerm<'s> {
+    fn build(item: ast::BinaryTerm<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         let lhs = Expression::build(item.lhs, symbols)?;
         let rhs = Expression::build(item.rhs, symbols)?;
 
@@ -75,7 +75,7 @@ impl<'s> BuildExpr<ast::BinaryTerm<'s>> for BinaryTerm<'s> {
             inner: BinaryTerm {
                 lhs: lhs.inner,
                 rhs: rhs.inner,
-                operator: item.operator,
+                operator: item.operator.node,
                 ctx_size: util::ctx_size_binary_op(lhs.size, rhs.size, item.operator.node),
                 span: item.span,
             },
@@ -84,14 +84,14 @@ impl<'s> BuildExpr<ast::BinaryTerm<'s>> for BinaryTerm<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::UnaryTerm<'s>> for UnaryTerm<'s> {
-    fn build(item: ast::UnaryTerm<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::UnaryTerm<'s>> for UnaryTerm<'s> {
+    fn build(item: ast::UnaryTerm<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         let expr = Expression::build(item.expression, symbols)?;
 
         Ok(Expr {
             inner: UnaryTerm {
                 expression: expr.inner,
-                operator: item.operator,
+                operator: item.operator.node,
                 ctx_size: util::ctx_size_unary_op(expr.size, item.operator.node),
                 span: item.span,
             },
@@ -100,18 +100,17 @@ impl<'s> BuildExpr<ast::UnaryTerm<'s>> for UnaryTerm<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
-    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
+    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Register(range, kind)) => {
                 let size = util::range_into(range, item.range)?
                     .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
                     inner: Either::Left(Register {
-                        ident: item.ident,
-                        range: item.range,
+                        ident: item.ident.node,
+                        range: item.range.map(|s| s.node),
                         kind,
-                        span: item.span,
                     }),
                     size,
                 })
@@ -121,10 +120,9 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
                     .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
                     inner: Either::Right(Bus {
-                        ident: item.ident,
-                        range: item.range,
+                        ident: item.ident.node,
+                        range: item.range.map(|s| s.node),
                         kind,
-                        span: item.span,
                     }),
                     size,
                 })
@@ -134,14 +132,18 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
     }
 }
 
-impl<'s> BuildExpr<ast::RegBus<'s>> for Register<'s> {
-    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Register<'s> {
+    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Register(range, kind)) => {
                 let size = util::range_into(range, item.range)?
                     .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
-                    inner: Register { ident: item.ident, range: item.range, kind, span: item.span },
+                    inner: Register {
+                        ident: item.ident.node,
+                        range: item.range.map(|s| s.node),
+                        kind,
+                    },
                     size,
                 })
             }
@@ -150,14 +152,14 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Register<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::RegBus<'s>> for Bus<'s> {
-    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Bus<'s> {
+    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Bus(range, kind)) => {
                 let size = util::range_into(range, item.range)?
                     .ok_or_else(|| InternalError("expected size".to_string()))?;
                 Ok(Expr {
-                    inner: Bus { ident: item.ident, range: item.range, kind, span: item.span },
+                    inner: Bus { ident: item.ident.node, range: item.range.map(|s| s.node), kind },
                     size,
                 })
             }
@@ -166,8 +168,8 @@ impl<'s> BuildExpr<ast::RegBus<'s>> for Bus<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::RegisterArray<'s>> for RegisterArray<'s> {
-    fn build(item: ast::RegisterArray<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegisterArray<'s>> for RegisterArray<'s> {
+    fn build(item: ast::RegisterArray<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::RegisterArray { range, len }) => {
                 let index = Expression::build(*item.index, symbols)?;
@@ -176,11 +178,10 @@ impl<'s> BuildExpr<ast::RegisterArray<'s>> for RegisterArray<'s> {
 
                 Ok(Expr {
                     inner: RegisterArray {
-                        ident: item.ident,
+                        ident: item.ident.node,
                         index: Box::new(index.inner),
                         index_ctx_size: util::log_2(len),
-                        range: item.range,
-                        span: item.span,
+                        range: item.range.map(|s| s.node),
                     },
                     size,
                 })
@@ -192,11 +193,11 @@ impl<'s> BuildExpr<ast::RegisterArray<'s>> for RegisterArray<'s> {
 
 // -------------------------------- Concat --------------------------------
 
-impl<'s, P> BuildExpr<ast::Concat<'s>> for Concat<P>
+impl<'s, P> BuildExpr<'s, ast::Concat<'s>> for Concat<P>
 where
-    P: BuildExpr<ast::ConcatPart<'s>>,
+    P: BuildExpr<'s, ast::ConcatPart<'s>>,
 {
-    fn build(item: ast::Concat<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+    fn build(item: ast::Concat<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         let mut parts = Vec::new();
         let mut size = 0;
 
@@ -206,14 +207,14 @@ where
             parts.push(part.inner);
         }
 
-        Ok(Expr { inner: Concat { parts, span: item.span }, size })
+        Ok(Expr { inner: Concat { parts }, size })
     }
 }
 
-impl<'s> BuildExpr<ast::ConcatPart<'s>> for ConcatPartLvalueClocked<'s> {
-    fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartLvalueClocked<'s> {
+    fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
-            ast::ConcatPart::RegBus(reg_bus) => {
+            ast::ConcatPart::RegBusAlias(reg_bus) => {
                 let register = Register::build(reg_bus, symbols)?;
                 Expr {
                     inner: ConcatPartLvalueClocked::Register(register.inner, register.size),
@@ -234,8 +235,8 @@ impl<'s> BuildExpr<ast::ConcatPart<'s>> for ConcatPartLvalueClocked<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::ConcatPart<'s>> for ConcatPartLvalueUnclocked<'s> {
-    fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartLvalueUnclocked<'s> {
+    fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
             ast::ConcatPart::RegBus(reg_bus) => {
                 let bus = Bus::build(reg_bus, symbols)?;
@@ -253,8 +254,8 @@ impl<'s> BuildExpr<ast::ConcatPart<'s>> for ConcatPartLvalueUnclocked<'s> {
     }
 }
 
-impl<'s> BuildExpr<ast::ConcatPart<'s>> for ConcatPartExpr<'s> {
-    fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'_>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartExpr<'s> {
+    fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
             ast::ConcatPart::RegBus(reg_bus) => {
                 let reg_bus = <Either<_, _>>::build(reg_bus, symbols)?;
@@ -272,7 +273,7 @@ impl<'s> BuildExpr<ast::ConcatPart<'s>> for ConcatPartExpr<'s> {
                 Expr { inner: ConcatPartExpr::RegisterArray(reg_array.inner), size: reg_array.size }
             }
             ast::ConcatPart::Number(number) => {
-                Expr { size: number.node.value.size(), inner: ConcatPartExpr::Number(number) }
+                Expr { size: number.node.value.size(), inner: ConcatPartExpr::Number(number.node) }
             }
         })
     }

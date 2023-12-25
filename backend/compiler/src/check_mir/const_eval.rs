@@ -22,7 +22,7 @@ impl Evaluate for Atom<'_> {
             Self::Register(reg) => reg.evaluate(ctx_size),
             Self::Bus(bus) => bus.evaluate(ctx_size),
             Self::RegisterArray(reg_array) => reg_array.evaluate(ctx_size),
-            Self::Number(number) => number.node.evaluate(ctx_size),
+            Self::Number(number) => number.evaluate(ctx_size),
         }
     }
 }
@@ -33,7 +33,7 @@ impl Evaluate for BinaryTerm<'_> {
         let lhs = self.lhs.evaluate(ctx_size_inner)?;
         let rhs = self.rhs.evaluate(ctx_size_inner)?;
 
-        let mut value = match self.operator.node {
+        let mut value = match self.operator {
             BinaryOperator::Eq => Value::from(Bit::from(lhs == rhs)),
             BinaryOperator::Ne => Value::from(Bit::from(lhs != rhs)),
             BinaryOperator::Le => Value::from(Bit::from(lhs <= rhs)),
@@ -58,7 +58,7 @@ impl Evaluate for UnaryTerm<'_> {
         let ctx_size_inner = self.ctx_size.calc(ctx_size);
         let mut rhs = self.expression.evaluate(ctx_size_inner)?;
 
-        let mut value = match self.operator.node {
+        let mut value = match self.operator {
             UnaryOperator::Sign | UnaryOperator::Neg => -rhs,
             UnaryOperator::Not => !rhs,
             UnaryOperator::Sxt => {
@@ -106,7 +106,7 @@ impl Evaluate for Concat<ConcatPartExpr<'_>> {
                 ConcatPartExpr::Register(_) => None,
                 ConcatPartExpr::Bus(_) => None,
                 ConcatPartExpr::RegisterArray(_) => None,
-                ConcatPartExpr::Number(number) => Some(number.node.value.clone()),
+                ConcatPartExpr::Number(number) => Some(number.value.clone()),
             })
             .collect::<Option<Vec<Value>>>()?;
 

@@ -84,7 +84,7 @@ fn visit_expression<'s>(expression: &Expression<'s>, state: &mut State<'s>) {
                 for part in &concat.parts {
                     match part {
                         ConcatPartExpr::RegisterArray(reg_array) => {
-                            state.insert(reg_array.ident.node);
+                            state.insert(reg_array.ident);
                         }
                         ConcatPartExpr::Register(_)
                         | ConcatPartExpr::Bus(_)
@@ -93,7 +93,7 @@ fn visit_expression<'s>(expression: &Expression<'s>, state: &mut State<'s>) {
                 }
             }
             Atom::RegisterArray(reg_array) => {
-                state.insert(reg_array.ident.node);
+                state.insert(reg_array.ident);
             }
             Atom::Register(_) | Atom::Bus(_) | Atom::Number(_) => (),
         },

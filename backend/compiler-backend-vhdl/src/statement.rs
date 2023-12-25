@@ -78,7 +78,7 @@ impl StatementBuilder {
             // Otherwise the entry for the label in next_state_conditional is created
             // or extended with the criteria of this step.
             mir::Operation::Goto(mir_goto) => {
-                let label = Label::named(mir_goto.label.node.0);
+                let label = Label::named(mir_goto.label.0);
 
                 if step.criteria.is_empty() {
                     self.next_state_default = label;

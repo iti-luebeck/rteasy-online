@@ -121,7 +121,7 @@ fn calc_label_goto_prefix(mir: &mir::Mir<'_>) -> String {
         let any_label_contains_prefix = mir
             .statements
             .iter()
-            .filter_map(|statement| statement.label.map(|s| s.node))
+            .filter_map(|statement| statement.label)
             .any(|label| label.0.contains(&prefix));
         if any_label_contains_prefix {
             prefix += "_";
@@ -136,7 +136,7 @@ fn calc_label_goto_prefix(mir: &mir::Mir<'_>) -> String {
 fn make_label(idx: usize, statement: Option<&mir::Statement<'_>>) -> Label {
     match statement {
         Some(statement) => match statement.label.as_ref() {
-            Some(label) => Label::named(label.node.0),
+            Some(label) => Label::named(label.0),
             None => Label::unnamed(idx),
         },
         None => Label::terminated(),

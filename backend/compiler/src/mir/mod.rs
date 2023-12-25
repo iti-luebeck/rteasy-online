@@ -20,7 +20,7 @@ pub struct Mir<'s> {
 
 #[derive(Debug, Clone)]
 pub struct Statement<'s> {
-    pub label: Option<Spanned<Label<'s>>>,
+    pub label: Option<Label<'s>>,
     pub steps: Spanned<Vec<Step<'s>>>,
     pub span: Span,
     pub span_semicolon: Span,
@@ -33,12 +33,7 @@ pub struct Step<'s> {
     pub criteria: Vec<Criterion>,
     pub operation: Operation<'s>,
     pub annotation: Annotation,
-}
-
-impl Step<'_> {
-    pub fn span(&self) -> Span {
-        self.operation.span()
-    }
+    pub span: Span,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
