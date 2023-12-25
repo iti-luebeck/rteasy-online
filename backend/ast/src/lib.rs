@@ -309,6 +309,7 @@ pub struct UnaryTerm<'s> {
 #[derive(Debug, Copy, Clone)]
 pub struct MemoryRange<'s> {
     pub address_register: Spanned<Ident<'s>>,
+    pub address_range: Option<Spanned<BitRange>>,
     pub data_register: Spanned<Ident<'s>>,
     pub span: Span,
 }

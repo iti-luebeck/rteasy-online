@@ -31,6 +31,7 @@ impl Generate<mir::Memory<'_>> for Memory {
             ident: gen_ident(memory.ident),
             range: MemoryRange {
                 address_register: gen_ident(memory.range.address_register),
+                address_range: memory.range.address_range,
                 data_register: gen_ident(memory.range.data_register),
             },
         })

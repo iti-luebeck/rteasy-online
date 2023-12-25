@@ -31,7 +31,8 @@ impl MemoryState {
 
     pub fn read(&self, state: &State) -> Result<(), Error> {
         // Get AR value
-        let ar_value = state.register(&self.range.address_register)?.read(None)?;
+        let ar_value =
+            state.register(&self.range.address_register)?.read(self.range.address_range)?;
         debug_assert_eq!(ar_value.size(), self.ar_size);
 
         // Read from memory
@@ -45,7 +46,8 @@ impl MemoryState {
 
     pub fn write(&self, state: &State) -> Result<(), Error> {
         // Get AR value
-        let ar_value = state.register(&self.range.address_register)?.read(None)?;
+        let ar_value =
+            state.register(&self.range.address_register)?.read(self.range.address_range)?;
         debug_assert_eq!(ar_value.size(), self.ar_size);
 
         // Get DR value

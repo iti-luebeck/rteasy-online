@@ -32,6 +32,7 @@ pub struct Memory {
 #[derive(Debug, Clone)]
 pub struct MemoryRange {
     pub address_register: Ident,
+    pub address_range: Option<BitRange>,
     pub data_register: Ident,
 }
 

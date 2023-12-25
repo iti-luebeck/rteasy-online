@@ -86,53 +86,88 @@ impl<'s> Symbols<'s> {
                 }
                 ast::Declaration::Memory(declare_memory) => {
                     for memory in &declare_memory.memories {
+                        let mut address_range = memory.range.address_range.map(|s| s.node);
+
+                        match symbols.symbol(memory.range.address_register.node) {
+                            Some(Symbol::Register(reg_range, _)) => {
+                                if let Some(addr_range) = memory.range.address_range.map(|s| s.node)
+                                {
+                                    if !reg_range.contains_range(addr_range) {
+                                        error_sink(CompilerError::new(
+                                            CompilerErrorKind::RangeMismatch {
+                                                range_idx: addr_range,
+                                                range: reg_range,
+                                            },
+                                            memory.range.address_register.span,
+                                        ));
+                                    }
+                                } else {
+                                    address_range = Some(reg_range);
+                                }
+                                let size = reg_range.size();
+                                if size
+                                    .map(|size| size > MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER)
+                                    .unwrap_or(true)
+                                {
+                                    error_sink(CompilerError::new(
+                                        CompilerErrorKind::BitRangeTooWide {
+                                            max_size: MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER,
+                                            size,
+                                        },
+                                        memory.range.address_register.span,
+                                    ));
+                                }
+                            }
+                            Some(symbol) => error_sink(CompilerError::new(
+                                CompilerErrorKind::WrongSymbolType {
+                                    expected: &[SymbolType::Register],
+                                    found: symbol.type_(),
+                                },
+                                memory.range.address_register.span,
+                            )),
+                            None => error_sink(CompilerError::new(
+                                CompilerErrorKind::SymbolNotFound(
+                                    &[SymbolType::Register],
+                                    memory.range.address_register.node.0.to_string(),
+                                ),
+                                memory.range.address_register.span,
+                            )),
+                        }
+
+                        match symbols.symbol(memory.range.data_register.node) {
+                            Some(Symbol::Register(_reg_range, _)) => {}
+                            Some(symbol) => error_sink(CompilerError::new(
+                                CompilerErrorKind::WrongSymbolType {
+                                    expected: &[SymbolType::Register],
+                                    found: symbol.type_(),
+                                },
+                                memory.range.data_register.span,
+                            )),
+                            None => error_sink(CompilerError::new(
+                                CompilerErrorKind::SymbolNotFound(
+                                    &[SymbolType::Register],
+                                    memory.range.data_register.node.0.to_string(),
+                                ),
+                                memory.range.data_register.span,
+                            )),
+                        }
+
                         if symbols
                             .symbols
-                            .insert(memory.ident.node, Symbol::Memory(memory.range))
+                            .insert(
+                                memory.ident.node,
+                                Symbol::Memory {
+                                    address_register: memory.range.address_register.node,
+                                    address_range: address_range.unwrap_or_default(),
+                                    data_register: memory.range.data_register.node,
+                                },
+                            )
                             .is_some()
                         {
                             error_sink(CompilerError::new(
                                 CompilerErrorKind::DuplicateSymbol(memory.ident.node.0.to_string()),
                                 memory.ident.span,
                             ));
-                        }
-
-                        for (mem_reg, is_ar) in [
-                            (&memory.range.address_register, true),
-                            (&memory.range.data_register, false),
-                        ] {
-                            match symbols.symbol(mem_reg.node) {
-                                Some(Symbol::Register(range, _)) => {
-                                    let size = range.unwrap_or_default().size();
-                                    if is_ar
-                                        && size
-                                            .map(|size| size > MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER)
-                                            .unwrap_or(true)
-                                    {
-                                        error_sink(CompilerError::new(
-                                            CompilerErrorKind::BitRangeTooWide {
-                                                max_size: MAX_BIT_RANGE_SIZE_ADDRESS_REGISTER,
-                                                size,
-                                            },
-                                            memory.range.address_register.span,
-                                        ));
-                                    }
-                                }
-                                Some(symbol) => error_sink(CompilerError::new(
-                                    CompilerErrorKind::WrongSymbolType {
-                                        expected: &[SymbolType::Register],
-                                        found: symbol.type_(),
-                                    },
-                                    mem_reg.span,
-                                )),
-                                None => error_sink(CompilerError::new(
-                                    CompilerErrorKind::SymbolNotFound(
-                                        &[SymbolType::Register],
-                                        mem_reg.node.0.to_string(),
-                                    ),
-                                    mem_reg.span,
-                                )),
-                            }
                         }
                     }
                 }
@@ -221,6 +256,7 @@ pub enum Symbol<'s> {
     Bus(ast::BitRange, ast::BusKind),
     Memory {
         address_register: ast::Ident<'s>,
+        address_range: ast::BitRange,
         data_register: ast::Ident<'s>,
     },
     RegisterArray {

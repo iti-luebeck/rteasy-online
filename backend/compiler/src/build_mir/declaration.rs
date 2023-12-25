@@ -31,6 +31,7 @@ pub fn build<'s>(
                     ident: mem.ident.node,
                     range: MemoryRange {
                         address_register: mem.range.address_register.node,
+                        address_range: mem.range.address_range.map(|s| s.node),
                         data_register: mem.range.data_register.node,
                     },
                 })

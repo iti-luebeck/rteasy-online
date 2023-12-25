@@ -204,7 +204,7 @@ bit_range -> BitRange:
       "(" number_usize ":" number_usize ")" { BitRange($2, $4) }
     | "(" number_usize ")" { BitRange($2, $2) };
 memory_range -> MemoryRange<'s>:
-    "(" spanned(ident) "," spanned(ident) ")" { MemoryRange { address_register: $2, data_register: $4, span: $span.into() } };
+    "(" spanned(ident) opt(spanned(bit_range)) "," spanned(ident) ")" { MemoryRange { address_register: $2, address_range: $3, data_register: $5, span: $span.into() } };
 
 // Number rules
 number_usize -> usize: exact(Token::LiteralNumberDec) { parse_usize($1, $span) }?;

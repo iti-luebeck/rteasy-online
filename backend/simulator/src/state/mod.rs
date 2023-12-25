@@ -61,8 +61,15 @@ impl State {
         for declaration in program.declarations() {
             if let Declaration::Memory(declare_memory) = declaration {
                 for mem in &declare_memory.memories {
-                    let ar_size =
-                        registers.get(&mem.range.address_register).unwrap().range().size().unwrap();
+                    let ar_size = match mem.range.address_range {
+                        Some(ar_range) => ar_range.size().unwrap(),
+                        None => registers
+                            .get(&mem.range.address_register)
+                            .unwrap()
+                            .range()
+                            .size()
+                            .unwrap(),
+                    };
                     let dr_size =
                         registers.get(&mem.range.data_register).unwrap().range().size().unwrap();
                     memories.insert(
