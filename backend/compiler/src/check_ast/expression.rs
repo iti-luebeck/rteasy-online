@@ -130,13 +130,15 @@ impl CheckExpr for RegBusAlias<'_> {
                     None
                 }
             },
-            Some(Symbol::Alias(_, range)) => match util::range_into(range.normalize(), self.range) {
-                Ok(maybe_size) => maybe_size,
-                Err(e) => {
-                    error_sink(e);
-                    None
+            Some(Symbol::Alias(_, range)) => {
+                match util::range_into(range.normalize(), self.range) {
+                    Ok(maybe_size) => maybe_size,
+                    Err(e) => {
+                        error_sink(e);
+                        None
+                    }
                 }
-            },
+            }
             Some(Symbol::RegisterArray { .. }) => {
                 error_sink(CompilerError::new(
                     CompilerErrorKind::RegArrayMissingIndex(self.ident.node.0.to_string()),
