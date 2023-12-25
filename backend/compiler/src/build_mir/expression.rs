@@ -48,7 +48,7 @@ impl<'s> BuildExpr<'s, ast::Atom<'s>> for Atom<'s> {
                 let concat = ConcatExpr::build(concat, symbols)?;
                 Expr { inner: Atom::Concat(concat.inner), size: concat.size }
             }
-            ast::Atom::RegBus(reg_bus) => {
+            ast::Atom::RegBusAlias(reg_bus) => {
                 let reg_bus = <Either<_, _>>::build(reg_bus, symbols)?;
                 match reg_bus.inner {
                     Either::Left(reg) => Expr { inner: Atom::Register(reg), size: reg_bus.size },
@@ -100,8 +100,8 @@ impl<'s> BuildExpr<'s, ast::UnaryTerm<'s>> for UnaryTerm<'s> {
     }
 }
 
-impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
-    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegBusAlias<'s>> for Either<Register<'s>, Bus<'s>> {
+    fn build(item: ast::RegBusAlias<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Register(range, kind)) => {
                 let size = util::range_into(range, item.range)?
@@ -127,13 +127,52 @@ impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Either<Register<'s>, Bus<'s>> {
                     size,
                 })
             }
-            _ => Err(InternalError("missing register or bus".to_string())),
+            Some(Symbol::Alias(ref_ident, def_range)) => {
+                let used_range = match item.range {
+                    Some(range) => def_range.slice_relative(range.node).ok_or_else(|| {
+                        InternalError(
+                            "this range should always be valid since it was checked earlier"
+                                .to_string(),
+                        )
+                    })?,
+                    None => def_range,
+                };
+                let ref_symbol = symbols.symbol(ref_ident);
+
+                let size =
+                    used_range.size().ok_or_else(|| InternalError("expected size".to_string()))?;
+                let ref_ident = Ident(ref_ident.0);
+
+                match ref_symbol {
+                    Some(Symbol::Bus(_, kind)) => Ok(Expr {
+                        inner: Either::Right(Bus {
+                            ident: ref_ident,
+                            range: Some(used_range),
+                            kind,
+                        }),
+                        size,
+                    }),
+                    Some(Symbol::Register(_, kind)) => Ok(Expr {
+                        inner: Either::Left(Register {
+                            ident: ref_ident,
+                            range: Some(used_range),
+                            kind,
+                        }),
+                        size,
+                    }),
+                    _ => Err(InternalError(format!(
+                        "alias {} is referencing a non-register/bus symbol {}",
+                        item.ident.node.0, ref_ident.0
+                    ))),
+                }
+            }
+            _ => Err(InternalError("missing register, bus or alias".to_string())),
         }
     }
 }
 
-impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Register<'s> {
-    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegBusAlias<'s>> for Register<'s> {
+    fn build(item: ast::RegBusAlias<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Register(range, kind)) => {
                 let size = util::range_into(range, item.range)?
@@ -152,8 +191,8 @@ impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Register<'s> {
     }
 }
 
-impl<'s> BuildExpr<'s, ast::RegBus<'s>> for Bus<'s> {
-    fn build(item: ast::RegBus<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
+impl<'s> BuildExpr<'s, ast::RegBusAlias<'s>> for Bus<'s> {
+    fn build(item: ast::RegBusAlias<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         match symbols.symbol(item.ident.node) {
             Some(Symbol::Bus(range, kind)) => {
                 let size = util::range_into(range, item.range)?
@@ -238,7 +277,7 @@ impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartLvalueClocked<'s> {
 impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartLvalueUnclocked<'s> {
     fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
-            ast::ConcatPart::RegBus(reg_bus) => {
+            ast::ConcatPart::RegBusAlias(reg_bus) => {
                 let bus = Bus::build(reg_bus, symbols)?;
                 Expr { inner: ConcatPartLvalueUnclocked::Bus(bus.inner, bus.size), size: bus.size }
             }
@@ -257,7 +296,7 @@ impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartLvalueUnclocked<'s> {
 impl<'s> BuildExpr<'s, ast::ConcatPart<'s>> for ConcatPartExpr<'s> {
     fn build(item: ast::ConcatPart<'s>, symbols: &Symbols<'s>) -> Result<Expr<Self>> {
         Ok(match item {
-            ast::ConcatPart::RegBus(reg_bus) => {
+            ast::ConcatPart::RegBusAlias(reg_bus) => {
                 let reg_bus = <Either<_, _>>::build(reg_bus, symbols)?;
                 match reg_bus.inner {
                     Either::Left(reg) => {

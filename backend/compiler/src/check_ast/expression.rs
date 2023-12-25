@@ -30,7 +30,7 @@ impl CheckExpr for Atom<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         match self {
             Self::Concat(concat) => concat.check_expr(symbols, error_sink),
-            Self::RegBus(reg_bus) => reg_bus.check_expr(symbols, error_sink),
+            Self::RegBusAlias(reg_bus) => reg_bus.check_expr(symbols, error_sink),
             Self::RegisterArray(reg_array) => reg_array.check_expr(symbols, error_sink),
             Self::Number(number) => number.node.check_expr(symbols, error_sink),
         }
@@ -106,14 +106,14 @@ impl CheckExpr for Concat<'_> {
 impl CheckExpr for ConcatPart<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         match self {
-            Self::RegBus(reg_bus) => reg_bus.check_expr(symbols, error_sink),
+            Self::RegBusAlias(reg_bus) => reg_bus.check_expr(symbols, error_sink),
             Self::RegisterArray(reg_array) => reg_array.check_expr(symbols, error_sink),
             Self::Number(number) => number.node.check_expr(symbols, error_sink),
         }
     }
 }
 
-impl CheckExpr for RegBus<'_> {
+impl CheckExpr for RegBusAlias<'_> {
     fn check_expr(&self, symbols: &Symbols<'_>, error_sink: &mut impl FnMut(CompilerError)) -> Res {
         let size = match symbols.symbol(self.ident.node) {
             Some(Symbol::Register(range, _)) => match util::range_into(range, self.range) {
@@ -130,6 +130,13 @@ impl CheckExpr for RegBus<'_> {
                     None
                 }
             },
+            Some(Symbol::Alias(_, range)) => match util::range_into(range.normalize(), self.range) {
+                Ok(maybe_size) => maybe_size,
+                Err(e) => {
+                    error_sink(e);
+                    None
+                }
+            },
             Some(Symbol::RegisterArray { .. }) => {
                 error_sink(CompilerError::new(
                     CompilerErrorKind::RegArrayMissingIndex(self.ident.node.0.to_string()),
@@ -140,7 +147,7 @@ impl CheckExpr for RegBus<'_> {
             Some(symbol) => {
                 error_sink(CompilerError::new(
                     CompilerErrorKind::WrongSymbolType {
-                        expected: &[SymbolType::Register, SymbolType::Bus],
+                        expected: &[SymbolType::Register, SymbolType::Bus, SymbolType::Alias],
                         found: symbol.type_(),
                     },
                     self.ident.span,

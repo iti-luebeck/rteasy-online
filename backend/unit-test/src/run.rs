@@ -160,7 +160,7 @@ fn map_declarations(declarations: &[Declaration]) -> Vec<ast::Declaration<'_>> {
                             registers: declare
                                 .registers
                                 .iter()
-                                .map(|register| ast::RegBus {
+                                .map(|register| ast::RegBusAlias {
                                     ident: spanned_dummy(ast::Ident(&register.ident.0)),
                                     range: register.range.map(spanned_dummy),
                                     span: Span::dummy(),
@@ -180,7 +180,7 @@ fn map_declarations(declarations: &[Declaration]) -> Vec<ast::Declaration<'_>> {
                         buses: declare
                             .buses
                             .iter()
-                            .map(|bus| ast::RegBus {
+                            .map(|bus| ast::RegBusAlias {
                                 ident: spanned_dummy(ast::Ident(&bus.ident.0)),
                                 range: bus.range.map(spanned_dummy),
                                 span: Span::dummy(),

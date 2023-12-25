@@ -32,6 +32,15 @@ pub fn build_mir<'s>(ast: ast::Ast<'s>, symbols: &Symbols<'s>) -> Result<Mir<'s>
         declarations: ast
             .declarations
             .into_iter()
+            .filter(
+                |declaration| {
+                    if let ast::Declaration::Alias(_) = declaration {
+                        false
+                    } else {
+                        true
+                    }
+                },
+            )
             .map(|declaration| declaration::build(declaration, symbols))
             .collect::<Result<_>>()?,
         statements,

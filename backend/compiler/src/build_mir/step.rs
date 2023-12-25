@@ -216,7 +216,7 @@ fn split_clauses<'s>(
 
 fn build_lvalue<'s>(lvalue: ast::Lvalue<'s>, symbols: &Symbols<'s>) -> Result<(Lvalue<'s>, usize)> {
     Ok(match lvalue {
-        ast::Lvalue::RegBus(reg_bus) => {
+        ast::Lvalue::RegBusAlias(reg_bus) => {
             let reg_bus = <Either<_, _>>::build(reg_bus, symbols)?;
             match reg_bus.inner {
                 Either::Left(reg) => (Lvalue::Register(reg), reg_bus.size),

@@ -84,6 +84,63 @@ impl<'s> Symbols<'s> {
                         }
                     }
                 }
+                ast::Declaration::Alias(declare_alias) => {
+                    if symbols
+                        .symbols
+                        .insert(
+                            declare_alias.alias.node,
+                            Symbol::Alias(declare_alias.ident.node, declare_alias.range.node),
+                        )
+                        .is_some()
+                    {
+                        error_sink(CompilerError::new(
+                            CompilerErrorKind::DuplicateSymbol(
+                                declare_alias.alias.node.0.to_string(),
+                            ),
+                            declare_alias.alias.span,
+                        ));
+                    }
+
+                    let alias_range = declare_alias.range.node;
+                    match symbols.symbol(declare_alias.ident.node) {
+                        Some(Symbol::Register(reg_range, _)) => {
+                            if !reg_range.contains_range(alias_range) {
+                                error_sink(CompilerError::new(
+                                    CompilerErrorKind::RangeMismatch {
+                                        range_idx: alias_range,
+                                        range: reg_range,
+                                    },
+                                    declare_alias.range.span,
+                                ));
+                            }
+                        }
+                        Some(Symbol::Bus(bus_range, _)) => {
+                            if !bus_range.contains_range(alias_range) {
+                                error_sink(CompilerError::new(
+                                    CompilerErrorKind::RangeMismatch {
+                                        range_idx: alias_range,
+                                        range: bus_range,
+                                    },
+                                    declare_alias.range.span,
+                                ));
+                            }
+                        }
+                        Some(symbol) => error_sink(CompilerError::new(
+                            CompilerErrorKind::WrongSymbolType {
+                                expected: &[SymbolType::Register],
+                                found: symbol.type_(),
+                            },
+                            declare_alias.ident.span,
+                        )),
+                        None => error_sink(CompilerError::new(
+                            CompilerErrorKind::SymbolNotFound(
+                                &[SymbolType::Register],
+                                declare_alias.ident.node.0.to_string(),
+                            ),
+                            declare_alias.ident.span,
+                        )),
+                    }
+                }
                 ast::Declaration::Memory(declare_memory) => {
                     for memory in &declare_memory.memories {
                         let mut address_range = memory.range.address_range.map(|s| s.node);
@@ -254,6 +311,7 @@ impl<'s> Symbols<'s> {
 pub enum Symbol<'s> {
     Register(ast::BitRange, ast::RegisterKind),
     Bus(ast::BitRange, ast::BusKind),
+    Alias(ast::Ident<'s>, ast::BitRange),
     Memory {
         address_register: ast::Ident<'s>,
         address_range: ast::BitRange,
@@ -270,6 +328,7 @@ impl Symbol<'_> {
         match self {
             Self::Register(_, _) => SymbolType::Register,
             Self::Bus(_, _) => SymbolType::Bus,
+            Self::Alias(_, _) => SymbolType::Alias,
             Self::Memory { .. } => SymbolType::Memory,
             Self::RegisterArray { .. } => SymbolType::RegisterArray,
         }
@@ -280,6 +339,7 @@ impl Symbol<'_> {
 pub enum SymbolType {
     Register,
     Bus,
+    Alias,
     Memory,
     RegisterArray,
 }
@@ -289,6 +349,7 @@ impl fmt::Display for SymbolType {
         match self {
             Self::Register => write!(f, "register"),
             Self::Bus => write!(f, "bus"),
+            Self::Alias => write!(f, "alias"),
             Self::Memory => write!(f, "memory"),
             Self::RegisterArray => write!(f, "register array"),
         }

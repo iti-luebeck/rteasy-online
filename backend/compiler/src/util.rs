@@ -121,7 +121,7 @@ pub fn concat_info(concat: &Concat<'_>, symbols: &Symbols<'_>) -> ConcatInfo {
 
     for part in &concat.parts {
         match part {
-            ConcatPart::RegBus(reg_bus) => match symbols.symbol(reg_bus.ident.node) {
+            ConcatPart::RegBusAlias(reg_bus) => match symbols.symbol(reg_bus.ident.node) {
                 Some(Symbol::Register(..)) => info.contains_clocked = true,
                 Some(Symbol::Bus(..)) => info.contains_unclocked = true,
                 _ => (),

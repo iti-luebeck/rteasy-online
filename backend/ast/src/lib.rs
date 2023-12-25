@@ -14,6 +14,7 @@ pub struct Ast<'s> {
 pub enum Declaration<'s> {
     Register(DeclareRegister<'s>),
     Bus(DeclareBus<'s>),
+    Alias(DeclareAlias<'s>),
     Memory(DeclareMemory<'s>),
     RegisterArray(DeclareRegisterArray<'s>),
 }
@@ -23,6 +24,7 @@ impl Declaration<'_> {
         match self {
             Self::Register(n) => n.span,
             Self::Bus(n) => n.span,
+            Self::Alias(n) => n.span,
             Self::Memory(n) => n.span,
             Self::RegisterArray(n) => n.span,
         }
@@ -31,15 +33,23 @@ impl Declaration<'_> {
 
 #[derive(Debug, Clone)]
 pub struct DeclareRegister<'s> {
-    pub registers: Vec<RegBus<'s>>,
+    pub registers: Vec<RegBusAlias<'s>>,
     pub kind: RegisterKind,
     pub span: Span,
 }
 
 #[derive(Debug, Clone)]
 pub struct DeclareBus<'s> {
-    pub buses: Vec<RegBus<'s>>,
+    pub buses: Vec<RegBusAlias<'s>>,
     pub kind: BusKind,
+    pub span: Span,
+}
+
+#[derive(Debug, Clone)]
+pub struct DeclareAlias<'s> {
+    pub alias: Spanned<Ident<'s>>, // alias name
+    pub ident: Spanned<Ident<'s>>, // register or bus name
+    pub range: Spanned<BitRange>,
     pub span: Span,
 }
 
@@ -56,7 +66,7 @@ pub struct DeclareRegisterArray<'s> {
 }
 
 #[derive(Debug, Clone)]
-pub struct RegBus<'s> {
+pub struct RegBusAlias<'s> {
     pub ident: Spanned<Ident<'s>>,
     pub range: Option<Spanned<BitRange>>,
     pub span: Span,
@@ -70,7 +80,7 @@ pub struct Concat<'s> {
 
 #[derive(Debug, Clone)]
 pub enum ConcatPart<'s> {
-    RegBus(RegBus<'s>),
+    RegBusAlias(RegBusAlias<'s>),
     RegisterArray(RegisterArray<'s>),
     Number(Spanned<Number>),
 }
@@ -78,7 +88,7 @@ pub enum ConcatPart<'s> {
 impl ConcatPart<'_> {
     pub fn span(&self) -> Span {
         match self {
-            Self::RegBus(n) => n.span,
+            Self::RegBusAlias(n) => n.span,
             Self::RegisterArray(n) => n.span,
             Self::Number(n) => n.span,
         }
@@ -209,7 +219,7 @@ pub struct DefaultClause {
 
 #[derive(Debug, Clone)]
 pub enum Lvalue<'s> {
-    RegBus(RegBus<'s>),
+    RegBusAlias(RegBusAlias<'s>),
     RegisterArray(RegisterArray<'s>),
     Concat(Concat<'s>),
 }
@@ -217,7 +227,7 @@ pub enum Lvalue<'s> {
 impl Lvalue<'_> {
     pub fn span(&self) -> Span {
         match self {
-            Self::RegBus(n) => n.span,
+            Self::RegBusAlias(n) => n.span,
             Self::RegisterArray(n) => n.span,
             Self::Concat(n) => n.span,
         }
@@ -275,7 +285,7 @@ impl<'s> From<UnaryTerm<'s>> for Expression<'s> {
 #[derive(Debug, Clone)]
 pub enum Atom<'s> {
     Concat(Concat<'s>),
-    RegBus(RegBus<'s>),
+    RegBusAlias(RegBusAlias<'s>),
     RegisterArray(RegisterArray<'s>),
     Number(Spanned<Number>),
 }
@@ -284,7 +294,7 @@ impl Atom<'_> {
     pub fn span(&self) -> Span {
         match self {
             Self::Concat(n) => n.span,
-            Self::RegBus(n) => n.span,
+            Self::RegBusAlias(n) => n.span,
             Self::RegisterArray(n) => n.span,
             Self::Number(n) => n.span,
         }

@@ -23,6 +23,9 @@ pub fn build<'s>(
                 .map(|bus| Ok(Bus::build(bus, symbols)?.inner))
                 .collect::<Result<_>>()?,
         })),
+        ast::Declaration::Alias(_) => Err(InternalError(
+            "Alias are not needed and should be filtered out from the list.".to_string(),
+        )),
         ast::Declaration::Memory(declare_memory) => Ok(Declaration::Memory(DeclareMemory {
             memories: declare_memory
                 .memories

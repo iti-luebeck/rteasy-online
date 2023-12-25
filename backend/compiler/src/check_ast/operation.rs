@@ -244,7 +244,7 @@ impl CheckOp for Assignment<'_> {
     ) -> Result {
         // Check lhs/rhs as expr and size
         let lhs = match &self.lhs {
-            Lvalue::RegBus(reg_bus) => reg_bus.check_expr(symbols, error_sink),
+            Lvalue::RegBusAlias(reg_bus) => reg_bus.check_expr(symbols, error_sink),
             Lvalue::RegisterArray(reg_array) => reg_array.check_expr(symbols, error_sink),
             Lvalue::Concat(concat) => concat.check_expr(symbols, error_sink),
         };
@@ -277,10 +277,16 @@ impl CheckOp for Assignment<'_> {
 
         // Check assign to input
         match &self.lhs {
-            Lvalue::RegBus(reg_bus) => {
+            Lvalue::RegBusAlias(reg_bus) => {
                 if reg_bus_is_input(reg_bus, symbols) {
                     error_sink(CompilerError::new(
                         CompilerErrorKind::AssignmentLhsContainsInput,
+                        self.lhs.span(),
+                    ));
+                }
+                if reg_bus_is_alias(reg_bus, symbols) {
+                    error_sink(CompilerError::new(
+                        CompilerErrorKind::AssignmentLhsContainsAlias,
                         self.lhs.span(),
                     ));
                 }
@@ -289,10 +295,16 @@ impl CheckOp for Assignment<'_> {
             Lvalue::Concat(concat) => {
                 for part in &concat.parts {
                     match part {
-                        ConcatPart::RegBus(reg_bus) => {
+                        ConcatPart::RegBusAlias(reg_bus) => {
                             if reg_bus_is_input(reg_bus, symbols) {
                                 error_sink(CompilerError::new(
                                     CompilerErrorKind::AssignmentLhsContainsInput,
+                                    self.lhs.span(),
+                                ));
+                            }
+                            if reg_bus_is_alias(reg_bus, symbols) {
+                                error_sink(CompilerError::new(
+                                    CompilerErrorKind::AssignmentLhsContainsAlias,
                                     self.lhs.span(),
                                 ));
                             }
@@ -306,7 +318,14 @@ impl CheckOp for Assignment<'_> {
 
         // Check assign to register array with bit range
         match &self.lhs {
-            Lvalue::RegBus(_) => (),
+            Lvalue::RegBusAlias(reg_bus) => {
+                if reg_bus_is_alias(reg_bus, symbols) {
+                    error_sink(CompilerError::new(
+                        CompilerErrorKind::AssignmentLhsContainsAlias,
+                        self.lhs.span(),
+                    ));
+                }
+            }
             Lvalue::RegisterArray(reg_array) => {
                 if reg_array.range.is_some() {
                     error_sink(CompilerError::new(
@@ -318,6 +337,14 @@ impl CheckOp for Assignment<'_> {
             Lvalue::Concat(concat) => {
                 for part in &concat.parts {
                     match part {
+                        ConcatPart::RegBusAlias(reg_bus) => {
+                            if reg_bus_is_alias(reg_bus, symbols) {
+                                error_sink(CompilerError::new(
+                                    CompilerErrorKind::AssignmentLhsContainsAlias,
+                                    self.lhs.span(),
+                                ));
+                            }
+                        }
                         ConcatPart::RegisterArray(reg_array) => {
                             if reg_array.range.is_some() {
                                 error_sink(CompilerError::new(
@@ -326,7 +353,7 @@ impl CheckOp for Assignment<'_> {
                                 ));
                             }
                         }
-                        ConcatPart::RegBus(_) | ConcatPart::Number(_) => (),
+                        ConcatPart::Number(_) => (),
                     }
                 }
             }
@@ -372,9 +399,16 @@ where
     }
 }
 
-fn reg_bus_is_input(reg_bus: &RegBus<'_>, symbols: &Symbols<'_>) -> bool {
+fn reg_bus_is_input(reg_bus: &RegBusAlias<'_>, symbols: &Symbols<'_>) -> bool {
     match symbols.symbol(reg_bus.ident.node) {
         Some(Symbol::Bus(_, BusKind::Input)) => true,
+        _ => false,
+    }
+}
+
+fn reg_bus_is_alias(reg_bus: &RegBusAlias<'_>, symbols: &Symbols<'_>) -> bool {
+    match symbols.symbol(reg_bus.ident.node) {
+        Some(Symbol::Alias(_, _)) => true,
         _ => false,
     }
 }

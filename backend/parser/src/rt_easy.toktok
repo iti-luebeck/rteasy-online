@@ -16,6 +16,7 @@ declaration -> Declaration<'s>:
     | declare_register { Declaration::Register($1) }
     | declare_input { Declaration::Bus($1) }
     | declare_bus { Declaration::Bus($1) }
+    | declare_alias { Declaration::Alias($1) }
     | declare_memory { Declaration::Memory($1) };
 
 declare_register_array -> DeclareRegisterArray<'s>:
@@ -32,6 +33,9 @@ declare_input -> DeclareBus<'s>:
     "declare" "input" sep1(reg_bus, ",") { DeclareBus { buses: $3, kind: BusKind::Input, span: $span.into() } };
 declare_bus -> DeclareBus<'s>:
     "declare" "bus" sep1(reg_bus, ",") { DeclareBus { buses: $3, kind: BusKind::Intern, span: $span.into() } };
+
+declare_alias -> DeclareAlias<'s>:
+    "declare" "alias" spanned(ident) "=" spanned(ident) spanned(bit_range) { DeclareAlias { alias: $3, ident: $5, range: $6, span: $span.into() } };
 
 declare_memory -> DeclareMemory<'s>:
     "declare" "memory" sep1(memory, ",") { DeclareMemory { memories: $3, span: $span.into() } };
@@ -74,7 +78,7 @@ assert -> Assert<'s>: "assert" expression { Assert { condition: $2, span: $span.
 lvalue -> Lvalue<'s>:
       concat { Lvalue::Concat($1) }
     | register_array { Lvalue::RegisterArray($1) }
-    | reg_bus { Lvalue::RegBus($1) };
+    | reg_bus { Lvalue::RegBusAlias($1) };
 assignment -> Assignment<'s>: lvalue "<-" expression { Assignment { lhs: $1, rhs: $3, span: $span.into() } };
 
 operation -> Operation<'s>:
@@ -181,12 +185,12 @@ expression_leaf -> Expression<'s>:
       "(" expression ")" { $2 }
     | concat { Atom::Concat($1).into() }
     | register_array { Atom::RegisterArray($1).into() }
-    | reg_bus { Atom::RegBus($1).into() }
+    | reg_bus { Atom::RegBusAlias($1).into() }
     | spanned(number) { Atom::Number($1).into() };
 
 // ...
 memory -> Memory<'s>: spanned(ident) memory_range { Memory { ident: $1, range: $2, span: $span.into() } };
-reg_bus -> RegBus<'s>: spanned(ident) opt(spanned(bit_range)) { RegBus { ident: $1, range: $2, span: $span.into() } };
+reg_bus -> RegBusAlias<'s>: spanned(ident) opt(spanned(bit_range)) { RegBusAlias { ident: $1, range: $2, span: $span.into() } };
 register_array -> RegisterArray<'s>: spanned(ident) "[" expression "]" opt(spanned(bit_range)) { RegisterArray { ident: $1, index: Box::new($3), range: $5, span: $span.into() } };
 concat -> Concat<'s>:
     concat_part many1(preceded(".", concat_part)) {
@@ -196,7 +200,7 @@ concat -> Concat<'s>:
     };
 concat_part -> ConcatPart<'s>:
       register_array { ConcatPart::RegisterArray($1) }
-    | reg_bus { ConcatPart::RegBus($1) }
+    | reg_bus { ConcatPart::RegBusAlias($1) }
     | spanned(number) { ConcatPart::Number($1) };
 
 // Common rules
@@ -245,6 +249,7 @@ label -> Label<'s>: exact(Token::Identifier) { Label($1) };
 "output" = Token::KeywordOutput
 "register" = Token::KeywordRegister
 "bus" = Token::KeywordBus
+"alias" = Token::KeywordAlias
 "memory" = Token::KeywordMemory
 "array" = Token::KeywordArray
 "nop" = Token::KeywordNop

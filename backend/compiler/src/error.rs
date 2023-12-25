@@ -93,6 +93,7 @@ pub enum CompilerErrorKind {
     AssignmentLhsContainsClockedAndUnclocked,
     AssignmentLhsContainsANonLvalue,
     AssignmentLhsContainsInput,
+    AssignmentLhsContainsAlias,
     RangeMismatch { range: BitRange, range_idx: BitRange },
     GotoBeforePipe,
     MutateAfterPipe,
@@ -129,6 +130,7 @@ impl CompilerErrorKind {
             AssignmentLhsContainsClockedAndUnclocked => 17,
             AssignmentLhsContainsANonLvalue => 18,
             AssignmentLhsContainsInput => 19,
+            AssignmentLhsContainsAlias => 30,
             RangeMismatch { .. } => 20,
             GotoBeforePipe => 21,
             MutateAfterPipe => 22,
@@ -208,6 +210,9 @@ impl fmt::Display for CompilerErrorKind {
             }
             AssignmentLhsContainsInput => {
                 write!(f, "cannot assign to input (inputs are read-only)")
+            }
+            AssignmentLhsContainsAlias => {
+                write!(f, "cannot assign to alias (aliases are read-only)")
             }
             RangeMismatch { range, range_idx } => {
                 write!(f, "bit range {} exceeds declaration {}", range_idx, range)

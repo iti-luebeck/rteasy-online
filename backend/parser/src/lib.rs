@@ -83,6 +83,7 @@ pub fn pretty_print_error(
                 KeywordOutput => "\"output\"",
                 KeywordRegister => "\"register\"",
                 KeywordBus => "\"bus\"",
+                KeywordAlias => "\"alias\"",
                 KeywordMemory => "\"memory\"",
                 KeywordArray => "\"array\"",
                 KeywordNop => "\"nop\"",

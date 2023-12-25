@@ -46,6 +46,8 @@ pub enum Token {
     KeywordRegister,
     #[token("bus")]
     KeywordBus,
+    #[token("alias")]
+    KeywordAlias,
     #[token("memory")]
     KeywordMemory,
     #[token("array")]
