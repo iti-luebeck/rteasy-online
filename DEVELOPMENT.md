@@ -8,11 +8,7 @@ If you want to build, test and run RTeasy-Online locally, you need to install a 
 
 - **Node and npm**: Node and npm are required to build the IDE and can be installed from [here](https://nodejs.org/en/).
 
-- **mdbook**: mdbook is required to build the book. ~~It can be installed by executing the command `cargo install mdbook`.~~ It currently needs to be installed via the following command because it uses a feature that has not yet been released:
-
-  ```
-  cargo install mdbook --git https://github.com/rust-lang/mdBook --rev refs/pull/1761/head
-  ```
+- **mdbook**: mdbook is required to build the book. It can be installed by executing the command `cargo install mdbook`.
 
 - **ghdl**: ghdl is required to run the vhdl tests and can be installed from [here](https://github.com/ghdl/ghdl).
 

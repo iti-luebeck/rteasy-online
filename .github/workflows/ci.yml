@@ -333,8 +333,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install mdbook
-        # TODO: run: cargo install mdbook --no-default-features --features search --vers "^0.4" --locked
-        run: cargo install mdbook --no-default-features --features search --git https://github.com/rust-lang/mdBook --rev refs/pull/1761/head
+        run: cargo install mdbook --no-default-features --features search --vers "^0.4" --locked
 
       - name: Build IDE
         run: |
