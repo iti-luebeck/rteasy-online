@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["MemoryFile",""],["Value",""]]});
+window.SIDEBAR_ITEMS = {"struct":["MemoryFile","Value"]};

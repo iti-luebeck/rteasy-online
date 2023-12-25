@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -8,10 +8,9 @@
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -33,15 +32,16 @@
         <link rel="stylesheet" href="../../theme/custom.css">
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -57,50 +57,81 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Tutorial</li><li class="chapter-item expanded "><a href="../../tutorial/lang/index.html"><strong aria-hidden="true">1.</strong> The Register Transfer Language RTeasy</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/declarations.html"><strong aria-hidden="true">1.1.</strong> Declarations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/algorithm.html"><strong aria-hidden="true">1.2.</strong> Algorithm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/lang/micro-operations.html"><strong aria-hidden="true">1.2.1.</strong> Micro Operations</a></li><li class="chapter-item expanded "><a href="../../tutorial/lang/expressions.html"><strong aria-hidden="true">1.2.2.</strong> Expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/ide/index.html"><strong aria-hidden="true">2.</strong> IDE User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/ide/editing-mode.html"><strong aria-hidden="true">2.1.</strong> Editing Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/simulation-mode.html"><strong aria-hidden="true">2.2.</strong> Simulation Mode</a></li><li class="chapter-item expanded "><a href="../../tutorial/ide/vhdl-export.html"><strong aria-hidden="true">2.3.</strong> VHDL Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/cli/index.html"><strong aria-hidden="true">3.</strong> CLI User Guide</a></li><li class="chapter-item expanded "><a href="../../tutorial/examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/examples/easy-multiplier.html"><strong aria-hidden="true">4.1.</strong> Easy Multiplier</a></li><li class="chapter-item expanded "><a href="../../tutorial/examples/register-register-machine.html" class="active"><strong aria-hidden="true">4.2.</strong> Register-Register-Machine</a></li></ol></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../tutorial/advanced/eval-expressions.html"><strong aria-hidden="true">5.1.</strong> Evaluation of Expressions</a></li><li class="chapter-item expanded "><a href="../../tutorial/advanced/memory-file-format.html"><strong aria-hidden="true">5.2.</strong> Memory File Format</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Compiler Error Index</li><li class="chapter-item expanded "><a href="../../compiler-error-index/errors.html"><strong aria-hidden="true">6.</strong> Errors</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../../appendix.html">Appendix</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -133,7 +164,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -149,7 +180,7 @@
 <p>Using the above block diagram, a simple processor is to be realized. For this a register array is to be used to manage the 8-bit source and destination registers. Via the shown data path instructions and data are loaded from the memory into the instruction register <em>IR</em>. The instruction format is given as follows:</p>
 <p><img src="../../images/rrm-instruction-format.png" alt="Instruction Format" /></p>
 <p>Each instruction consists of at least one byte. For jump instructions a second byte with the destination address is needed. The source and destination registers of the register array <em>Rm</em> and <em>Rn</em> are specified via two 2-bit wide numbers. A 4 bit wide number encodes the instruction to be executed. The processor has the following instructions for unsigned numbers:</p>
-<table><thead><tr><th>Instruction</th><th>Opcode</th><th>Description</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Instruction</th><th>Opcode</th><th>Description</th></tr></thead><tbody>
 <tr><td>ADD <em>Rm</em>, <em>Rn</em></td><td>0001</td><td>Adds <em>Rm</em> and <em>Rn</em>, result in <em>Rm</em></td></tr>
 <tr><td>SHL <em>Rm</em></td><td>0010</td><td>Shifts <em>Rm</em> by one bit to the left and sets the vacant bit to 0</td></tr>
 <tr><td>LOAD <em>Rm</em></td><td>0011</td><td>Loads <em>Rm</em> with the memory contents specified by <em>R3</em></td></tr>
@@ -157,6 +188,7 @@
 <tr><td>JMP address</td><td>0101</td><td>Continues the program execution at <em>address</em></td></tr>
 <tr><td>BREQ address</td><td>0110</td><td>Continues the program execution at <em>address</em> if the result of the last result of the last operation was 0</td></tr>
 </tbody></table>
+</div>
 <p>The arithmetic logic unit (ALU) does not consider overflows, which means that in this case only the lower 8 bits of the result are output. To be able to execute the BREQ instruction more easily, the ALU has an additional flag <em>Z</em>, which takes the value value 1 if the result of the last operation was 0. Otherwise Z is set to 0.</p>
 <h2 id="draft-program"><a class="header" href="#draft-program">Draft Program</a></h2>
 <p>First you can see from the block diagram which registers, memories and register arrays are needed:</p>
@@ -363,7 +395,7 @@ END:
 00000000 # | 7       | 0000   | 00 | 00 | -           |
 </code></pre>
 <p>After you have set up the memory, you can start simulating the program. The table below shows what effect the memory content should have.</p>
-<table><thead><tr><th>Address</th><th>Description</th><th>Rm</th><th>Rn</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Address</th><th>Description</th><th>Rm</th><th>Rn</th></tr></thead><tbody>
 <tr><td>0</td><td>Load the value at address <code>R3</code> (= 0) into register array at position <em>m</em> (= 0)</td><td>00110000</td><td>x</td></tr>
 <tr><td>1</td><td>Add register at position <em>m</em> (= 1) and at position <em>n</em> (= 0)</td><td>00110000</td><td>00110000</td></tr>
 <tr><td>2</td><td>Shift register at position <em>m</em> (= 1) by 1 bit to the left</td><td>01100000</td><td>x</td></tr>
@@ -373,7 +405,7 @@ END:
 <tr><td>6</td><td>(should not be reached!) If <code>Z=1</code> jump to value from next address</td><td>x</td><td>x</td></tr>
 <tr><td>7</td><td>Address to jump to</td><td>x</td><td>x</td></tr>
 </tbody></table>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
@@ -382,7 +414,7 @@ END:
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../tutorial/advanced/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../tutorial/advanced/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -396,7 +428,7 @@ END:
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../tutorial/advanced/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../tutorial/advanced/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -406,21 +438,22 @@ END:
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
 
-        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
 
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>

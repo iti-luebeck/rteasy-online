@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["json",""]]});
+window.SIDEBAR_ITEMS = {"mod":["json"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["SynthErrorKind",""]],"struct":[["BackendError",""],["SynthError",""]],"type":[["Result",""]]});
+window.SIDEBAR_ITEMS = {"enum":["SynthErrorKind"],"struct":["BackendError","SynthError"],"type":["Result"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["BackendSimulator",""]]});
+window.SIDEBAR_ITEMS = {"struct":["BackendSimulator"]};

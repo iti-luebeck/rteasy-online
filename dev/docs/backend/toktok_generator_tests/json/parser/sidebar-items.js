@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["json",""]]});
+window.SIDEBAR_ITEMS = {"fn":["json"]};

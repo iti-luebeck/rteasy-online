@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["RenderError",""]],"type":[["Result",""]]});
+window.SIDEBAR_ITEMS = {"enum":["RenderError"],"type":["Result"]};

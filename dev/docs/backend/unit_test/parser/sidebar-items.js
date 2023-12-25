@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Token",""]],"fn":[["parse",""],["pretty_print_error",""]]});
+window.SIDEBAR_ITEMS = {"enum":["Token"],"fn":["parse","pretty_print_error"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Span",""]],"struct":[["Error",""]]});
+window.SIDEBAR_ITEMS = {"enum":["Span"],"struct":["Error"]};

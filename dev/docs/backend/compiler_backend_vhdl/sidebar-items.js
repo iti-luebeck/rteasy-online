@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["error",""]],"struct":[["BackendVhdl",""]]});
+window.SIDEBAR_ITEMS = {"mod":["error"],"struct":["BackendVhdl"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["process",""]],"type":[["Result",""]]});
+window.SIDEBAR_ITEMS = {"fn":["process"],"type":["Result"]};

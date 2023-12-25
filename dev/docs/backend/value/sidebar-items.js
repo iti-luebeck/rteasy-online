@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Bit",""],["SignedValue",""]],"struct":[["Value",""],["ValueSlice",""]]});
+window.SIDEBAR_ITEMS = {"enum":["Bit","SignedValue"],"struct":["Value","ValueSlice"]};

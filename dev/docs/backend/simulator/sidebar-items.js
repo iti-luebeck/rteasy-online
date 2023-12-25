@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["StepResultKind",""]],"struct":[["Changed",""],["Simulator",""],["StepResult",""]],"type":[["Error",""],["Result",""]]});
+window.SIDEBAR_ITEMS = {"enum":["StepResultKind"],"struct":["Changed","Simulator","StepResult"],"type":["Error","Result"]};

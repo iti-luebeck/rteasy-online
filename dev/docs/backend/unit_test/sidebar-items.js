@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["run",""]],"mod":[["parser",""],["unit_test",""]]});
+window.SIDEBAR_ITEMS = {"fn":["run"],"mod":["parser","unit_test"]};

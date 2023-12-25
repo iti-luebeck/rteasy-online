@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SplitVec",""]]});
+window.SIDEBAR_ITEMS = {"struct":["SplitVec"]};
