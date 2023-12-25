@@ -42,10 +42,14 @@ pub fn generate_declarations<'s>(mir_declarations: &[mir::Declaration<'s>]) -> D
                         .iter()
                         .find(|(name, _, _)| name.0 == memory.range.data_register.0)
                         .unwrap();
+                    let ar_range = match memory.range.address_range {
+                        Some(range) => generate_bit_range(Some(range)),
+                        None => *ar_range,
+                    };
 
                     declarations.memories.push((
                         gen_ident(memory.ident),
-                        (ar_name.clone(), *ar_range, *ar_kind),
+                        (ar_name.clone(), ar_range, *ar_kind),
                         (dr_name.clone(), *dr_range, *dr_kind),
                     ));
                 }
