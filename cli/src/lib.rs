@@ -41,6 +41,12 @@ pub enum Command {
         module_name: Option<String>,
         #[structopt(long)]
         memories: Option<Vec<String>>,
+        #[structopt(
+            short = "d",
+            long = "debug",
+            help = "Enables debug interface in the exported VHDL code"
+        )]
+        is_debug: bool,
     },
 }
 
@@ -55,8 +61,8 @@ pub fn run(opt: Opt) -> Result<String> {
             commands::test(file, test_file, ansi_colors)?;
             "Tests passed"
         }
-        Command::GenVhdl { rt_file, vhdl_file, module_name, memories } => {
-            commands::gen_vhdl(rt_file, vhdl_file, module_name, memories, ansi_colors)?;
+        Command::GenVhdl { rt_file, vhdl_file, module_name, memories, is_debug } => {
+            commands::gen_vhdl(rt_file, vhdl_file, module_name, memories, is_debug, ansi_colors)?;
             "Generated VHDL code"
         }
     };

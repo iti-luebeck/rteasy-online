@@ -12,6 +12,7 @@ fn test() {
             vhdl_file: vhdl_file.path().to_owned(),
             module_name: Some("my_mem_module".to_string()),
             memories: Some(vec!["MEM".to_string(), file("MEM.rtmem").to_str().unwrap().to_owned()]),
+            is_debug: false,
         },
     };
     rt_easy_cli::run(opt).unwrap();

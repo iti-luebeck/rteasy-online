@@ -16,6 +16,7 @@ use temply::Template;
 pub fn render(
     vhdl: &Vhdl,
     module_name: &str,
+    is_debug: bool,
     memories: HashMap<Ident, MemoryFile>,
 ) -> Result<String, RenderError> {
     // Trim module name
@@ -28,6 +29,7 @@ pub fn render(
     let mut buffer = String::new();
     VhdlTemplate {
         module_name,
+        is_debug,
         statements: &vhdl.statements,
         criteria: &vhdl.signals.criteria,
         operations: &vhdl.signals.operations,
@@ -44,6 +46,7 @@ pub fn render(
 #[template = "./impl_render/template.vhdl"]
 struct VhdlTemplate<'a> {
     module_name: &'a str,
+    is_debug: bool,
     statements: &'a [Statement],
     criteria: &'a IndexSet<Expression>,  // Index = CriterionId
     operations: &'a IndexSet<Operation>, // Index = OperationId
@@ -53,14 +56,36 @@ struct VhdlTemplate<'a> {
 }
 
 impl<'a> VhdlTemplate<'a> {
-    fn any_port(&self) -> bool {
+    fn any_input(&self) -> bool {
         self.declarations.buses.iter().any(|(_, _, kind)| *kind == BusKind::Input)
-            || self.declarations.registers.iter().any(|(_, _, kind)| *kind == RegisterKind::Output)
+    }
+
+    fn any_output(&self) -> bool {
+        self.declarations.registers.iter().any(|(_, _, kind)| *kind == RegisterKind::Output)
+    }
+
+    fn _any_bus(&self) -> bool {
+        self.declarations.buses.iter().any(|(_, _, kind)| *kind == BusKind::Intern)
+    }
+
+    fn any_register(&self) -> bool {
+        self.declarations.registers.iter().any(|(_, _, kind)| *kind == RegisterKind::Intern)
+    }
+
+    fn any_register_array(&self) -> bool {
+        self.declarations.register_arrays.len() > 0
+    }
+
+    fn any_memory(&self) -> bool {
+        self.declarations.memories.len() > 0
+    }
+
+    fn any_debug(&self) -> bool {
+        self.is_debug && (self.any_register() || self.any_register_array() || self.any_memory())
     }
 
     fn ports_input(&self) -> impl Iterator<Item = (&'a Ident, BitRange, bool)> + '_ {
-        let any_output =
-            self.declarations.registers.iter().any(|(_, _, kind)| *kind == RegisterKind::Output);
+        let any_after = self.any_output() || self.any_debug();
         let inputs = self
             .declarations
             .buses
@@ -70,12 +95,13 @@ impl<'a> VhdlTemplate<'a> {
         let len = inputs.len();
 
         inputs.into_iter().enumerate().map(move |(idx, (name, range, _))| {
-            let is_last = !any_output && idx == len - 1;
+            let is_last = !any_after && idx == len - 1;
             (name, *range, is_last)
         })
     }
 
     fn ports_output(&self) -> impl Iterator<Item = (&'a Ident, BitRange, bool)> + '_ {
+        let any_after = self.any_debug();
         let outputs = self
             .declarations
             .registers
@@ -85,8 +111,51 @@ impl<'a> VhdlTemplate<'a> {
         let len = outputs.len();
 
         outputs.into_iter().enumerate().map(move |(idx, (name, range, _))| {
-            let is_last = idx == len - 1;
+            let is_last = !any_after && idx == len - 1;
             (name, *range, is_last)
+        })
+    }
+
+    fn ports_dbg_register(&self) -> impl Iterator<Item = (&'a Ident, BitRange, bool)> + '_ {
+        let any_after = self.any_register_array() || self.any_memory();
+        let register = self
+            .declarations
+            .registers
+            .iter()
+            .filter(|_| self.is_debug)
+            .filter(|(_, _, kind)| *kind == RegisterKind::Intern)
+            .collect::<Vec<_>>();
+        let len = register.len();
+
+        register.into_iter().enumerate().map(move |(idx, (name, range, _))| {
+            let is_last = !any_after && idx == len - 1;
+            (name, *range, is_last)
+        })
+    }
+
+    fn ports_dbg_register_array(
+        &self,
+    ) -> impl Iterator<Item = (&'a Ident, BitRange, usize, bool)> + '_ {
+        let any_after = self.any_memory();
+        let reister_array =
+            self.declarations.register_arrays.iter().filter(|_| self.is_debug).collect::<Vec<_>>();
+        let len = reister_array.len();
+
+        reister_array.into_iter().enumerate().map(move |(idx, (name, range, size))| {
+            let is_last = !any_after && idx == len - 1;
+            (name, *range, *size, is_last)
+        })
+    }
+
+    fn ports_dbg_memory(&self) -> impl Iterator<Item = (&'a Ident, BitRange, BitRange, bool)> + '_ {
+        let any_after = false;
+        let memory =
+            self.declarations.memories.iter().filter(|_| self.is_debug).collect::<Vec<_>>();
+        let len = memory.len();
+
+        memory.into_iter().enumerate().map(move |(idx, (name, ar, dr))| {
+            let is_last = !any_after && idx == len - 1;
+            (name, ar.1.normalize(), dr.1.normalize(), is_last)
         })
     }
 

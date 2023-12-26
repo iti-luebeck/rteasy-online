@@ -16,7 +16,7 @@ fn memory_not_found() {
     let vhdl = util::compile(SOURCE);
     let memories = HashMap::from([(Ident("MEM_NOT_FOUND".to_string()), MemoryFile::empty(2, 4))]);
 
-    match vhdl.render("my_module", memories) {
+    match vhdl.render("my_module", false, memories) {
         Ok(_) => panic!("expected error"),
         Err(err) => match err {
             RenderError::MemoryNotFound(name) => assert_eq!(name.0, "MEM_NOT_FOUND"),
@@ -37,7 +37,7 @@ fn invalid_memory_size() {
     let vhdl = util::compile(SOURCE);
     let memories = HashMap::from([(Ident("MEM".to_string()), MemoryFile::empty(2, 5))]);
 
-    match vhdl.render("my_module", memories) {
+    match vhdl.render("my_module", false, memories) {
         Ok(_) => panic!("expected error"),
         Err(err) => match err {
             RenderError::InvalidMemorySize { name, expected, actual } => {

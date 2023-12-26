@@ -31,9 +31,10 @@ impl Vhdl {
     pub fn render(
         &self,
         module_name: &str,
+        is_debug: bool,
         memories: std::collections::HashMap<Ident, memory_file::MemoryFile>,
     ) -> Result<String, RenderError> {
-        crate::impl_render::render(self, module_name, memories)
+        crate::impl_render::render(self, module_name, is_debug, memories)
     }
 }
 
@@ -332,6 +333,13 @@ impl BitRange {
     pub fn size(&self) -> usize {
         match *self {
             BitRange::Downto(a, b) | BitRange::To(b, a) => a - b + 1,
+        }
+    }
+
+    pub fn normalize(&self) -> Self {
+        match *self {
+            BitRange::Downto(a, b) => BitRange::Downto(a - b, 0),
+            BitRange::To(a, b) => BitRange::To(0, b - a),
         }
     }
 }

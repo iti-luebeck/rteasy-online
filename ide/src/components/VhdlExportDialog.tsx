@@ -5,6 +5,8 @@ import {
   Button,
   InputGroup,
   HTMLTable,
+  Switch,
+  FormGroup,
 } from "@blueprintjs/core";
 
 import { useFilePicker } from "../hooks/useFilePicker";
@@ -36,6 +38,7 @@ const VhdlExportDialog: React.FC<Props> = ({ isOpen, onClose }) => {
   const [memories, setMemories] = useState<Memory[]>([]);
   const [renderError, setRenderError] = useState("");
   const [moduleName, setModuleName] = useState("");
+  const [isDebug, setIsDebug] = useState(false);
 
   // Set memory file by name
   const setMemoryFileByName = (
@@ -108,6 +111,7 @@ const VhdlExportDialog: React.FC<Props> = ({ isOpen, onClose }) => {
     if (name === "") name = DEFAULT_NAME;
     const res = vhdl.value.render(
       name,
+      isDebug,
       memories
         .filter((mem) => mem.file)
         .map((mem) => ({ name: mem.name, file: mem.file!.content }))
@@ -129,54 +133,66 @@ const VhdlExportDialog: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
     <Dialog title="VHDL Export" onClose={onClose} isOpen={isOpen}>
       <div className={Classes.DIALOG_BODY}>
-        <div style={{ marginBottom: 16 }}>
-          <strong>Module name</strong>
-        </div>
-        <div style={{ maxWidth: 300 }}>
-          <InputGroup
-            placeholder={DEFAULT_NAME}
-            value={moduleName}
-            onChange={(e) => setModuleName(e.target.value)}
-          />
+        <div style={{ maxWidth: 300,  }}>
+          <FormGroup
+            label="Module Name"
+            labelFor="module-name"
+            
+          >
+            <InputGroup
+              placeholder={DEFAULT_NAME}
+              id="module-name"
+              value={moduleName}
+              onChange={(e) => setModuleName(e.target.value)}
+            />
+          </FormGroup>
+          
+          <FormGroup label="Flags">
+            <Switch
+              checked={isDebug}
+              onChange={(e) => setIsDebug((e.target as HTMLInputElement).checked)}
+              label="Enable Debug Interface"
+            />
+          </FormGroup>
+
         </div>
         {memories.length !== 0 && (
           <>
-            <div style={{ margin: "16px 0" }}>
-              <strong>Memories</strong>
-            </div>
-            <HTMLTable width="100%" bordered condensed>
-              <thead>
-                <tr>
-                  <th style={{ width: "20%" }}>Name</th>
-                  <th>Content</th>
-                </tr>
-              </thead>
-              <tbody>
-                {memories.map((mem) => (
-                  <tr key={mem.name}>
-                    <td>{mem.name}</td>
-                    <td>
-                      {mem.file ? (
-                        <>
-                          <span>{mem.file.name}</span>
-                          <Button
-                            icon="delete"
-                            onClick={() => setMemoryFileByName(mem.name, null)}
-                            style={{ marginLeft: "16px" }}
-                            minimal
-                            small
-                          />
-                        </>
-                      ) : (
-                        <Button onClick={() => openLoadMemory(mem.name)} small>
-                          Load
-                        </Button>
-                      )}
-                    </td>
+            <FormGroup label="Memories">
+              <HTMLTable width="100%" bordered condensed>
+                <thead>
+                  <tr>
+                    <th style={{ width: "20%" }}>Name</th>
+                    <th>Content</th>
                   </tr>
-                ))}
-              </tbody>
-            </HTMLTable>
+                </thead>
+                <tbody>
+                  {memories.map((mem) => (
+                    <tr key={mem.name}>
+                      <td>{mem.name}</td>
+                      <td>
+                        {mem.file ? (
+                          <>
+                            <span>{mem.file.name}</span>
+                            <Button
+                              icon="delete"
+                              onClick={() => setMemoryFileByName(mem.name, null)}
+                              style={{ marginLeft: "16px" }}
+                              minimal
+                              small
+                            />
+                          </>
+                        ) : (
+                          <Button onClick={() => openLoadMemory(mem.name)} small>
+                            Load
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </HTMLTable>
+            </FormGroup>
           </>
         )}
         {renderError !== "" && (

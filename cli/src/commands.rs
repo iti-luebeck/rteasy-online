@@ -61,6 +61,7 @@ pub fn gen_vhdl(
     vhdl_file: PathBuf,
     module_name: Option<String>,
     memories: Option<Vec<String>>,
+    is_debug: bool,
     ansi_colors: bool,
 ) -> Result<()> {
     // Build the vhdl
@@ -113,7 +114,7 @@ pub fn gen_vhdl(
     };
 
     // Render
-    let rendered = vhdl.render(module_name, memories).context("Failed to render")?;
+    let rendered = vhdl.render(module_name, is_debug, memories).context("Failed to render")?;
 
     // Save to file
     fs::write(&vhdl_file, rendered)

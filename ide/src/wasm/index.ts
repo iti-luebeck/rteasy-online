@@ -345,6 +345,7 @@ export class Vhdl {
   memories = (): string[] => this.vhdlWasm.memories();
   render = (
     moduleName: string,
+    isDebug: boolean,
     memories: { name: string; file: string }[]
   ): RenderResult<string> => {
     try {
@@ -355,7 +356,7 @@ export class Vhdl {
       }
       return {
         tag: "Ok",
-        value: this.vhdlWasm.render(moduleName, memoriesArg),
+        value: this.vhdlWasm.render(moduleName, isDebug, memoriesArg),
       };
     } catch (e) {
       return { tag: "Error", error: e as string };

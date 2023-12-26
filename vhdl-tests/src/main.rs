@@ -202,7 +202,7 @@ impl Tb {
         }
 
         // Render and save vhdl
-        fs::write(self.target_dir.join(self.vhdl_file_name()), vhdl.render(&self.name, memories)?)?;
+        fs::write(self.target_dir.join(self.vhdl_file_name()), vhdl.render(&self.name, false, memories)?)?;
 
         Ok(())
     }

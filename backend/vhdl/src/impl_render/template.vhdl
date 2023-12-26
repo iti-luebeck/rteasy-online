@@ -188,7 +188,8 @@ ENTITY CU_{{ module_name }} IS
         clock : IN STD_LOGIC;
         reset : IN STD_LOGIC;
         c : OUT STD_LOGIC_VECTOR({{ operations.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0);
-        k : IN STD_LOGIC_VECTOR({{ criteria.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0)
+        k : IN STD_LOGIC_VECTOR({{ criteria.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0){% if self.is_debug %};
+        dbg_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_ilog2().unwrap_or(0) }} DOWNTO 0){% endif %}
     );
     ATTRIBUTE KEEP_HIERARCHY : STRING;
     ATTRIBUTE KEEP_HIERARCHY OF CU_{{ module_name }} : ENTITY IS "YES";
@@ -270,6 +271,18 @@ BEGIN
                 NULL;
         END CASE;
     END PROCESS;
+
+    {% if self.is_debug %}
+    DbgState : PROCESS (state)
+    BEGIN
+        CASE state IS
+            {% for (idx, statement) in statements.iter().enumerate() %}
+                WHEN {{ statement.label }} => dbg_state <= std_logic_vector(to_signed({{ idx }}, dbg_state'length));
+            {% endfor %}
+            WHEN OTHERS => NULL;
+        END CASE;
+    END PROCESS;
+    {% endif %}
 END Behavioral;
 
 -------------------------------------------------------------------------------
@@ -285,7 +298,7 @@ ENTITY EU_{{ module_name }} IS
     PORT (
         clock : IN STD_LOGIC;
         c : IN STD_LOGIC_VECTOR({{ operations.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0);
-        k : OUT STD_LOGIC_VECTOR({{ criteria.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0){% if self.any_port() %};{% endif %}
+        k : OUT STD_LOGIC_VECTOR({{ criteria.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0){% if self.any_input() || self.any_output() || self.any_debug() %};{% endif %}
 
         -- Inputs
         {% for (name, range, is_last) in self.ports_input() %}
@@ -295,6 +308,23 @@ ENTITY EU_{{ module_name }} IS
         -- Outputs
         {% for (name, range, is_last) in self.ports_output() %}
             output_{{ name }} : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
+        {% endfor %}
+
+        -- Debug Registers
+        {% for (name, range, is_last) in self.ports_dbg_register() %}
+            dbg_{{ name }} : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
+        {% endfor %}
+
+        -- Debug Register Arrays
+        {% for (name, range, size, is_last) in self.ports_dbg_register_array() %}
+            dbg_{{ name }}_a : IN  unsigned({{ size.checked_ilog2().unwrap_or(0) }} DOWNTO 0) := (OTHERS => '0');
+            dbg_{{ name }}_d : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
+        {% endfor %}
+
+        -- Debug Memories
+        {% for (name, ar_range, dr_range, is_last) in self.ports_dbg_memory() %}
+            dbg_{{ name }}_a : IN  unsigned{{ RenderAsVhdl(ar_range) }} := (OTHERS => '0');
+            dbg_{{ name }}_d : OUT unsigned{{ RenderAsVhdl(dr_range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
         {% endfor %}
     );
     ATTRIBUTE KEEP_HIERARCHY : STRING;
@@ -346,6 +376,21 @@ BEGIN
     -- Map registers to output
     {% for (name, _, _) in declarations.registers.iter().filter(|(_, _, kind)| *kind == RegisterKind::Output) %}
         output_{{ name }} <= register_{{ name }};
+    {% endfor %}
+
+    -- Debug Registers
+    {% for (name, _, _) in self.ports_dbg_register() %}
+        dbg_{{ name }} <= register_{{ name }};
+    {% endfor %}
+
+    -- Debug Register Arrays
+    {% for (name, _, _, _) in self.ports_dbg_register_array() %}
+        dbg_{{ name }}_d <= register_array_{{ name }}(to_integer(dbg_{{ name }}_a));
+    {% endfor %}
+
+    -- Debug Memories
+    {% for (name, _, _, _) in self.ports_dbg_memory() %}
+        dbg_{{ name }}_d <= memory_{{ name }}(to_integer(dbg_{{ name }}_a));
     {% endfor %}
 
     -- Unclocked operations
