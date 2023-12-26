@@ -17,7 +17,12 @@ impl Vhdl {
         memories.into_iter().map(Into::into).collect()
     }
 
-    pub fn render(&self, module_name: String, is_debug: bool, memories_arg: Vec<JsValue>) -> Result<String> {
+    pub fn render(
+        &self,
+        module_name: String,
+        is_debug: bool,
+        memories_arg: Vec<JsValue>,
+    ) -> Result<String> {
         let mut memories = HashMap::new();
 
         let mut memories_arg = memories_arg.into_iter();
@@ -32,6 +37,8 @@ impl Vhdl {
             memories.insert(Ident(name), file);
         }
 
-        self.0.render(&module_name, is_debug, memories).map_err(|e| JsValue::from_str(&e.to_string()))
+        self.0
+            .render(&module_name, is_debug, memories)
+            .map_err(|e| JsValue::from_str(&e.to_string()))
     }
 }
