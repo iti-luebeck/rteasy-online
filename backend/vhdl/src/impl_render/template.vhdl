@@ -189,7 +189,8 @@ ENTITY CU_{{ module_name }} IS
         reset : IN STD_LOGIC;
         c : OUT STD_LOGIC_VECTOR({{ operations.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0);
         k : IN STD_LOGIC_VECTOR({{ criteria.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0){% if self.is_debug %};
-        dbg_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_ilog2().unwrap_or(0) }} DOWNTO 0){% endif %}
+        dbg_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_sub(1).unwrap_or(1).checked_ilog2().unwrap_or(0) }} DOWNTO 0);
+        dbg_next_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_sub(1).unwrap_or(1).checked_ilog2().unwrap_or(0) }} DOWNTO 0){% endif %}
     );
     ATTRIBUTE KEEP_HIERARCHY : STRING;
     ATTRIBUTE KEEP_HIERARCHY OF CU_{{ module_name }} : ENTITY IS "YES";
@@ -273,15 +274,9 @@ BEGIN
     END PROCESS;
 
     {% if self.is_debug %}
-    DbgState : PROCESS (state)
-    BEGIN
-        CASE state IS
-            {% for (idx, statement) in statements.iter().enumerate() %}
-                WHEN {{ statement.label }} => dbg_state <= std_logic_vector(to_signed({{ idx }}, dbg_state'length));
-            {% endfor %}
-            WHEN OTHERS => NULL;
-        END CASE;
-    END PROCESS;
+    -- Debug state
+    dbg_state      <= std_logic_vector(to_signed(state_type'pos(state),      dbg_state'length));
+    dbg_next_state <= std_logic_vector(to_signed(state_type'pos(next_state), dbg_state'length));
     {% endif %}
 END Behavioral;
 
@@ -310,6 +305,7 @@ ENTITY EU_{{ module_name }} IS
             output_{{ name }} : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
         {% endfor %}
 
+        {% if self.is_debug %}
         -- Debug Registers
         {% for (name, range, is_last) in self.ports_dbg_register() %}
             dbg_{{ name }} : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
@@ -317,7 +313,7 @@ ENTITY EU_{{ module_name }} IS
 
         -- Debug Register Arrays
         {% for (name, range, size, is_last) in self.ports_dbg_register_array() %}
-            dbg_{{ name }}_a : IN  unsigned({{ size.checked_ilog2().unwrap_or(0) }} DOWNTO 0) := (OTHERS => '0');
+            dbg_{{ name }}_a : IN  unsigned({{ size.checked_ilog2().checked_sub(1).unwrap_or(0) }} DOWNTO 0) := (OTHERS => '0');
             dbg_{{ name }}_d : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
         {% endfor %}
 
@@ -326,6 +322,7 @@ ENTITY EU_{{ module_name }} IS
             dbg_{{ name }}_a : IN  unsigned{{ RenderAsVhdl(ar_range) }} := (OTHERS => '0');
             dbg_{{ name }}_d : OUT unsigned{{ RenderAsVhdl(dr_range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
         {% endfor %}
+        {% endif %}
     );
     ATTRIBUTE KEEP_HIERARCHY : STRING;
     ATTRIBUTE KEEP_HIERARCHY OF EU_{{ module_name }} : ENTITY IS "YES";
@@ -378,6 +375,7 @@ BEGIN
         output_{{ name }} <= register_{{ name }};
     {% endfor %}
 
+{% if self.is_debug %}
     -- Debug Registers
     {% for (name, _, _) in self.ports_dbg_register() %}
         dbg_{{ name }} <= register_{{ name }};
@@ -392,6 +390,7 @@ BEGIN
     {% for (name, _, _, _) in self.ports_dbg_memory() %}
         dbg_{{ name }}_d <= memory_{{ name }}(to_integer(dbg_{{ name }}_a));
     {% endfor %}
+{% endif %}
 
     -- Unclocked operations
     BusMux : PROCESS {{ self.sensitivity_list_bus_mux() }}
