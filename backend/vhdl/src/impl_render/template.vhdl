@@ -313,7 +313,7 @@ ENTITY EU_{{ module_name }} IS
 
         -- Debug Register Arrays
         {% for (name, range, size, is_last) in self.ports_dbg_register_array() %}
-            dbg_{{ name }}_a : IN  unsigned({{ size.checked_ilog2().checked_sub(1).unwrap_or(0) }} DOWNTO 0) := (OTHERS => '0');
+            dbg_{{ name }}_a : IN  unsigned({{ size.checked_ilog2().unwrap_or(1).checked_sub(1).unwrap_or(0) }} DOWNTO 0) := (OTHERS => '0');
             dbg_{{ name }}_d : OUT unsigned{{ RenderAsVhdl(range) }} := (OTHERS => '0'){% if !is_last %};{% endif %}
         {% endfor %}
 
