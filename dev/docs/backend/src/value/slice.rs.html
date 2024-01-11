@@ -206,6 +206,16 @@
 <a href="#206" id="206">206</a>
 <a href="#207" id="207">207</a>
 <a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
 </pre></div><pre class="rust"><code><span class="kw">use super</span>::{Bit, Value};
 <span class="kw">use </span>std::borrow::ToOwned;
 <span class="kw">use </span>std::hash::{Hash, Hasher};
@@ -254,6 +264,16 @@
 
     <span class="kw">pub fn </span>as_hex(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="self">self</span>.as_radix(<span class="number">16</span>)
+    }
+
+    <span class="kw">pub fn </span>as_hex_with_leading_zeros(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="kw">let </span>result = <span class="self">self</span>.as_hex();
+        <span class="kw">let </span>len = (<span class="self">self</span>.size() <span class="kw">as </span>i32) / <span class="number">4 </span>- (result.len() <span class="kw">as </span>i32);
+        <span class="kw">if </span>len &lt;= <span class="number">0 </span>{
+            result
+        } <span class="kw">else </span>{
+            <span class="macro">format!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="string">&quot;0&quot;</span>.repeat(len <span class="kw">as </span>usize), result)
+        }
     }
 
     <span class="doccomment">/// # Panics
