@@ -71,7 +71,7 @@ const InputValue: React.FC<Props | PropsWithBaseSelect> = (props) => {
       <div style={{ flex: "1" }}>
         <InputGroup
           small
-          style={{ backgroundColor: props.highlight ? "yellow" : undefined }}
+          style={{ backgroundColor: props.highlight ? "yellow" : undefined, fontFamily: `Consolas, "Courier New", monospace`, fontSize: "14px" }}
           value={valueDisplay}
           onChange={(e) => setFocused({ inputKey, value: e.target.value })}
           onFocus={() => setFocused({ inputKey, value: value })}

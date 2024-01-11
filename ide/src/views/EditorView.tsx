@@ -12,6 +12,7 @@ const EditorView: React.FC<Props> = () => {
 
   if (globalModel.editor !== null && globalModel.tag === "Run") {
     const simState = globalModel.simulator.getSimState();
+    const simIsRunning = globalModel.simulator.isRunning();
     let decorations = [];
 
     // Breakpoints (TODO: Use memo to calc ranges)
@@ -65,6 +66,10 @@ const EditorView: React.FC<Props> = () => {
       oldDecorations.current,
       decorations
     );
+
+    if (simState && !simIsRunning) {
+      globalModel.editor.revealLinesInCenter(simState.span.startLineNumber, simState.span.endLineNumber, monaco.editor.ScrollType.Smooth);
+    }
   }
 
   // Listener: onMouseDown

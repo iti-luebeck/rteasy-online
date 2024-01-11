@@ -48,6 +48,16 @@ impl ValueSlice {
         self.as_radix(16)
     }
 
+    pub fn as_hex_with_leading_zeros(&self) -> String {
+        let result = self.as_hex();
+        let len = (self.size() as i32) / 4 - (result.len() as i32);
+        if len <= 0 {
+            result
+        } else {
+            format!("{}{}", "0".repeat(len as usize), result)
+        }
+    }
+
     /// # Panics
     ///
     /// Panics if given a radix larger than 36.

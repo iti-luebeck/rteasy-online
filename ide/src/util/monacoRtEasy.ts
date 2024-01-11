@@ -19,7 +19,7 @@ export function setUpRtEasyLang(monaco: Monaco) {
       "default",
       "assert",
     ],
-    typeKeywords: ["input", "output", "register", "bus", "memory", "array"],
+    typeKeywords: ["input", "output", "register", "bus", "memory", "array", "alias"],
     operators: [
       "=",
       "<>",

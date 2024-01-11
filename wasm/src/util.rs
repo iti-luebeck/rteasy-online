@@ -36,7 +36,7 @@ impl ValueSliceExt for ValueSlice {
         match base {
             "BIN" => Ok(self.as_bin(true)),
             "DEC" => Ok(self.as_dec()),
-            "HEX" => Ok(self.as_hex()),
+            "HEX" => Ok(self.as_hex_with_leading_zeros()),
             _ => Err(JsError::from_str(&format!("invalid base: {}", base))),
         }
     }
