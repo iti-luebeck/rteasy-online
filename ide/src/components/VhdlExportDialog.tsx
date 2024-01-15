@@ -40,6 +40,8 @@ const VhdlExportDialog: React.FC<Props> = ({ isOpen, onClose }) => {
   const [moduleName, setModuleName] = useState("");
   const [isDebug, setIsDebug] = useState(false);
 
+  const moduleNameValid = moduleName === "" || moduleName.trim().match(/^[a-z][a-z_0-9]*$/gi) !== null;
+
   // Set memory file by name
   const setMemoryFileByName = (
     name: string,
@@ -217,6 +219,7 @@ const VhdlExportDialog: React.FC<Props> = ({ isOpen, onClose }) => {
                   )
               )
             }
+            disabled={!moduleNameValid}
           >
             Copy to clipboard
           </Button>
@@ -224,6 +227,7 @@ const VhdlExportDialog: React.FC<Props> = ({ isOpen, onClose }) => {
             onClick={() =>
               doExport((name, content) => downloadFile(`${name}.vhdl`, content))
             }
+            disabled={!moduleNameValid}
           >
             Download
           </Button>
