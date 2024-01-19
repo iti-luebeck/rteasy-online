@@ -41,11 +41,15 @@ impl ValueSlice {
     }
 
     pub fn as_dec(&self) -> String {
-        self.as_radix(10)
+        self.as_radix(false, 10)
+    }
+
+    pub fn as_dec_signed(&self) -> String {
+        self.as_radix(true, 10)
     }
 
     pub fn as_hex(&self) -> String {
-        self.as_radix(16)
+        self.as_radix(false, 16)
     }
 
     pub fn as_hex_with_leading_zeros(&self) -> String {
@@ -61,13 +65,19 @@ impl ValueSlice {
     /// # Panics
     ///
     /// Panics if given a radix larger than 36.
-    fn as_radix(&self, radix: u32) -> String {
+    fn as_radix(&self, signed: bool, radix: u32) -> String {
         if self.is_zero() {
             return "0".to_string();
         }
 
         let mut value = self.to_owned();
         let mut result = Vec::new();
+        let negative = signed && value.bits.last().unwrap() == &Bit::One && value.bits.len() > 1;
+
+        if negative {
+            value = -value;
+            value.remove_leading_zeros();
+        }
 
         while !value.is_zero() {
             let mut r = 0;
@@ -86,6 +96,10 @@ impl ValueSlice {
             value = Value { bits: value_rest.into_iter().rev().collect() };
             value.remove_leading_zeros();
             result.push(char::from_digit(r, radix).unwrap().to_ascii_uppercase());
+        }
+
+        if negative {
+            result.push('-');
         }
 
         result.into_iter().rev().collect()

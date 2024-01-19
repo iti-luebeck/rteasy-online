@@ -364,7 +364,7 @@ export class Vhdl {
   };
 }
 
-export const baseValues = ["BIN", "DEC", "HEX"] as const;
+export const baseValues = ["BIN", "DEC", "DEC2", "HEX"] as const;
 export type Base = typeof baseValues[number];
 export const isBase = (x: any): x is Base => baseValues.includes(x);
 

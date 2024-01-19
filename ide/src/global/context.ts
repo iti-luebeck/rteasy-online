@@ -17,7 +17,7 @@ export const GlobalContext = React.createContext<GlobalModel>({
 
 export type GlobalModel = GlobalModelEdit | GlobalModelRun;
 
-export const baseInheritValues = ["Inherit", "BIN", "DEC", "HEX"] as const;
+export const baseInheritValues = ["Inherit", "BIN", "DEC", "DEC2", "HEX"] as const;
 export type BaseInherit = typeof baseInheritValues[number];
 export const isBaseInherit = (x: any): x is BaseInherit =>
   baseInheritValues.includes(x);

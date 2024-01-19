@@ -36,6 +36,7 @@ impl ValueSliceExt for ValueSlice {
         match base {
             "BIN" => Ok(self.as_bin(true)),
             "DEC" => Ok(self.as_dec()),
+            "DEC2" => Ok(self.as_dec_signed()),
             "HEX" => Ok(self.as_hex_with_leading_zeros()),
             _ => Err(JsError::from_str(&format!("invalid base: {}", base))),
         }
@@ -66,7 +67,7 @@ impl ValueExt for SignedValue {
     fn parse_with_base(value: &str, base: &str) -> Result<Self, JsError> {
         let parse_result = match base {
             "BIN" => SignedValue::parse_bin(value),
-            "DEC" => SignedValue::parse_dec(value),
+            "DEC" | "DEC2" => SignedValue::parse_dec(value),
             "HEX" => SignedValue::parse_hex(value),
             _ => return Err(JsError::from_str(&format!("invalid base: {}", base))),
         };
