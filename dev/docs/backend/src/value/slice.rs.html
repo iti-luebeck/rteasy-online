@@ -216,6 +216,20 @@
 <a href="#216" id="216">216</a>
 <a href="#217" id="217">217</a>
 <a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
 </pre></div><pre class="rust"><code><span class="kw">use super</span>::{Bit, Value};
 <span class="kw">use </span>std::borrow::ToOwned;
 <span class="kw">use </span>std::hash::{Hash, Hasher};
@@ -259,11 +273,15 @@
     }
 
     <span class="kw">pub fn </span>as_dec(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
-        <span class="self">self</span>.as_radix(<span class="number">10</span>)
+        <span class="self">self</span>.as_radix(<span class="bool-val">false</span>, <span class="number">10</span>)
+    }
+
+    <span class="kw">pub fn </span>as_dec_signed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="self">self</span>.as_radix(<span class="bool-val">true</span>, <span class="number">10</span>)
     }
 
     <span class="kw">pub fn </span>as_hex(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
-        <span class="self">self</span>.as_radix(<span class="number">16</span>)
+        <span class="self">self</span>.as_radix(<span class="bool-val">false</span>, <span class="number">16</span>)
     }
 
     <span class="kw">pub fn </span>as_hex_with_leading_zeros(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
@@ -279,13 +297,19 @@
     <span class="doccomment">/// # Panics
     ///
     /// Panics if given a radix larger than 36.
-    </span><span class="kw">fn </span>as_radix(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; String {
+    </span><span class="kw">fn </span>as_radix(<span class="kw-2">&amp;</span><span class="self">self</span>, signed: bool, radix: u32) -&gt; String {
         <span class="kw">if </span><span class="self">self</span>.is_zero() {
             <span class="kw">return </span><span class="string">&quot;0&quot;</span>.to_string();
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>value = <span class="self">self</span>.to_owned();
         <span class="kw">let </span><span class="kw-2">mut </span>result = Vec::new();
+        <span class="kw">let </span>negative = signed &amp;&amp; value.bits.last().unwrap() == <span class="kw-2">&amp;</span>Bit::One &amp;&amp; value.bits.len() &gt; <span class="number">1</span>;
+
+        <span class="kw">if </span>negative {
+            value = -value;
+            value.remove_leading_zeros();
+        }
 
         <span class="kw">while </span>!value.is_zero() {
             <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="number">0</span>;
@@ -304,6 +328,10 @@
             value = Value { bits: value_rest.into_iter().rev().collect() };
             value.remove_leading_zeros();
             result.push(char::from_digit(r, radix).unwrap().to_ascii_uppercase());
+        }
+
+        <span class="kw">if </span>negative {
+            result.push(<span class="string">&#39;-&#39;</span>);
         }
 
         result.into_iter().rev().collect()
