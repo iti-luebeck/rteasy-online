@@ -176,7 +176,7 @@ impl StatementBuilder {
 
             // Default
             let transform_to_default = Label(format!(
-                "{}{}{}",
+                "DEFAULT_{}{}{}",
                 self.label,
                 vhdl_builder.transform_goto_prefix(),
                 self.next_state_default
