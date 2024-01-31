@@ -192,8 +192,6 @@ ENTITY CU_{{ module_name }} IS
         dbg_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_sub(1).unwrap_or(1).checked_ilog2().unwrap_or(0) }} DOWNTO 0);
         dbg_next_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_sub(1).unwrap_or(1).checked_ilog2().unwrap_or(0) }} DOWNTO 0){% endif %}
     );
-    ATTRIBUTE KEEP_HIERARCHY : STRING;
-    ATTRIBUTE KEEP_HIERARCHY OF CU_{{ module_name }} : ENTITY IS "YES";
 END CU_{{ module_name }};
 
 ARCHITECTURE Behavioral OF CU_{{ module_name }} IS
@@ -324,23 +322,17 @@ ENTITY EU_{{ module_name }} IS
         {% endfor %}
         {% endif %}
     );
-    ATTRIBUTE KEEP_HIERARCHY : STRING;
-    ATTRIBUTE KEEP_HIERARCHY OF EU_{{ module_name }} : ENTITY IS "YES";
 END EU_{{ module_name }};
 
 ARCHITECTURE Behavioral OF EU_{{ module_name }} IS
-    ATTRIBUTE KEEP : STRING;
-
     -- Registers
     {% for (name, range, _) in declarations.registers.iter() %}
         SIGNAL register_{{ name }} : unsigned{{ RenderAsVhdl(*range) }} := (OTHERS => '0');
-        ATTRIBUTE KEEP OF register_{{ name }} : SIGNAL IS "TRUE";
     {% endfor %}
 
     -- Buses
     {% for (name, range, _) in declarations.buses.iter().filter(|(_, _, kind)| *kind == BusKind::Intern) %}
         SIGNAL bus_{{ name }} : unsigned{{ RenderAsVhdl(*range) }} := (OTHERS => '0');
-        ATTRIBUTE KEEP OF bus_{{ name }} : SIGNAL IS "TRUE";
     {% endfor %}
 
     -- Register arrays
@@ -349,7 +341,6 @@ ARCHITECTURE Behavioral OF EU_{{ module_name }} IS
         SIGNAL register_array_{{ name }} : type_of_register_array_{{ name }} := (
             OTHERS => (OTHERS => '0')
         );
-        ATTRIBUTE KEEP OF register_array_{{ name }} : SIGNAL IS "TRUE";
     {% endfor %}
 
     -- Memories
@@ -367,7 +358,6 @@ ARCHITECTURE Behavioral OF EU_{{ module_name }} IS
             {% endif %}
             OTHERS => (OTHERS => '0')
         );
-        ATTRIBUTE KEEP OF memory_{{ name }} : SIGNAL IS "TRUE";
     {% endfor %}
 BEGIN
     -- Map registers to output
