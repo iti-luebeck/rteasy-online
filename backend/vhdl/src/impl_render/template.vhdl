@@ -187,6 +187,7 @@ ENTITY CU_{{ module_name }} IS
     PORT (
         clock : IN STD_LOGIC;
         reset : IN STD_LOGIC;
+        enable : IN STD_LOGIC;
         c : OUT STD_LOGIC_VECTOR({{ operations.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0);
         k : IN STD_LOGIC_VECTOR({{ criteria.len().checked_sub(1).unwrap_or(0) }} DOWNTO 0){% if self.is_debug %};
         dbg_state: OUT STD_LOGIC_VECTOR({{ statements.len().checked_sub(1).unwrap_or(1).checked_ilog2().unwrap_or(0) }} DOWNTO 0);
@@ -206,10 +207,8 @@ BEGIN
     BEGIN
         IF reset = '1' THEN
             state <= {{ statements[0].label }};
-        ELSE
-            IF rising_edge(clock) THEN
-                state <= next_state;
-            END IF;
+        ELSIF rising_edge(clock) and enable = '1' THEN
+            state <= next_state;
         END IF;
     END PROCESS;
 
@@ -246,6 +245,7 @@ BEGIN
     OutputLogic : PROCESS (state, k)
     BEGIN
         c <= (OTHERS => '0');
+        IF enable = '1' THEN
         CASE state IS
             {% for statement in statements.iter() %}
 
@@ -269,6 +269,7 @@ BEGIN
             WHEN OTHERS =>
                 NULL;
         END CASE;
+        END IF;
     END PROCESS;
 
     {% if self.is_debug %}
