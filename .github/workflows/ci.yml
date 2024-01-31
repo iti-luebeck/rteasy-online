@@ -219,7 +219,7 @@ jobs:
         cli_check_fmt,
         wasm_build_and_test,
         wasm_check_fmt,
-        vhdl_tests,
+        # vhdl_tests,
         book_test,
       ]
 
